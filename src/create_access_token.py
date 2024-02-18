@@ -29,7 +29,7 @@ body = {
 auth_response = requests.post(auth_url, headers = head, data = body)
 
 
-# Check if the request was successful
+# Get the response
 if auth_response.status_code == 200:
     if auth_response.json().get('access_token') is None:
         print('Authentication failed, please check your credentials')
