@@ -94,11 +94,14 @@ def populate_parsing_list(followers_list):
 
 def recursion():
     for i in parsing_list:
+        # Get the user list
         res = get_response(i)
         followers_list = res.get('user_followers')
 
+        # Turn the user bit to 1 (parsed)
         parsing_list[i] = 1
 
+        # Populate the dictionary with the newly fetched followers
         populate_parsing_list(followers_list)
 
 
@@ -117,23 +120,10 @@ def main():
     # Get the key and the first user to parse
     get_values()
 
-
-    # Get the first user list
-    res = get_response(starting_user)
-    followers_list = res.get('user_followers')
-
-
     # Add the starting username to list
-    parsing_list[starting_user] = 1
-
-    # Populate the dictionary for the first time
-    populate_parsing_list(followers_list)
-
+    parsing_list[starting_user] = 0
 
     recursion()
-
-
-
 
     print_dictionary()
 
