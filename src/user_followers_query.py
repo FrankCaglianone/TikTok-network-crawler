@@ -81,7 +81,7 @@ def get_response(parsing_user):
 
     
 # DOCSTRING
-def populate_parsing_list(followers_list):
+def populate_data_structures(followers_list):
     for user in followers_list:
         username = user["username"]
 
@@ -89,11 +89,15 @@ def populate_parsing_list(followers_list):
             continue
         else:
             parsing_list[username] = 0
+            queue.append(username)
 
 
 
 def recursion():
-    for i in parsing_list:
+    while queue:   # Loop until queue is empty
+        # Get the first item from the queue
+        i = queue.pop(0)
+
         # Get the user list
         res = get_response(i)
         followers_list = res.get('user_followers')
@@ -102,7 +106,7 @@ def recursion():
         parsing_list[i] = 1
 
         # Populate the dictionary with the newly fetched followers
-        populate_parsing_list(followers_list)
+        populate_data_structures(followers_list)
 
 
 
@@ -111,6 +115,7 @@ def recursion():
 starting_user = None
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
+queue = [] # Queue of username to parse
 
 
 
@@ -122,6 +127,7 @@ def main():
 
     # Add the starting username to list
     parsing_list[starting_user] = 0
+    queue.append(starting_user)
 
     recursion()
 
