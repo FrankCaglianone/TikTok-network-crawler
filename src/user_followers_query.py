@@ -41,6 +41,7 @@ def get_response():
 
     # Get the Access Token from stdin
     print("\n")
+    global access_token
     access_token = input("Enter your access token: ")
     auth = "Bearer " + access_token
 
@@ -89,12 +90,20 @@ def populate_parsing_list(followers_list):
 
 
 
+def recursion():
+    print()
+
+
+# make the key global 
+# Create user tests 5 json of up to 5 users
+
 
 
 
    
 # Declaring Global Variables
 starting_username = None
+access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 
 
