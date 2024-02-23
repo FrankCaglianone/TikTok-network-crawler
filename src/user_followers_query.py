@@ -19,8 +19,7 @@ import requests
     },
 '''
 
-
-
+# Create user tests 5 json of up to 5 users
 
 
 
@@ -32,7 +31,7 @@ def print_dictionary():
 
 
 
-
+# DOCSTRING
 def get_values():
     print("\n")
 
@@ -41,13 +40,13 @@ def get_values():
     access_token = input("Enter your access token: ")
 
     # Get the starting username from stdin
-    global parsed_username
-    parsed_username = input("Please enter the TikTok Username: ")
+    global starting_user
+    starting_user = input("Please enter the TikTok Username: ")
 
 
 
 # DOCSTRING
-def get_response(): 
+def get_response(parsing_user): 
     # API url
     url = "https://open.tiktokapis.com/v2/research/user/followers/"
 
@@ -63,7 +62,7 @@ def get_response():
 
     # Creating the body 
     data = {
-        "username": parsed_username,  
+        "username": parsing_user,  
         "max_count": 10,  # Optional: Adjust the number of results as needed
     }
 
@@ -94,18 +93,19 @@ def populate_parsing_list(followers_list):
 
 
 def recursion():
-    print()
+    for i in parsing_list:
+        res = get_response(i)
+        followers_list = res.get('user_followers')
 
+        parsing_list[i] = 1
 
-# make the key global 
-# Create user tests 5 json of up to 5 users
-
+        populate_parsing_list(followers_list)
 
 
 
    
 # Declaring Global Variables
-parsed_username = None
+starting_user = None
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 
@@ -113,15 +113,28 @@ parsing_list = {}  # Maps username to parsed bit (0 or 1)
 
 
 def main():
+
+    # Get the key and the first user to parse
     get_values()
 
-    res = get_response()
+
+    # Get the first user list
+    res = get_response(starting_user)
     followers_list = res.get('user_followers')
 
-    # Add the starting username
-    parsing_list[parsed_username] = 1
 
+    # Add the starting username to list
+    parsing_list[starting_user] = 1
+
+    # Populate the dictionary for the first time
     populate_parsing_list(followers_list)
+
+
+    recursion()
+
+
+
+
     print_dictionary()
 
 
