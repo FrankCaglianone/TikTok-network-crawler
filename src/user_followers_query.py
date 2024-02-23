@@ -33,16 +33,24 @@ def print_dictionary():
 
 
 
+def get_values():
+    print("\n")
+
+    # Get the Access Token from stdin
+    global access_token
+    access_token = input("Enter your access token: ")
+
+    # Get the starting username from stdin
+    global parsed_username
+    parsed_username = input("Please enter the TikTok Username: ")
+
+
+
 # DOCSTRING
 def get_response(): 
     # API url
     url = "https://open.tiktokapis.com/v2/research/user/followers/"
 
-
-    # Get the Access Token from stdin
-    print("\n")
-    global access_token
-    access_token = input("Enter your access token: ")
     auth = "Bearer " + access_token
 
 
@@ -51,16 +59,11 @@ def get_response():
         "Authorization": auth,
         "Content-Type": "application/json"
     }
-
-
-    # Get the starting username from stdin
-    global starting_username
-    starting_username = input("Please enter the TikTok Username: ")
                         
 
     # Creating the body 
     data = {
-        "username": starting_username,  
+        "username": parsed_username,  
         "max_count": 10,  # Optional: Adjust the number of results as needed
     }
 
@@ -102,7 +105,7 @@ def recursion():
 
    
 # Declaring Global Variables
-starting_username = None
+parsed_username = None
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 
@@ -110,11 +113,13 @@ parsing_list = {}  # Maps username to parsed bit (0 or 1)
 
 
 def main():
+    get_values()
+
     res = get_response()
     followers_list = res.get('user_followers')
 
     # Add the starting username
-    parsing_list[starting_username] = 1
+    parsing_list[parsed_username] = 1
 
     populate_parsing_list(followers_list)
     print_dictionary()
