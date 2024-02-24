@@ -36,6 +36,16 @@ def print_dictionary():
 
 
 
+def read_from_file():
+    print("Hello world")
+
+
+
+
+
+
+
+
 # DOCSTRING
 def populate_data_structures(followers_list):
 
@@ -123,6 +133,12 @@ def parse_network():
 
 
 
+
+
+
+
+
+
    
 # Declaring Global Variables
 starting_user = None
@@ -134,7 +150,7 @@ queue = [] # Queue of username to parse
 
 
 
-def main():
+def parse_with_stdin():
     # Get the key and the first user to parse from stdin
     global access_token
     access_token = input("Enter your access token: ")
@@ -148,6 +164,23 @@ def main():
     # Start parsing
     parse_network()
 
+
+    print_dictionary()
+
+
+
+
+def parse_with_list():
+    global access_token
+    access_token = input("Enter your access token: ")
+
+    starting_users = read_from_file()
+
+    for user in starting_user:
+        parsing_list[user] = 0
+        queue.append(user)
+
+    parse_network()
 
     print_dictionary()
 
