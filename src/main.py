@@ -1,11 +1,11 @@
-# import user_followers_query
-# # user_followers_query.main()
+
+import user_followers_query
+import user_following_query
+import user_liked_videos_query
 
 
 
-def get_user_choice():
-    options = ["User Followers Query", "User Following Query"]
-
+def get_user_choice(options):
     # Print all the options to the user
     for i, option in enumerate(options, start=1):
         print(f"{i}. {option}")
@@ -28,6 +28,58 @@ def get_user_choice():
             print("Please enter a valid number.")
 
 
+
+
+# Switch case block function, actual block is from python 3.10 above
+def switch(option, user_input):
+    if option == "User Followers Query":
+        if user_input == "Type one starting username":
+            user_followers_query.main()
+    #     else:
+    #         user_followers_query.main2()
+    #     return
+    # elif option == "User Following Query":
+    #     if user_input == "Type one starting username":
+    #         user_following_query.main()
+    #     else:
+    #         user_following_query.main2()
+    #     return
+    # elif option == "User Liked Videos Query":
+    #     if user_input == "Type one starting username":
+    #         user_liked_videos_query.main()
+    #     else:
+    #         user_liked_videos_query.main2()
+    #     return
+
         
-# Define global variables
-service_chose = get_user_choice()
+
+
+
+
+
+
+
+
+def main():
+    print("\n")
+
+    print("Please choose what service you would like to access:")
+    service_options = ["User Followers Query", "User Following Query", "User Liked Videos Query"]
+    service_chose = get_user_choice(service_options)
+
+    print("\n")
+
+    print("Please choose how to upload the usernames to be parsed")
+    user_input_options = ["Type one starting username", "Upload a list"]
+    user_input = get_user_choice(user_input_options)
+
+
+    switch(service_chose, user_input)
+
+
+
+
+
+
+
+
