@@ -21,6 +21,12 @@ import requests
 
 
 
+
+# Fetch for a max of 30 users in the get_all_followers() loop
+# Fill the queue of users to parse up to only 100 users in parse_network()
+
+
+
 # Helper functions
 def print_dictionary():
     print("Username to Parsed Status:")
@@ -32,17 +38,19 @@ def print_dictionary():
 
 # DOCSTRING
 def populate_data_structures(followers_list):
+
+    # Loop through every user in the follower list
     for user in followers_list:
+        # Get the username @
         username = user["username"]
 
+        # If already in dictionary skip
         if username in parsing_list:
             continue
         else:
+            # Add the new user to the dictionary and the queue
             parsing_list[username] = 0
             queue.append(username)
-
-
-
 
 
 
@@ -51,37 +59,41 @@ def populate_data_structures(followers_list):
 def get_all_followers(parsing_user):
     all_followers = []
     url = "https://open.tiktokapis.com/v2/research/user/followers/"
+
+    # Create the header
     auth = "Bearer " + access_token
-    headers = {
+    header = {
         "Authorization": auth,
         "Content-Type": "application/json"
     }
+
+    # Intialize cursor and has_more variables to enter the loop for the first time
     cursor = None
     has_more = True
 
-    # Loop to fetch all followers using pagination
+    # Loop to fetch all followers
     while has_more and len(all_followers) <= 30:
-        data = {
+        # Create body
+        body = {
             "username": parsing_user,
             "max_count": 10,
         }
+
         # Add cursor to request if it exists
         if cursor:
-            data["cursor"] = cursor
+            body["cursor"] = cursor
 
         # Make the post request
-        print("sending request")
-        response = requests.post(url=url, headers=headers, json=data)
+        response = requests.post(url=url, headers=header, json=body)
 
         # Check if request was successful
         if response.status_code == 200:
-            json_response = response.json()
-            response_data = json_response.get('data')
-            all_followers.extend(response_data.get('user_followers'))
+            data = response.json().get('data')
+            all_followers.extend(data.get('user_followers'))
 
             # Check if there are more followers to fetch
-            has_more = response_data.get('has_more', False)
-            cursor = response_data.get('cursor', None)
+            has_more = data.get('has_more', False)
+            cursor = data.get('cursor', None)
         else:
             print("Failed to retrieve followers. Status code:", response.status_code)
             break
@@ -92,19 +104,21 @@ def get_all_followers(parsing_user):
 
 
 
+# DOCSTRING
+def parse_network():
+    # Loop until queue is empty
+    while queue and len(queue) <= 100:
 
-def recursion():
-    while queue and len(queue) <= 100:   # Loop until queue is empty
         # Get the first item from the queue
         i = queue.pop(0)
 
-        # Get the user list
+        # Get the followers list of that user
         followers_list = get_all_followers(i)
 
         # Turn the user bit to 1 (parsed)
         parsing_list[i] = 1
 
-        # Populate the dictionary with the newly fetched followers
+        # Populate the dictionary and the queue with the newly fetched followers
         populate_data_structures(followers_list)
 
 
@@ -126,17 +140,16 @@ def main():
     access_token = input("Enter your access token: ")
     global starting_user
     starting_user = input("Please enter the TikTok Username: ")
-
     
-   
-    # Add the starting username to list
+    # Add the starting username to dictionary and queue
     parsing_list[starting_user] = 0
     queue.append(starting_user)
 
-    recursion()
+    # Start parsing
+    parse_network()
+
 
     print_dictionary()
-
 
 
 
