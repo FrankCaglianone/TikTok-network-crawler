@@ -1,4 +1,4 @@
-import user_followers_query
+# import user_followers_query
 
 
-user_followers_query.main()
+# user_followers_query.main()

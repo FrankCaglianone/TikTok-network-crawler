@@ -19,8 +19,6 @@ import requests
     },
 '''
 
-# Create user tests 5 json of up to 5 users
-
 
 
 # Helper functions
@@ -31,55 +29,7 @@ def print_dictionary():
 
 
 
-# DOCSTRING
-def get_values():
-    print("\n")
 
-    # Get the Access Token from stdin
-    global access_token
-    access_token = input("Enter your access token: ")
-
-    # Get the starting username from stdin
-    global starting_user
-    starting_user = input("Please enter the TikTok Username: ")
-
-
-
-# DOCSTRING
-def get_response(parsing_user): 
-    # API url
-    url = "https://open.tiktokapis.com/v2/research/user/followers/"
-
-    auth = "Bearer " + access_token
-
-
-    # Create the Header
-    header = {
-        "Authorization": auth,
-        "Content-Type": "application/json"
-    }
-                        
-
-    # Creating the body 
-    data = {
-        "username": parsing_user,  
-        "max_count": 10,  # Optional: Adjust the number of results as needed
-    }
-
-
-    # Make the post request
-    response = requests.post(url=url, headers=header, json=data)
-
-
-    # Get the response
-    if response.status_code == 200:
-        data = response.json().get('data')
-        return data
-    else:
-        print("Failed to retrieve followers. Status code:", response.status_code)
-
-
-    
 # DOCSTRING
 def populate_data_structures(followers_list):
     for user in followers_list:
@@ -93,14 +43,63 @@ def populate_data_structures(followers_list):
 
 
 
+
+
+
+
+# DOCSTRING
+def get_all_followers(parsing_user):
+    all_followers = []
+    url = "https://open.tiktokapis.com/v2/research/user/followers/"
+    auth = "Bearer " + access_token
+    headers = {
+        "Authorization": auth,
+        "Content-Type": "application/json"
+    }
+    cursor = None
+    has_more = True
+
+    # Loop to fetch all followers using pagination
+    while has_more and len(all_followers) <= 30:
+        data = {
+            "username": parsing_user,
+            "max_count": 10,
+        }
+        # Add cursor to request if it exists
+        if cursor:
+            data["cursor"] = cursor
+
+        # Make the post request
+        print("sending request")
+        response = requests.post(url=url, headers=headers, json=data)
+
+        # Check if request was successful
+        if response.status_code == 200:
+            json_response = response.json()
+            response_data = json_response.get('data')
+            all_followers.extend(response_data.get('user_followers'))
+
+            # Check if there are more followers to fetch
+            has_more = response_data.get('has_more', False)
+            cursor = response_data.get('cursor', None)
+        else:
+            print("Failed to retrieve followers. Status code:", response.status_code)
+            break
+
+    return all_followers
+
+
+
+
+
+
 def recursion():
-    while queue:   # Loop until queue is empty
+    while queue and len(queue) <= 100:   # Loop until queue is empty
         # Get the first item from the queue
         i = queue.pop(0)
 
         # Get the user list
-        res = get_response(i)
-        followers_list = res.get('user_followers')
+        followers_list = get_all_followers(i)
 
         # Turn the user bit to 1 (parsed)
         parsing_list[i] = 1
@@ -120,11 +119,16 @@ queue = [] # Queue of username to parse
 
 
 
+
 def main():
+    # Get the key and the first user to parse from stdin
+    global access_token
+    access_token = input("Enter your access token: ")
+    global starting_user
+    starting_user = input("Please enter the TikTok Username: ")
 
-    # Get the key and the first user to parse
-    get_values()
-
+    
+   
     # Add the starting username to list
     parsing_list[starting_user] = 0
     queue.append(starting_user)
@@ -132,6 +136,8 @@ def main():
     recursion()
 
     print_dictionary()
+
+
 
 
 
