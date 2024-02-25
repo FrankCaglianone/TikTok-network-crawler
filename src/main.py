@@ -31,12 +31,12 @@ def get_user_choice(options):
 
 
 # Switch case block function, actual block is from python 3.10 above
-def switch(option, user_input):
+def switch(option, user_input, token):
     if option == "User Followers Query":
         if user_input == "Type one starting username":
-            user_followers_query.parse_with_stdin()
+            user_followers_query.parse_with_stdin(token)
         else:
-            user_followers_query.parse_with_list()
+            user_followers_query.parse_with_list(token)
         return
     # elif option == "User Following Query":
     #     if user_input == "Type one starting username":
@@ -73,12 +73,15 @@ def main():
     user_input_options = ["Type one starting username", "Upload a list"]
     user_input = get_user_choice(user_input_options)
 
+    print("\n")
 
-    switch(service_chose, user_input)
+    access_token = input("Enter your access token: ")
 
-
-
-
-
+    switch(service_chose, user_input, access_token)
 
 
+
+
+
+
+main()

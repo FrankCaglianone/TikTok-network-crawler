@@ -59,7 +59,6 @@ def read_from_file(file_path):
 
 
 
-
 # DOCSTRING
 def populate_data_structures(followers_list):
 
@@ -169,10 +168,10 @@ queue = [] # Queue of username to parse
 
 
 
-def parse_with_stdin():
+def parse_with_stdin(token):
     # Get the key and the first user to parse from stdin
     global access_token
-    access_token = input("Enter your access token: ")
+    access_token = token
     global starting_user
     starting_user = input("Please enter the TikTok Username: ")
     
@@ -189,23 +188,23 @@ def parse_with_stdin():
 
 
 
-def parse_with_list(file_path):
+def parse_with_list(token):
+    # Get the key and the path to the list of users to parse
     global access_token
-    access_token = input("Enter your access token: ")
+    access_token = token
+    file_path = input("Enter the path to your .csv file: ")
 
-    # file_path = input("Enter the path to your .csv file: ")
-
+    # Get all the starting users to parse from the file
     starting_users = read_from_file(file_path)
 
+    # Add all starting users to the data structures
     for user in starting_users:
         parsing_list[user] = 0
         queue.append(user)
 
+    # Start parsing
     parse_network()
 
     print_dictionary()
 
 
-
-parse_with_stdin()
-   
