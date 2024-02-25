@@ -1,7 +1,7 @@
 
 import user_followers_query
-import user_following_query
-import user_liked_videos_query
+# import user_following_query
+# import user_liked_videos_query
 
 
 
@@ -34,10 +34,10 @@ def get_user_choice(options):
 def switch(option, user_input):
     if option == "User Followers Query":
         if user_input == "Type one starting username":
-            user_followers_query.main()
-    #     else:
-    #         user_followers_query.main2()
-    #     return
+            user_followers_query.parse_with_stdin()
+        else:
+            user_followers_query.parse_with_list()
+        return
     # elif option == "User Following Query":
     #     if user_input == "Type one starting username":
     #         user_following_query.main()
@@ -75,7 +75,6 @@ def main():
 
 
     switch(service_chose, user_input)
-
 
 
 
