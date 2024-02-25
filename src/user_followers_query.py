@@ -37,6 +37,9 @@ def print_dictionary():
 
 
 
+
+
+# DOCSTRING
 def read_from_file(file_path):
     starting_users = []
 
@@ -44,15 +47,11 @@ def read_from_file(file_path):
     with open(file_path, mode='r', encoding='utf-8') as file:
         csv_reader = csv.reader(file)
         
-        # Optional: Skip the header if your CSV has one
-        next(csv_reader, None) 
-        
         # Loop through the rows in the file
         for row in csv_reader:
             starting_users.append(row[0])
             # print(row[0])    
     return starting_users
-
 
 
 
