@@ -39,7 +39,6 @@ def print_dictionary():
 
 
 
-
 # DOCSTRING
 def read_from_file(file_path):
     starting_users = []
@@ -53,7 +52,6 @@ def read_from_file(file_path):
             starting_users.append(row[0])
             # print(row[0])    
     return starting_users
-
 
 
 
