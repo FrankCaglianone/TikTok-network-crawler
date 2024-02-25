@@ -1,4 +1,5 @@
 import requests
+import csv
 
 '''
     Response structure example
@@ -36,8 +37,21 @@ def print_dictionary():
 
 
 
-def read_from_file():
-    print("Hello world")
+def read_from_file(file_path):
+    starting_users = []
+
+    # Open the file and read the contents
+    with open(file_path, mode='r', encoding='utf-8') as file:
+        csv_reader = csv.reader(file)
+        
+        # Optional: Skip the header if your CSV has one
+        next(csv_reader, None) 
+        
+        # Loop through the rows in the file
+        for row in csv_reader:
+            starting_users.append(row[0])
+            # print(row[0])    
+    return starting_users
 
 
 
@@ -134,11 +148,6 @@ def parse_network():
 
 
 
-
-
-
-
-
    
 # Declaring Global Variables
 starting_user = None
@@ -174,19 +183,17 @@ def parse_with_list():
     global access_token
     access_token = input("Enter your access token: ")
 
-    starting_users = read_from_file()
+    file_path = input("Enter the path to your .csv file: ")
 
-    for user in starting_user:
+    starting_users = read_from_file(file_path)
+
+    for user in starting_users:
         parsing_list[user] = 0
         queue.append(user)
 
     parse_network()
 
     print_dictionary()
-
-
-
-
 
 
 
