@@ -1,5 +1,6 @@
 import requests
 import csv
+import sys
 
 '''
     Response structure example
@@ -109,14 +110,24 @@ def get_all_followers(parsing_user):
         # Make the post request
         response = requests.post(url=url, headers=header, json=body)
 
-        # Check if request was successful
+        # Check request status code
         if response.status_code == 200:
+            # If status code is succesfull, proceed
             data = response.json().get('data')
             all_followers.extend(data.get('user_followers'))
 
             # Check if there are more followers to fetch
             has_more = data.get('has_more', False)
             cursor = data.get('cursor', None)
+        elif response.status_code == 401:
+            # If status code 401, means the access token it's incorrect, terminate program and try again
+            print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
+            sys.exit("Terminating the program due to an error. Please check your access token")
+        elif response.status_code == 403:
+            # If status code 403, that user cannot be accessed, break, if there are more users in the queue it proceeds, if it is the only user it terminates
+            print("Status code 403 Forbidden: The server understood the request but refuses to authorize it.")
+            print(f"User not parsed: {parsing_user}")
+            break
         else:
             print("Failed to retrieve followers. Status code:", response.status_code)
             break
@@ -178,11 +189,11 @@ def parse_with_stdin():
 
 
 
-def parse_with_list():
+def parse_with_list(file_path):
     global access_token
     access_token = input("Enter your access token: ")
 
-    file_path = input("Enter the path to your .csv file: ")
+    # file_path = input("Enter the path to your .csv file: ")
 
     starting_users = read_from_file(file_path)
 
@@ -196,4 +207,5 @@ def parse_with_list():
 
 
 
+parse_with_stdin()
    
