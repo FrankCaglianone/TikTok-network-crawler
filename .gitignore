@@ -1,6 +1,14 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python,visualstudiocode,visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,visualstudiocode,visualstudio
 
+
+
+### Saved .csv files ###
+parsing_list.csv
+queue.csv
+
+
+
 ### macOS ###
 # General
 .DS_Store
