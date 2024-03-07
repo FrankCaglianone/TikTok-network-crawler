@@ -201,64 +201,71 @@ def parse_network():
 # Declaring Global Variables
 starting_user = None
 access_token = None
-parsing_list = {
-    "ciao": 1,
-    "mamma": 2
-}  # Maps username to parsed bit (0 or 1)
-queue = {
-    "ciao",
-    "mamma",
-    "guarda"
-} # Queue of username to parse
+parsing_list = {}  # Maps username to parsed bit (0 or 1)
+queue = {} # Queue of username to parse
 
 
 
 
 
 def parse_with_stdin(token):
-    # Get the key and the first user to parse from stdin
-    global access_token
-    access_token = token
-    global starting_user
-    starting_user = input("Please enter the TikTok Username: ")
-    
-    # Add the starting username to dictionary and queue
-    queue.append(starting_user)
+    # Set saving options
+    atexit.register(cleanup_and_save)
+    signal.signal(signal.SIGINT, handle_signal_received)
+    signal.signal(signal.SIGTERM, handle_signal_received)
 
-    # Start parsing
-    parse_network()
+    # Execute code normally
+    try: 
+        # Get the key and the first user to parse from stdin
+        global access_token
+        access_token = token
+        global starting_user
+        starting_user = input("Please enter the TikTok Username: ")
+        
+        # Add the starting username to dictionary and queue
+        queue.append(starting_user)
+
+        # Start parsing
+        parse_network()
 
 
-    print_dictionary()
+        print_dictionary()
+    except Exception as e:
+        # If exception is catched save and close
+        cleanup_and_save()
+        print(f"Unhandled exception: {e}")
 
 
 
 
 def parse_with_list(token):
-    # Get the key and the path to the list of users to parse
-    global access_token
-    access_token = token
-    file_path = input("Enter the path to your .csv file: ")
+     # Set saving options
+    atexit.register(cleanup_and_save)
+    signal.signal(signal.SIGINT, handle_signal_received)
+    signal.signal(signal.SIGTERM, handle_signal_received)
 
-    # Get all the starting users to parse from the file
-    starting_users = read_from_csv(file_path)
+    # Execute code normally
+    try: 
+        # Get the key and the path to the list of users to parse
+        global access_token
+        access_token = token
+        file_path = input("Enter the path to your .csv file: ")
 
-    # Add all starting users to the data structures
-    for user in starting_users:
-        queue.append(user)
+        # Get all the starting users to parse from the file
+        starting_users = read_from_csv(file_path)
 
-    # Start parsing
-    parse_network()
+        # Add all starting users to the data structures
+        for user in starting_users:
+            queue.append(user)
 
-    print_dictionary()
+        # Start parsing
+        parse_network()
 
-
-
-
-
-# 
-
-
+        print_dictionary()
+    except Exception as e:
+        # If exception is catched save and close
+        cleanup_and_save()
+        print(f"Unhandled exception: {e}")
 
 
 
@@ -271,22 +278,3 @@ def cause_exception():
     return result
 
 
-
-def main():
-    atexit.register(cleanup_and_save)
-    signal.signal(signal.SIGINT, handle_signal_received)
-    signal.signal(signal.SIGTERM, handle_signal_received)
-
-    x = 10
-    j = 20
-    cause_exception()
-    i = 30
-
-
-    
-
-try:
-    main()  
-except Exception as e:
-    save_to_csv()  # Save your data
-    print(f"Unhandled exception: {e}")
