@@ -79,7 +79,7 @@ def populate_data_structures(followers_list):
 # DOCSTRING
 def get_all_followers(parsing_user):
     all_followers = []
-    url = "https://open.tiktokapis.com/v2/research/user/followers/"
+    url = "https://open.tiktokapis.com/v2/research/user/following/"
 
     # Create the header
     auth = "Bearer " + access_token
@@ -111,7 +111,7 @@ def get_all_followers(parsing_user):
         if response.status_code == 200:
             # If status code is succesfull, proceed
             data = response.json().get('data')
-            all_followers.extend(data.get('user_followers'))
+            all_followers.extend(data.get('user_following'))
 
             # Check if there are more followers to fetch
             has_more = data.get('has_more', False)
@@ -204,5 +204,4 @@ def parse_with_list(token):
     parse_network()
 
     print_dictionary()
-
 

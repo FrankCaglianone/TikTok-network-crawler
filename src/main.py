@@ -62,7 +62,7 @@ def main():
     print("\n")
 
     print("Please choose what service you would like to access:")
-    service_options = ["User Followers Query", "User Following Query", "User Liked Videos Query"]
+    service_options = ["User Following Query", "User Liked Videos Query"]
     service_chose = get_user_choice(service_options)
 
     print("\n")
