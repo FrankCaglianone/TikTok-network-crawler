@@ -234,7 +234,7 @@ def parse_with_list(token):
     file_path = input("Enter the path to your .csv file: ")
 
     # Get all the starting users to parse from the file
-    starting_users = read_from_file(file_path)
+    starting_users = read_from_csv(file_path)
 
     # Add all starting users to the data structures
     for user in starting_users:
@@ -279,5 +279,5 @@ def main():
 try:
     main()  # Your main application logic here
 except Exception as e:
-    save_data_to_csv()  # Save your data
+    save_to_csv()  # Save your data
     print(f"Unhandled exception: {e}")
