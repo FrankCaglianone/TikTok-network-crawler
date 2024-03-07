@@ -85,7 +85,7 @@ def read_from_csv(file_path):
 
 
 # DOCSTRING
-def populate_data_structures(followers_list):
+def populate_queue(followers_list):
 
     # Loop through every user in the follower list
     for user in followers_list:
@@ -173,7 +173,7 @@ def parse_network():
         # Get the first item from the queue
         i = queue.pop(0)
 
-        # Get the followers list of that user
+        # Get the followers list of that user and the status code
         followers_list, code = get_all_followers(i)
 
         # Add user to dictionary with corresponding bit
@@ -192,7 +192,7 @@ def parse_network():
 
 
         # Populate the dictionary and the queue with the newly fetched followers
-        populate_data_structures(followers_list)
+        populate_queue(followers_list)
 
 
 
@@ -201,8 +201,15 @@ def parse_network():
 # Declaring Global Variables
 starting_user = None
 access_token = None
-parsing_list = {}  # Maps username to parsed bit (0 or 1)
-queue = [] # Queue of username to parse
+parsing_list = {
+    "ciao": 1,
+    "mamma": 2
+}  # Maps username to parsed bit (0 or 1)
+queue = {
+    "ciao",
+    "mamma",
+    "guarda"
+} # Queue of username to parse
 
 
 
@@ -263,6 +270,8 @@ def cause_exception():
     result = 1 / 0
     return result
 
+
+
 def main():
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -277,7 +286,7 @@ def main():
     
 
 try:
-    main()  # Your main application logic here
+    main()  
 except Exception as e:
     save_to_csv()  # Save your data
     print(f"Unhandled exception: {e}")
