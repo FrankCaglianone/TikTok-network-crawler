@@ -1,6 +1,9 @@
 import requests
 import csv
 import sys
+import csv
+import atexit
+import signal
 
 '''
     Response structure example
@@ -23,7 +26,6 @@ import sys
 
 
 
-
 # Fetch for a max of 30 users in the get_all_followers() loop
 # Fill the queue of users to parse up to only 100 users in parse_network()
 
@@ -36,11 +38,36 @@ def print_dictionary():
         print(f"{username}: {parsed}")
 
 
+def save_to_csv():
+    # Save parsing_list to CSV
+    with open('parsing_list.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Username", "Parsed Status"])  # Writing headers
+        for username, parsed_status in parsing_list.items():
+            writer.writerow([username, parsed_status])
+
+    # Save queue to CSV
+    with open('queue.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Usernames to parse"]) 
+        for username in queue:
+            writer.writerow([username])
+
+
+def cleanup_and_save():
+    print("Saving data to CSV before exiting...")
+    save_to_csv()
+    
 
 
 
-# DOCSTRING
-def read_from_file(file_path):
+def handle_signal_received():
+    cleanup_and_save()
+    exit(0)
+
+
+
+def read_from_csv(file_path):
     starting_users = []
 
     # Open the file and read the contents
@@ -221,4 +248,36 @@ def parse_with_list(token):
 
 
 
-parse_with_stdin("clt.XyqgcP9gTMpynf1hgtYgwHmV5Vm5PrTstEic270rT5usW4Sg67P6HgupmPqe")
+
+# 
+
+
+
+
+
+
+
+
+def cause_exception():
+    # Deliberately cause a ZeroDivisionError
+    result = 1 / 0
+    return result
+
+def main():
+    atexit.register(cleanup_and_save)
+    signal.signal(signal.SIGINT, handle_signal_received)
+    signal.signal(signal.SIGTERM, handle_signal_received)
+
+    x = 10
+    j = 20
+    cause_exception()
+    i = 30
+
+
+    
+
+try:
+    main()  # Your main application logic here
+except Exception as e:
+    save_data_to_csv()  # Save your data
+    print(f"Unhandled exception: {e}")

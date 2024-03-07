@@ -36,24 +36,9 @@ def switch(option, user_input, token):
         else:
             user_following_query.parse_with_list(token)
         return
-    # elif option == "User Following Query":
-    #     if user_input == "Type one starting username":
-    #         user_following_query.main()
-    #     else:
-    #         user_following_query.main2()
-    #     return
-    # elif option == "User Liked Videos Query":
-    #     if user_input == "Type one starting username":
-    #         user_liked_videos_query.main()
-    #     else:
-    #         user_liked_videos_query.main2()
-    #     return
+
 
         
-
-
-
-
 
 
 
