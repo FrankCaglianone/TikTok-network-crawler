@@ -202,7 +202,7 @@ def parse_network():
 starting_user = None
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
-queue = {} # Queue of username to parse
+queue = [] # Queue of username to parse
 
 
 
@@ -268,13 +268,5 @@ def parse_with_list(token):
         print(f"Unhandled exception: {e}")
 
 
-
-
-
-
-def cause_exception():
-    # Deliberately cause a ZeroDivisionError
-    result = 1 / 0
-    return result
 
 
