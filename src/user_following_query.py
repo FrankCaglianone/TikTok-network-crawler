@@ -69,8 +69,7 @@ def populate_data_structures(followers_list):
         if username in parsing_list:
             continue
         else:
-            # Add the new user to the dictionary and the queue
-            parsing_list[username] = 0
+            # Add the new user to the queue
             queue.append(username)
 
 
@@ -78,7 +77,10 @@ def populate_data_structures(followers_list):
 
 # DOCSTRING
 def get_all_followers(parsing_user):
+    # To return
     all_followers = []
+
+    # url to send the request
     url = "https://open.tiktokapis.com/v2/research/user/following/"
 
     # Create the header
@@ -122,14 +124,15 @@ def get_all_followers(parsing_user):
             sys.exit("Terminating the program due to an error. Please check your access token")
         elif response.status_code == 403:
             # If status code 403, that user cannot be accessed, break, if there are more users in the queue it proceeds, if it is the only user it terminates
-            print("Status code 403 Forbidden: The server understood the request but refuses to authorize it.")
-            print(f"User not parsed: {parsing_user}")
+            break
+        elif response.status_code == 500:
+            # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
             break
         else:
             print("Failed to retrieve followers. Status code:", response.status_code)
             break
 
-    return all_followers
+    return all_followers, response.status_code
 
 
 
@@ -144,10 +147,22 @@ def parse_network():
         i = queue.pop(0)
 
         # Get the followers list of that user
-        followers_list = get_all_followers(i)
+        followers_list, code = get_all_followers(i)
 
-        # Turn the user bit to 1 (parsed)
-        parsing_list[i] = 1
+        # Add user to dictionary with corresponding bit
+        if code == 200: 
+            # parsed
+            parsing_list[i] = 1
+        elif code == 403:
+            # User cannot be accessed
+            parsing_list[i] = 2
+        elif code == 500:
+            # User not existent or not found
+            parsing_list[i] = 3
+        else: 
+            # Unkown
+            parsing_list[i] = 4
+
 
         # Populate the dictionary and the queue with the newly fetched followers
         populate_data_structures(followers_list)
@@ -174,7 +189,6 @@ def parse_with_stdin(token):
     starting_user = input("Please enter the TikTok Username: ")
     
     # Add the starting username to dictionary and queue
-    parsing_list[starting_user] = 0
     queue.append(starting_user)
 
     # Start parsing
@@ -197,7 +211,6 @@ def parse_with_list(token):
 
     # Add all starting users to the data structures
     for user in starting_users:
-        parsing_list[user] = 0
         queue.append(user)
 
     # Start parsing
@@ -205,3 +218,7 @@ def parse_with_list(token):
 
     print_dictionary()
 
+
+
+
+parse_with_stdin("clt.XyqgcP9gTMpynf1hgtYgwHmV5Vm5PrTstEic270rT5usW4Sg67P6HgupmPqe")
