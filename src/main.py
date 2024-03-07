@@ -1,7 +1,5 @@
 
-import user_followers_query
-# import user_following_query
-# import user_liked_videos_query
+import user_following_query
 
 
 
@@ -32,11 +30,11 @@ def get_user_choice(options):
 
 # Switch case block function, actual block is from python 3.10 above
 def switch(option, user_input, token):
-    if option == "User Followers Query":
+    if option == "User Following Query":
         if user_input == "Type one starting username":
-            user_followers_query.parse_with_stdin(token)
+            user_following_query.parse_with_stdin(token)
         else:
-            user_followers_query.parse_with_list(token)
+            user_following_query.parse_with_list(token)
         return
     # elif option == "User Following Query":
     #     if user_input == "Type one starting username":
