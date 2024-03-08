@@ -35,6 +35,7 @@ def get_user_choice(options):
 access_token = None
 key = None
 secret = None
+condition = threading.Condition()  # Condition variable for synchronizing access to access_token
 
 
 
@@ -42,18 +43,24 @@ secret = None
 # Use multithreading to instantiate a timer to create an access token every ~ 2 hours
 def create_tokens():
     # Access Global Variables
-    global access_token
-    global key
-    global secret
-
+    global access_token, key, secret
     while True:
-        access_token = create_access_token.get_token(key, secret)
-        print(f"New Key Created: {access_token} \n")
+        # Simulate access token creation
+        with condition:
+            access_token = create_access_token.get_token(key, secret)
+            print(f"New Key Created: {access_token} \n")
+            condition.notify_all() # Notify all waiting threads that the token is updated
         time.sleep(10) # Sleep for 2 hours, 7200s
 
 
 
 
+# Wait for the access token to be available.
+def wait_for_token():
+    global access_token
+    with condition:
+        while access_token is None:
+            condition.wait()  # Wait until the access token is updated
 
 
 
@@ -77,6 +84,7 @@ def main():
     # Get key and secret
     global key 
     global secret
+    global access_token
     key = input("Please enter your key (don't worry this information wont be saved): ")
     secret = input("Please enter your secret (don't worry this information wont be saved): ")
 
@@ -91,9 +99,10 @@ def main():
     thread.start()
 
 
+    # Wait for the first access token to be available
+    wait_for_token()
 
 
-    global access_token
 
 
     if service == "User Following Query":
