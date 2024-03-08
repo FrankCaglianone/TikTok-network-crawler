@@ -1,4 +1,3 @@
-
 import user_following_query
 import create_access_token
 import threading
@@ -65,6 +64,9 @@ def wait_for_token():
 
 
 def main():
+    # Access all global variables
+    global key, secret, access_token
+
     print("\n")
 
     # Choose which service to provide 
@@ -82,29 +84,22 @@ def main():
     print("\n")
 
     # Get key and secret
-    global key 
-    global secret
-    global access_token
     key = input("Please enter your key (don't worry this information wont be saved): ")
     secret = input("Please enter your secret (don't worry this information wont be saved): ")
 
 
-
     ##### Start the thread to create the access tokens #####
     # Create a thread that will execute the create_tokens function
-    thread = threading.Thread(target=create_tokens)
     # Daemon threads are stopped automatically when the main program exits
-    thread.daemon = True
     # Start the thread
-    thread.start()
+    threading.Thread(target=create_tokens, daemon=True).start()
 
 
     # Wait for the first access token to be available
     wait_for_token()
 
 
-
-
+    # Based on the users options start the parsing
     if service == "User Following Query":
         if user_input == "Type one starting username":
             user_following_query.parse_with_stdin(access_token)
@@ -114,10 +109,5 @@ def main():
     
 
 
-main()
-
-
-
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
