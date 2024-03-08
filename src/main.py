@@ -1,5 +1,6 @@
 
 import user_following_query
+import create_access_token
 
 
 
@@ -46,19 +47,31 @@ def switch(option, user_input, token):
 def main():
     print("\n")
 
+    # Choose which service to provide 
     print("Please choose what service you would like to access:")
     service_options = ["User Following Query", "User Liked Videos Query"]
     service_chose = get_user_choice(service_options)
 
     print("\n")
 
+    # Choose if from stdin or from list
     print("Please choose how to upload the usernames to be parsed")
     user_input_options = ["Type one starting username", "Upload a list"]
     user_input = get_user_choice(user_input_options)
 
     print("\n")
 
-    access_token = input("Enter your access token: ")
+    # Get key and secret
+    key = input("Please enter your key (don't worry this information wont be saved): ")
+    secret = input("Please enter your secret (don't worry this information wont be saved): ")
+
+
+
+
+
+
+    # Create the access token
+    access_token = create_access_token.get_token(key, secret)
 
     switch(service_chose, user_input, access_token)
 
