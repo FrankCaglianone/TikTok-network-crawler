@@ -106,53 +106,7 @@ def main():
 
 
 
-
-
 main()
-
-
-
-
-def testing(): 
-    global key 
-    global secret
-    key = input("Please enter your key (don't worry this information wont be saved): ")
-    secret = input("Please enter your secret (don't worry this information wont be saved): ")
-
-
-
-
-
-
-    ##### Start the thread to create the access tokens #####
-    # Create a thread that will execute the create_tokens function
-    thread = threading.Thread(target=create_tokens)
-    # Daemon threads are stopped automatically when the main program exits
-    thread.daemon = True
-    # Start the thread
-    thread.start()
-
-
-
-
-
-
-
-    i = 0
-
-    # Your main program can continue executing in parallel
-    while i < 40:
-        print("Main program continues to run in parallel.")
-        i += 1
-        time.sleep(1)
-
-
-
-
-
-
-
-
 
 
 
