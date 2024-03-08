@@ -133,7 +133,7 @@ def get_all_followers(parsing_user):
         # Create body
         body = {
             "username": parsing_user,
-            "max_count": 10,
+            "max_count": 100,
         }
 
         # Add cursor to request if it exists
