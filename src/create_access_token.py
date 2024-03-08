@@ -1,4 +1,5 @@
 import requests
+import sys
 
 
 
@@ -28,7 +29,7 @@ def get_token(key, secret):
     # Get the response
     if auth_response.status_code == 200:
         if auth_response.json().get('access_token') is None:
-            print('Authentication failed, please check your credentials')
+            sys.exit('Authentication failed, please check your credentials')
         else:
             token = auth_response.json().get('access_token')
             expiration = auth_response.json().get('expires_in')
@@ -38,5 +39,7 @@ def get_token(key, secret):
             print("Access Token: ", token)
             print("Expiration in seconds: ", expiration)
             print("Token Type: ", type)
+
+            return token
     else:
-        print("Failed to obtain access token. Status code:", auth_response.status_code)
+        sys.exit("Failed to obtain access token. Status code:", auth_response.status_code)

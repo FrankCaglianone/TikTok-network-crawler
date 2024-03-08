@@ -148,7 +148,7 @@ def get_all_followers(parsing_user):
         elif response.status_code == 401:
             # If status code 401, means the access token it's incorrect, terminate program and try again
             print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
-            sys.exit("Terminating the program due to an error. Please check your access token")
+            sys.exit("Terminating the program due to an error. Please check your access credentials")
         elif response.status_code == 403:
             # If status code 403, that user cannot be accessed, break, if there are more users in the queue it proceeds, if it is the only user it terminates
             break

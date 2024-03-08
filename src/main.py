@@ -1,6 +1,8 @@
 
 import user_following_query
 import create_access_token
+import threading
+import time
 
 
 
@@ -29,6 +31,7 @@ def get_user_choice(options):
 
 
 
+
 # Switch case block function, actual block is from python 3.10 above
 def switch(option, user_input, token):
     if option == "User Following Query":
@@ -40,6 +43,32 @@ def switch(option, user_input, token):
 
 
         
+
+
+
+
+### Global Variables
+access_token = None
+key = None
+secret = None
+
+
+
+
+# Use multithreading to instantiate a timer to create an access token every ~ 2 hours
+def create_tokens():
+    # Access Global Variables
+    global access_token
+    global key
+    global secret
+
+    while True:
+        access_token = create_access_token.get_token(key, secret)
+        print(f"New Key Created: {access_token} \n")
+        time.sleep(10) # Sleep for 2 hours, 7200s
+
+
+
 
 
 
@@ -62,8 +91,12 @@ def main():
     print("\n")
 
     # Get key and secret
+    global key 
+    global secret
     key = input("Please enter your key (don't worry this information wont be saved): ")
     secret = input("Please enter your secret (don't worry this information wont be saved): ")
+
+
 
 
 
@@ -79,5 +112,53 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
+def testing(): 
+    global key 
+    global secret
+    key = input("Please enter your key (don't worry this information wont be saved): ")
+    secret = input("Please enter your secret (don't worry this information wont be saved): ")
+
+
+
+
+
+
+    ##### Start the thread to create the access tokens #####
+    # Create a thread that will execute the create_tokens function
+    thread = threading.Thread(target=create_tokens)
+    # Daemon threads are stopped automatically when the main program exits
+    thread.daemon = True
+    # Start the thread
+    thread.start()
+
+
+
+
+
+
+
+    i = 0
+
+    # Your main program can continue executing in parallel
+    while i < 40:
+        print("Main program continues to run in parallel.")
+        i += 1
+        time.sleep(1)
+
+
+
+
+
+
+
+
+
+testing()
+
+
+
+
+
+
+# if __name__ == "__main__":
+#     main()
