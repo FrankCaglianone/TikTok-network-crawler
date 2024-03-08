@@ -198,7 +198,6 @@ def parse_network():
 
    
 # Declaring Global Variables
-starting_user = None
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 queue = [] # Queue of username to parse
@@ -218,7 +217,6 @@ def parse_with_stdin(token):
         # Get the key and the first user to parse from stdin
         global access_token
         access_token = token
-        global starting_user
         starting_user = input("Please enter the TikTok Username: ")
         
         # Add the starting username to dictionary and queue
@@ -260,11 +258,12 @@ def parse_with_list(token):
         # Start parsing
         parse_network()
 
-        print_dictionary()
+        # print_dictionary()
     except Exception as e:
         # If exception is catched save and close
         cleanup_and_save()
         print(f"Unhandled exception: {e}")
+
 
 
 
