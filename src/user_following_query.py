@@ -69,14 +69,22 @@ def handle_signal_received():
 def read_from_csv(file_path):
     starting_users = []
 
-    # Open the file and read the contents
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        csv_reader = csv.reader(file)
-        
-        # Loop through the rows in the file
-        for row in csv_reader:
-            starting_users.append(row[0])
-            # print(row[0])    
+    try:
+        # Open the file and read the contents
+        with open(file_path, mode='r', encoding='utf-8') as file:
+            csv_reader = csv.reader(file)
+            
+            # Loop through the rows in the file
+            for row in csv_reader:
+                starting_users.append(row[0])
+                # print(row[0])
+        #
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {file_path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
     return starting_users
 
 
@@ -258,13 +266,11 @@ def parse_with_list(token):
         # Start parsing
         parse_network()
 
-        # print_dictionary()
+        print_dictionary()
     except Exception as e:
         # If exception is catched save and close
         cleanup_and_save()
         print(f"Unhandled exception: {e}")
-
-
 
 
 
