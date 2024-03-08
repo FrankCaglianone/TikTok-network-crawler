@@ -1,7 +1,6 @@
 import requests
 import csv
 import sys
-import csv
 import atexit
 import signal
 

@@ -31,22 +31,6 @@ def get_user_choice(options):
 
 
 
-
-# Switch case block function, actual block is from python 3.10 above
-def switch(option, user_input, token):
-    if option == "User Following Query":
-        if user_input == "Type one starting username":
-            user_following_query.parse_with_stdin(token)
-        else:
-            user_following_query.parse_with_list(token)
-        return
-
-
-        
-
-
-
-
 ### Global Variables
 access_token = None
 key = None
@@ -79,7 +63,7 @@ def main():
     # Choose which service to provide 
     print("Please choose what service you would like to access:")
     service_options = ["User Following Query", "User Liked Videos Query"]
-    service_chose = get_user_choice(service_options)
+    service = get_user_choice(service_options)
 
     print("\n")
 
@@ -98,16 +82,33 @@ def main():
 
 
 
+    ##### Start the thread to create the access tokens #####
+    # Create a thread that will execute the create_tokens function
+    thread = threading.Thread(target=create_tokens)
+    # Daemon threads are stopped automatically when the main program exits
+    thread.daemon = True
+    # Start the thread
+    thread.start()
+
+
+
+
+    global access_token
+
+
+    if service == "User Following Query":
+        if user_input == "Type one starting username":
+            user_following_query.parse_with_stdin(access_token)
+        else:
+            user_following_query.parse_with_list(access_token)
+        return
+    
 
 
 
 
 
-    # Create the access token
-    access_token = create_access_token.get_token(key, secret)
-
-    switch(service_chose, user_input, access_token)
-
+main()
 
 
 
@@ -150,10 +151,6 @@ def testing():
 
 
 
-
-
-
-testing()
 
 
 
