@@ -49,7 +49,7 @@ def create_tokens():
             access_token = create_access_token.get_token(key, secret)
             print(f"New Key Created: {access_token} \n")
             condition.notify_all() # Notify all waiting threads that the token is updated
-        time.sleep(10) # Sleep for 2 hours, 7200s
+        time.sleep(7000) # Sleep for 2 hours, 7200s
 
 
 

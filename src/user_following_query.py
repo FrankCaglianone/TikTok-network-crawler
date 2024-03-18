@@ -3,6 +3,7 @@ import csv
 import sys
 import atexit
 import signal
+import datetime
 
 '''
     Response structure example
@@ -62,12 +63,20 @@ def save_jsons():
 
 
 
+def save_time_stamps():
+    with open('time_stamps.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Time Stamps"]) 
+        for row in time_stamps:
+            writer.writerow([row])
+
 
 
 def cleanup_and_save():
     print("Saving all data to CSV before exiting...")
     save_to_csv()
     save_jsons()
+    save_time_stamps()
     
 
 
@@ -165,12 +174,20 @@ def get_all_followers(parsing_user):
             data = response.json().get('data')
             all_followers.extend(data.get('user_following'))
 
-            # Add data to the jsons map
+            # Add data to the jsons map and Save response time stamp
             if parsing_user in jsons:
+                # Add data to jsons map
                 jsons[f"{parsing_user} {json_index}"] = data
+                # Add the time stamp to time_stamp list
+                elapsed_time = datetime.datetime.now() - start_time
+                time_stamps.append(f"{parsing_user} {json_index} response at {elapsed_time}")
                 json_index += 1
             else:
+                # Add data to jsons map
                 jsons[parsing_user] = data
+                # Add the time stamp to time_stamp list
+                elapsed_time = datetime.datetime.now() - start_time
+                time_stamps.append(f"{parsing_user} response at {elapsed_time}")
 
 
             # Check if there are more followers to fetch
@@ -231,9 +248,11 @@ def parse_network():
    
 # Declaring Global Variables
 access_token = None
+start_time = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 queue = [] # Queue of username to parse
 jsons = {} # Maps for json files
+time_stamps = []
 
 
 
@@ -246,9 +265,10 @@ def parse_with_stdin(token):
     signal.signal(signal.SIGTERM, handle_signal_received)
 
     # Execute code normally
-    try: 
+    try:
         # Get the key and the first user to parse from stdin
-        global access_token
+        global access_token, start_time
+        start_time = datetime.datetime.now()
         access_token = token
         starting_user = input("Please enter the TikTok Username: ")
         
@@ -277,7 +297,8 @@ def parse_with_list(token):
     # Execute code normally
     try: 
         # Get the key and the path to the list of users to parse
-        global access_token
+        global access_token, start_time
+        start_time = datetime.datetime.now()
         access_token = token
         file_path = input("Enter the path to your .csv file: ")
 
