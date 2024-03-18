@@ -53,9 +53,21 @@ def save_to_csv():
             writer.writerow([username])
 
 
+def save_jsons():
+    with open('saved_jsons.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Username", "Json_response"])  # Writing headers
+        for username, data in jsons.items():
+            writer.writerow([username, data])
+
+
+
+
+
 def cleanup_and_save():
-    print("Saving data to CSV before exiting...")
+    print("Saving all data to CSV before exiting...")
     save_to_csv()
+    save_jsons()
     
 
 
@@ -111,6 +123,10 @@ def populate_queue(followers_list):
 
 # DOCSTRING
 def get_all_followers(parsing_user):
+    # Helper
+    json_index = 1
+
+
     # To return
     all_followers = []
 
@@ -148,6 +164,14 @@ def get_all_followers(parsing_user):
             # If status code is succesfull, proceed
             data = response.json().get('data')
             all_followers.extend(data.get('user_following'))
+
+            # Add data to the jsons map
+            if parsing_user in jsons:
+                jsons[f"{parsing_user} {json_index}"] = data
+                json_index += 1
+            else:
+                jsons[parsing_user] = data
+
 
             # Check if there are more followers to fetch
             has_more = data.get('has_more', False)
@@ -209,6 +233,7 @@ def parse_network():
 access_token = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 queue = [] # Queue of username to parse
+jsons = {} # Maps for json files
 
 
 
