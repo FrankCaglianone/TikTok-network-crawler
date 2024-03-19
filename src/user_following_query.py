@@ -195,23 +195,7 @@ def read_from_csv(file_path):
 
 
 # --- QUEUE MANAGEMENT FUNCTION ---
-"""
-    Populates the global `queue` with usernames from a list of followers, excluding duplicates.
-
-    Iterates through each user in `followers_list`, extracting the `username` from each. If the username
-    is not already present in the global `parsing_list`, it is added to the global `queue`. This process
-    ensures that the queue contains a unique set of usernames for further processing.
-
-    Parameters:
-        followers_list (list of dict): A list where each item is a dictionary representing a follower,
-                                        expected to have a key "username" that provides the unique username of the follower.
-
-    Note:
-        - This function modifies the global `queue` directly.
-        - `parsing_list` is a dictionary where keys are usernames and its presence indicates
-          that the user has already been processed or is scheduled for processing.
-        - `queue` is a list that is intended to hold usernames for upcoming processing.
-"""
+# TODO: Fixed the bug checking for duplicates in the parse, but need a better time complexity solution
 def populate_queue(followers_list):
 
     # Loop through every user in the follower list
@@ -220,11 +204,14 @@ def populate_queue(followers_list):
         username = user["username"]
 
         # If already in dictionary skip
-        if username in parsing_list:
+        if username in parsing_list or username in queue:
             continue
         else:
             # Add the new user to the queue
             queue.append(username)
+
+
+
 
 
 
