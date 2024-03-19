@@ -31,13 +31,33 @@ import datetime
 
 
 
-# Helper functions
+
+
+
+
+
+
+# --- Helper functions ---
 def print_dictionary():
     print("Username to Parsed Status:")
     for username, parsed in parsing_list.items():
         print(f"{username}: {parsed}")
 
 
+
+
+
+# --- DATA SAVING FUNCTIONS ---
+"""
+    Saves data from the `parsing_list` dictionary and the `queue` list into two separate CSV files.
+
+    - The `parsing_list.csv` file will contain two columns: "Username" and "Parsed Status", 
+      representing keys and values from the `parsing_list` dictionary, respectively. 
+    - The `queue.csv` file will contain a single column: "Usernames to parse", 
+      listing all usernames to still parse from the `queue` list.
+
+    Both files are saved with no extra line spaces between rows.
+"""
 def save_to_csv():
     # Save parsing_list to CSV
     with open('parsing_list.csv', 'w', newline='') as file:
@@ -54,15 +74,16 @@ def save_to_csv():
             writer.writerow([username])
 
 
-def save_jsons():
-    with open('saved_jsons.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Username", "Json_response"])  # Writing headers
-        for username, data in jsons.items():
-            writer.writerow([username, data])
 
+"""
+    Saves a list of time stamps into a CSV file named `time_stamps.csv`.
 
+    The resulting CSV file will contain a single column titled "Time Stamps", 
+    with each row containing a time stamp from the `time_stamps` list representing the time 
+    at which the response for that username was received since the program started.
 
+    The file is saved with no extra line spaces between rows.
+"""
 def save_time_stamps():
     with open('time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -72,6 +93,35 @@ def save_time_stamps():
 
 
 
+
+
+# TODO: fix the function
+def save_jsons():
+    with open('saved_jsons.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Username", "Json_response"])  # Writing headers
+        for username, data in jsons.items():
+            writer.writerow([username, data])
+
+
+
+
+
+
+
+
+
+# --- HANDLERS FOR DATA SAVING OPERATIONS ---
+"""
+    Handles the saving of all relevant data structures to CSV files before exiting the application.
+
+    This function sequentially calls:
+    - `save_to_csv()` to save parsing-related data and queued usernames to 'parsing_list.csv' and 'queue.csv' respectively.
+    - `save_jsons()` to save JSON responses associated with usernames to 'saved_jsons.csv'.
+    - `save_time_stamps()` to save time stamps to 'time_stamps.csv'.
+
+    The function ensures that all in-memory data is persisted to disk in a structured CSV format, facilitating later analysis or application restarts.
+"""
 def cleanup_and_save():
     print("Saving all data to CSV before exiting...")
     save_to_csv()
@@ -79,14 +129,41 @@ def cleanup_and_save():
     save_time_stamps()
     
 
+"""
+    Responds to a termination signal by ensuring all data is safely saved before exiting the application.
 
+    When a signal (e.g., SIGINT from a keyboard interrupt, or another termination signal) is received, this function:
+    1. Calls `cleanup_and_save()` to perform all necessary data saving operations, ensuring no data loss occurs.
+    2. Exits the application with a status code of 0, indicating a clean and intentional shutdown.
 
+    This function is registered as a handler for termination signals to ensure graceful exits.
+"""
 def handle_signal_received():
     cleanup_and_save()
     exit(0)
 
 
 
+
+
+
+
+# --- CSV DATA RETRIEVAL FUNCTION ---
+"""
+    This function opens a CSV file located at the given file_path, reads its contents,
+    and appends the first item of each row to a list. This list is then returned. The
+    function is designed to handle UTF-8 encoded CSV files.
+
+    Parameters:
+        file_path (str): The path to the CSV file to be read.
+
+    Returns:
+        list: A list of strings, each representing the first column's value from each row in the CSV file.
+
+    Raises:
+        SystemExit: If the file at the specified path is not found, or if an unexpected error occurs during file reading, 
+                    the function will print an error message and terminate the execution of the program.
+"""
 def read_from_csv(file_path):
     starting_users = []
 
@@ -112,7 +189,29 @@ def read_from_csv(file_path):
 
 
 
-# DOCSTRING
+
+
+
+
+
+# --- QUEUE MANAGEMENT FUNCTION ---
+"""
+    Populates the global `queue` with usernames from a list of followers, excluding duplicates.
+
+    Iterates through each user in `followers_list`, extracting the `username` from each. If the username
+    is not already present in the global `parsing_list`, it is added to the global `queue`. This process
+    ensures that the queue contains a unique set of usernames for further processing.
+
+    Parameters:
+        followers_list (list of dict): A list where each item is a dictionary representing a follower,
+                                        expected to have a key "username" that provides the unique username of the follower.
+
+    Note:
+        - This function modifies the global `queue` directly.
+        - `parsing_list` is a dictionary where keys are usernames and its presence indicates
+          that the user has already been processed or is scheduled for processing.
+        - `queue` is a list that is intended to hold usernames for upcoming processing.
+"""
 def populate_queue(followers_list):
 
     # Loop through every user in the follower list
@@ -126,6 +225,20 @@ def populate_queue(followers_list):
         else:
             # Add the new user to the queue
             queue.append(username)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
