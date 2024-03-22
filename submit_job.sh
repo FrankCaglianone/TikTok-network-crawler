@@ -7,7 +7,7 @@
 #SBATCH --mem=4gb                          # Memory total in MB (for all cores)
 #SBATCH --time=02:00:00                    # Time limit hrs:min:sec
 #SBATCH --partition=brown                  # Run on either the Red or Brown queue
-#SBATCH --mail-type=FAIL,END               # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-type=FAIL,END,BEGIN         # Mail events (NONE, BEGIN, END, FAIL, ALL)
 
 # Load any modules or software you need
 # module load python3
