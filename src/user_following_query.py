@@ -358,7 +358,7 @@ time_stamps = []
 
 
 
-def parse_with_stdin(token):
+def parse_with_stdin(token, user_input):
     # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -370,7 +370,7 @@ def parse_with_stdin(token):
         global access_token, start_time
         start_time = datetime.datetime.now()
         access_token = token
-        starting_user = input("Please enter the TikTok Username: ")
+        starting_user = user_input
         
         # Add the starting username to dictionary and queue
         queue.append(starting_user)
@@ -388,7 +388,7 @@ def parse_with_stdin(token):
 
 
 
-def parse_with_list(token):
+def parse_with_list(token, user_input):
      # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -400,7 +400,7 @@ def parse_with_list(token):
         global access_token, start_time
         start_time = datetime.datetime.now()
         access_token = token
-        file_path = input("Enter the path to your .csv file: ")
+        file_path = user_input
 
         # Get all the starting users to parse from the file
         starting_users = read_from_csv(file_path)
