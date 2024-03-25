@@ -234,6 +234,7 @@ def populate_queue(followers_list):
 def get_all_followers(parsing_user):
     # Helper
     json_index = 1
+    json_list = []
 
 
     # To return
@@ -254,7 +255,7 @@ def get_all_followers(parsing_user):
     has_more = True
 
     # Loop to fetch all followers
-    while has_more and len(all_followers) <= 30:
+    while has_more and len(all_followers) <= 100:
         # Create body
         body = {
             "username": parsing_user,
@@ -274,20 +275,24 @@ def get_all_followers(parsing_user):
             data = response.json().get('data')
             all_followers.extend(data.get('user_following'))
 
+
+            json_list.append(data)
+
             # Add data to the jsons map and Save response time stamp
             if parsing_user in jsons:
                 # Add data to jsons map
-                jsons[f"{parsing_user} {json_index}"] = data
+                # jsons[f"{parsing_user} {json_index}"] = data
                 # Add the time stamp to time_stamp list
                 elapsed_time = datetime.datetime.now() - start_time
                 time_stamps.append(f"{parsing_user} {json_index} response at {elapsed_time}")
                 json_index += 1
             else:
                 # Add data to jsons map
-                jsons[parsing_user] = data
+                # jsons[parsing_user] = data
                 # Add the time stamp to time_stamp list
                 elapsed_time = datetime.datetime.now() - start_time
                 time_stamps.append(f"{parsing_user} response at {elapsed_time}")
+
 
 
             # Check if there are more followers to fetch
@@ -307,6 +312,8 @@ def get_all_followers(parsing_user):
             print("Failed to retrieve followers. Status code:", response.status_code)
             break
 
+    jsons[parsing_user] = json_list
+
     return all_followers, response.status_code
 
 
@@ -316,7 +323,7 @@ def get_all_followers(parsing_user):
 # DOCSTRING
 def parse_network():
     # Loop until queue is empty
-    while queue and len(queue) <= 100:
+    while queue and len(queue) <= 400:
 
         # Get the first item from the queue
         i = queue.pop(0)
