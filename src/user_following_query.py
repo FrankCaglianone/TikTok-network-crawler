@@ -87,9 +87,15 @@ def save_to_csv():
 def save_time_stamps():
     with open('time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["Time Stamps"]) 
-        for row in time_stamps:
-            writer.writerow([row])
+        writer.writerow(["Username", "Time Stamp"])  # Writing headers
+        for username, timestamps in time_stamps.items():
+            # Check if timestamps is a list and not None
+            if timestamps and isinstance(timestamps, list):
+                # Iterate through all timestamps if it's a list
+                for timestamp in timestamps:
+                    writer.writerow([username, timestamp])
+            elif timestamps:  # Not a list, but a single timestamp (and not None)
+                writer.writerow([username, timestamps])
 
 
 
@@ -235,7 +241,7 @@ def get_all_followers(parsing_user):
     # Helper
     json_index = 1
     json_list = []
-
+    tmp = []
 
     # To return
     all_followers = []
@@ -278,20 +284,9 @@ def get_all_followers(parsing_user):
 
             json_list.append(data)
 
-            # Add data to the jsons map and Save response time stamp
-            if parsing_user in jsons:
-                # Add data to jsons map
-                # jsons[f"{parsing_user} {json_index}"] = data
-                # Add the time stamp to time_stamp list
-                elapsed_time = datetime.datetime.now() - start_time
-                time_stamps.append(f"{parsing_user} {json_index} response at {elapsed_time}")
-                json_index += 1
-            else:
-                # Add data to jsons map
-                # jsons[parsing_user] = data
-                # Add the time stamp to time_stamp list
-                elapsed_time = datetime.datetime.now() - start_time
-                time_stamps.append(f"{parsing_user} response at {elapsed_time}")
+
+            elapsed_time = datetime.datetime.now() - start_time
+            time_stamps[parsing_user].append(elapsed_time)
 
 
 
@@ -313,6 +308,7 @@ def get_all_followers(parsing_user):
             break
 
     jsons[parsing_user] = json_list
+    time_stamps[parsing_user] = tmp
 
     return all_followers, response.status_code
 
@@ -359,7 +355,7 @@ start_time = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 queue = [] # Queue of username to parse
 jsons = {} # Maps for json files
-time_stamps = []
+time_stamps = {}
 
 
 
