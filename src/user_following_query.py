@@ -60,14 +60,14 @@ def print_dictionary():
 """
 def save_to_csv():
     # Save parsing_list to CSV
-    with open('parsing_list.csv', 'w', newline='') as file:
+    with open('./outputs/parsing_list.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Parsed Status"])  # Writing headers
         for username, parsed_status in parsing_list.items():
             writer.writerow([username, parsed_status])
 
     # Save queue to CSV
-    with open('queue.csv', 'w', newline='') as file:
+    with open('./outputs/queue.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Usernames to parse"]) 
         for username in queue:
@@ -85,17 +85,21 @@ def save_to_csv():
     The file is saved with no extra line spaces between rows.
 """
 def save_time_stamps():
-    with open('time_stamps.csv', 'w', newline='') as file:
+    with open('./outputs/time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Time Stamp"])  # Writing headers
         for username, timestamps in time_stamps.items():
-            # Check if timestamps is a list and not None
-            if timestamps and isinstance(timestamps, list):
-                # Iterate through all timestamps if it's a list
-                for timestamp in timestamps:
-                    writer.writerow([username, timestamp])
-            elif timestamps:  # Not a list, but a single timestamp (and not None)
-                writer.writerow([username, timestamps])
+            # If timestamps is None or not a list, log an error or handle it as you see fit
+            if timestamps is None:
+                print(f"Error: No timestamps found for username {username}.")
+                continue  # Skip this username
+            elif not isinstance(timestamps, list):
+                print(f"Error: Timestamps for username {username} is not a list.")
+                continue  # Skip this username
+
+            # Writing username and all its timestamps in one row
+            row = [username] + timestamps
+            writer.writerow(row)
 
 
 
@@ -103,7 +107,7 @@ def save_time_stamps():
 
 # TODO: fix the function
 def save_jsons():
-    with open('saved_jsons.csv', 'w', newline='') as file:
+    with open('./outputs/saved_jsons.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Json_response"])  # Writing headers
         for username, data in jsons.items():
@@ -275,6 +279,13 @@ def get_all_followers(parsing_user):
         # Make the post request
         response = requests.post(url=url, headers=header, json=body)
 
+
+        elapsed_time = int(((datetime.datetime.now() - start_time).total_seconds()) * 1000)
+        tmp.append(elapsed_time)
+
+
+
+
         # Check request status code
         if response.status_code == 200:
             # If status code is succesfull, proceed
@@ -283,12 +294,6 @@ def get_all_followers(parsing_user):
 
 
             json_list.append(data)
-
-
-            elapsed_time = datetime.datetime.now() - start_time
-            time_stamps[parsing_user].append(elapsed_time)
-
-
 
             # Check if there are more followers to fetch
             has_more = data.get('has_more', False)
