@@ -84,6 +84,7 @@ def save_to_csv():
 
     The file is saved with no extra line spaces between rows.
 """
+# TODO: fix documentation
 def save_time_stamps():
     with open('./outputs/time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -228,19 +229,7 @@ def populate_queue(followers_list):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# DOCSTRING
+# TODO: DOCSTRING
 def get_all_followers(parsing_user):
     # Helper
     json_index = 1
@@ -321,7 +310,7 @@ def get_all_followers(parsing_user):
 
 
 
-# DOCSTRING
+# TODO: DOCSTRING
 def parse_network():
     # Loop until queue is empty
     while queue and len(queue) <= 400:
@@ -366,6 +355,7 @@ time_stamps = {}
 
 
 
+# TODO: DOCSTRING
 def parse_with_stdin(token, user_input):
     # Set saving options
     atexit.register(cleanup_and_save)
@@ -396,6 +386,9 @@ def parse_with_stdin(token, user_input):
 
 
 
+
+
+# TODO: DOCSTRING
 def parse_with_list(token, user_input):
      # Set saving options
     atexit.register(cleanup_and_save)
