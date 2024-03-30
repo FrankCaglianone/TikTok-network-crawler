@@ -280,8 +280,8 @@ def get_all_followers(parsing_user):
         response = requests.post(url=url, headers=header, json=body)
 
 
-        elapsed_time = int(((datetime.datetime.now() - start_time).total_seconds()) * 1000)
-        tmp.append(elapsed_time)
+        elapsed_time = datetime.datetime.now() - start_time
+        tmp.append(f"{elapsed_time}")
 
 
 
