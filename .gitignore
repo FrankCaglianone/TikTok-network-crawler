@@ -2,13 +2,15 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python,visualstudiocode,visualstudio
 
 
+.env
+
+
 
 ### Saved .csv files ###
 parsing_list.csv
 queue.csv
 saved_jsons.csv
 time_stamps.csv
-
 
 
 ### macOS ###
