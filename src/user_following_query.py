@@ -1,4 +1,4 @@
-import requests
+import requests # type: ignore
 import csv
 import sys
 import atexit
@@ -254,7 +254,7 @@ def get_all_followers(parsing_user):
     has_more = True
 
     # Loop to fetch all followers
-    while has_more and len(all_followers) <= 100:
+    while has_more:    # and len(all_followers) <= 100
         # Create body
         body = {
             "username": parsing_user,
@@ -313,7 +313,7 @@ def get_all_followers(parsing_user):
 # TODO: DOCSTRING
 def parse_network():
     # Loop until queue is empty
-    while queue and len(queue) <= 400:
+    while queue:   # and len(queue) <= 400
 
         # Get the first item from the queue
         i = queue.pop(0)
@@ -349,7 +349,7 @@ start_time = None
 parsing_list = {}  # Maps username to parsed bit (0 or 1)
 queue = [] # Queue of username to parse
 jsons = {} # Maps for json files
-time_stamps = {}
+time_stamps = {} # Map for time stamps
 
 
 
