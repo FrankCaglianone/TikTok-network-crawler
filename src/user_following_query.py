@@ -128,6 +128,16 @@ def save_jsons():
 
 
 
+def save_network():
+    with open('src/outputs/network.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Source", "Destination"])
+        # Write each tuple in the network list to the file
+        for connection in network_graph:
+            writer.writerow(connection)
+
+
+
 
 
 
@@ -147,6 +157,8 @@ def cleanup_and_save():
     save_to_csv()
     save_jsons()
     save_time_stamps()
+    save_network()
+
     
 
 """
@@ -217,9 +229,9 @@ def read_from_csv(file_path):
 ########## QUEUE MANAGEMENT FUNCTION ##########
 
 
-# TODO: ADD NETWORK GRAPH
+
 # TODO: Fixed the bug checking for duplicates in the parse, but need a better time complexity solution
-def populate_queue(followers_list):
+def populate_queue(followers_list, parsing_user):
     # Loop through every user in the follower list
     for user in followers_list:
         # Get the username @
@@ -231,6 +243,9 @@ def populate_queue(followers_list):
         else:
             # Add the new user to the queue
             queue.append(username)
+        
+        tmp = (parsing_user, username)
+        network_graph.append(tmp)
 
 
 
@@ -369,7 +384,7 @@ def parse_network():
 
 
         # Populate the dictionary and the queue with the newly fetched followees
-        populate_queue(followers_list)
+        populate_queue(followers_list, i)
 
 
 
@@ -382,6 +397,7 @@ parsing_list = {}  # Maps the username to its parsed bit.
 queue = [] # Queue of all username to still be parsed.
 jsons = {} # Maps each username to a list of all its json responses.
 time_stamps = {} # Maps each username to a list of all the timestamps of its json responses.
+network_graph = []
 
 
 
