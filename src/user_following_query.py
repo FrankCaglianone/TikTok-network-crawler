@@ -127,7 +127,19 @@ def save_jsons():
 
 
 
+"""
+    Saves the global network graph to a CSV file.
 
+    This function iterates over the global `network_graph` variable, which is expected to be a list of tuples. 
+    Each tuple represents a directional relationship between two users (i.e., a source user and their followee, the destination user). 
+    It writes these relationships to a CSV file, creating a representation of the social network.
+
+    The CSV file will have two columns: "Source" and "Destination", corresponding to the user and their followee, respectively. 
+    Each row after the header represents one such relationship in the network.
+
+    Notes:
+    - The function writes the CSV file to 'src/outputs/network.csv'. It will overwrite any existing file at this location.
+"""
 def save_network():
     with open('src/outputs/network.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -149,6 +161,7 @@ def save_network():
     - `save_to_csv()` to save parsing-related data and queued usernames to 'parsing_list.csv' and 'queue.csv' respectively.
     - `save_jsons()` to save JSON responses associated with usernames to 'saved_jsons.csv'.
     - `save_time_stamps()` to save time stamps to 'time_stamps.csv'.
+    - 'save_network()' to save network connections to 'network.csv'.
 
     The function ensures that all in-memory data is persisted to disk in a structured CSV format, facilitating later analysis or application restarts.
 """
@@ -226,10 +239,19 @@ def read_from_csv(file_path):
 
 
 
-########## QUEUE MANAGEMENT FUNCTION ##########
+########## QUEUE & NETWORK MANAGEMENT FUNCTION ##########
+"""
+    Adds the followees that still need to be parsed to the global queue for further processing.
+    Saves their relationship with the parsing user in a global network graph.
 
+    This function iterates over a list of followers, each represented as a dictionary with "username" key and "display_name" value.
+    It adds each unique followee's username to the global queue unless the username already exists in either the global parsing list or the queue itself. 
+    Additionally, it records the relationship between the parsing user and each follower by appending a tuple to a global network graph data structure.
 
-
+    Parameters:
+    - followers_list (list of tuples): A list of tuples composed by "username" key and "display_name" value.
+    - parsing_user (str): The username of the user whose followees are being added. 
+"""
 # TODO: Fixed the bug checking for duplicates in the parse, but need a better time complexity solution
 def populate_queue(followers_list, parsing_user):
     # Loop through every user in the follower list
