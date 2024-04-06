@@ -279,6 +279,7 @@ def get_all_followers(parsing_user):
         if response.status_code == 200:
             # If status code is succesfull, proceed
             data = response.json().get('data')
+            # Append list of following to all_followers[] or append an empty list in case there are 0 followings
             all_followers.extend(data.get('user_following', []))
 
 
