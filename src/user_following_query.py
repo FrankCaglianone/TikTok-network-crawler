@@ -47,7 +47,7 @@ def print_dictionary():
 
 
 
-# --- DATA SAVING FUNCTIONS ---
+########## DATA SAVING FUNCTIONS ##########
 """
     Saves data from the `parsing_list` dictionary and the `queue` list into two separate CSV files.
 
@@ -56,7 +56,7 @@ def print_dictionary():
     - The `queue.csv` file will contain a single column: "Usernames to parse", 
       listing all usernames to still parse from the `queue` list.
 
-    Both files are saved with no extra line spaces between rows.
+    The file is saved in the `src/outputs` directory with no extra line spaces between rows.
 """
 def save_to_csv():
     # Save parsing_list to CSV
@@ -75,16 +75,17 @@ def save_to_csv():
 
 
 
-"""
-    Saves a list of time stamps into a CSV file named `time_stamps.csv`.
 
-    The resulting CSV file will contain a single column titled "Time Stamps", 
-    with each row containing a time stamp from the `time_stamps` list representing the time 
-    at which the response for that username was received since the program started.
 
-    The file is saved with no extra line spaces between rows.
 """
-# TODO: fix documentation
+    Saves a dictionary of usernames and their associated list of time stamps into a CSV file named `time_stamps.csv`.
+
+    The resulting CSV file will contain two columns: "Username" and "Time Stamp". 
+    Each row after the header will contain a username and their associated time stamps. 
+    If a username has multiple time stamps, all will be included in the same row, following the username.
+
+    The file is saved in the `src/outputs` directory with no extra line spaces between rows.
+"""
 def save_time_stamps():
     with open('src/outputs/time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -106,7 +107,15 @@ def save_time_stamps():
 
 
 
-# TODO: fix the function
+"""
+    Saves a dictionary of usernames and their associated JSON responses into a CSV file named `saved_jsons.csv`.
+
+    The resulting CSV file will have two columns: "Username" and "Json_response". 
+    Each row after the header will contain a username and the corresponding JSON response as a single string. 
+
+    The file is saved in the `src/outputs` directory. 
+    The CSV format is chosen for ease of use in spreadsheets and other data analysis tools.
+"""
 def save_jsons():
     with open('src/outputs/saved_jsons.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -122,7 +131,7 @@ def save_jsons():
 
 
 
-# --- HANDLERS FOR DATA SAVING OPERATIONS ---
+########## HANDLERS FOR DATA SAVING OPERATIONS ##########
 """
     Handles the saving of all relevant data structures to CSV files before exiting the application.
 
