@@ -391,7 +391,7 @@ time_stamps = {} # Maps each username to a list of all the timestamps of its jso
 
 
 
-
+########## NETWORK PARSING FUNCTIONS ##########
 """
     Initiates parsing based on a username provided through the terminal command line.
 
@@ -437,7 +437,6 @@ def parse_with_stdin(token, user_input):
         # If exception is catched save and close
         cleanup_and_save()
         print(f"Unhandled exception: {e}")
-
 
 
 
