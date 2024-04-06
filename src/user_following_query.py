@@ -1,4 +1,4 @@
-import requests # type: ignore
+import requests
 import csv
 import sys
 import atexit
@@ -60,14 +60,14 @@ def print_dictionary():
 """
 def save_to_csv():
     # Save parsing_list to CSV
-    with open('./outputs/parsing_list.csv', 'w', newline='') as file:
+    with open('src/outputs/parsing_list.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Parsed Status"])  # Writing headers
         for username, parsed_status in parsing_list.items():
             writer.writerow([username, parsed_status])
 
     # Save queue to CSV
-    with open('./outputs/queue.csv', 'w', newline='') as file:
+    with open('src/outputs/queue.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Usernames to parse"]) 
         for username in queue:
@@ -86,7 +86,7 @@ def save_to_csv():
 """
 # TODO: fix documentation
 def save_time_stamps():
-    with open('./outputs/time_stamps.csv', 'w', newline='') as file:
+    with open('src/outputs/time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Time Stamp"])  # Writing headers
         for username, timestamps in time_stamps.items():
@@ -108,7 +108,7 @@ def save_time_stamps():
 
 # TODO: fix the function
 def save_jsons():
-    with open('./outputs/saved_jsons.csv', 'w', newline='') as file:
+    with open('src/outputs/saved_jsons.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Json_response"])  # Writing headers
         for username, data in jsons.items():
@@ -279,7 +279,7 @@ def get_all_followers(parsing_user):
         if response.status_code == 200:
             # If status code is succesfull, proceed
             data = response.json().get('data')
-            all_followers.extend(data.get('user_following'))
+            all_followers.extend(data.get('user_following', []))
 
 
             json_list.append(data)
@@ -377,6 +377,7 @@ def parse_with_stdin(token, user_input):
         parse_network()
 
 
+        cleanup_and_save()
         print_dictionary()
     except Exception as e:
         # If exception is catched save and close
@@ -413,6 +414,8 @@ def parse_with_list(token, user_input):
         # Start parsing
         parse_network()
 
+
+        cleanup_and_save()
         print_dictionary()
     except Exception as e:
         # If exception is catched save and close
