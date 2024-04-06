@@ -240,14 +240,34 @@ def populate_queue(followers_list):
 
 
 
-# TODO: DOCSTRING
+
+"""
+    Retrieves all followees for a given user from the TikTok API, handling pagination and rate limits.
+
+    This function makes a series of POST requests to the TikTok API to fetch the complete list of followees for the specified user. 
+    It handles pagination by using a cursor, and continues to fetch data until all followers are retrieved or until an error occurs. 
+    Additionally, it tracks the response time for each request to monitor performance.
+
+    Parameters:
+    - parsing_user (str): The username of the TikTok user whose followers are to be retrieved.
+
+    Returns:
+    - tuple:
+        - all_followers (list): A list of tuples, each representing a follower, composed of "display_name" and "username".
+        - status_code (int): The HTTP status code of the last API request. Useful for identifying if the fetch was successful (200) or if it encountered issues (e.g., 401, 403, 500).
+
+    Notes:
+    - This function updates two global variables: `jsons` and `time_stamps`. `jsons` stores the JSON response for each user, and `time_stamps` keeps track of the elapsed time for each API call.
+    - The function uses a `while` loop with the condition `has_more` to manage pagination, controlled by the API's response indicating more data is available.
+
+    Exceptions:
+    - Exits the program if a 401 Unauthorized status code is encountered, indicating invalid authentication credentials.
+    - In case of 403 Forbidden or 500 Internal Server Error, the loop is exited, but the program does not terminate, allowing for the possibility of subsequent operations with other users.
+"""
 def get_all_followers(parsing_user):
     # Helper
-    json_index = 1
     json_list = []
     tmp = []
-
-    # To return
     all_followers = []
 
     # url to send the request
@@ -279,21 +299,20 @@ def get_all_followers(parsing_user):
         # Make the post request
         response = requests.post(url=url, headers=header, json=body)
 
-
+        # Append the timestamp of that response to the list
         elapsed_time = datetime.datetime.now() - start_time
         tmp.append(f"{elapsed_time}")
-
-
 
 
         # Check request status code
         if response.status_code == 200:
             # If status code is succesfull, proceed
             data = response.json().get('data')
+
             # Append list of following to all_followers[] or append an empty list in case there are 0 followings
             all_followers.extend(data.get('user_following', []))
 
-
+            # Append the json response to the list
             json_list.append(data)
 
             # Check if there are more followers to fetch
@@ -312,7 +331,8 @@ def get_all_followers(parsing_user):
         else:
             print("Failed to retrieve followers. Status code:", response.status_code)
             break
-
+    
+    # Append the list of jsons and the list of timestamps to the global data structures
     jsons[parsing_user] = json_list
     time_stamps[parsing_user] = tmp
 
@@ -355,13 +375,13 @@ def parse_network():
 
 
    
-# Declaring Global Variables
+########## Declaring Global Variables ##########
 access_token = None
 start_time = None
-parsing_list = {}  # Maps username to parsed bit (0 or 1)
-queue = [] # Queue of username to parse
-jsons = {} # Maps for json files
-time_stamps = {} # Map for time stamps
+parsing_list = {}  # Maps the username to its parsed bit.
+queue = [] # Queue of all username to still be parsed.
+jsons = {} # Maps each username to a list of all its json responses.
+time_stamps = {} # Maps each username to a list of all the timestamps of its json responses.
 
 
 
