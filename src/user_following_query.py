@@ -253,7 +253,7 @@ def read_from_csv(file_path):
     - parsing_user (str): The username of the user whose followees are being added. 
 """
 # TODO: Fixed the bug checking for duplicates in the parse, but need a better time complexity solution
-def populate_queue(followers_list, parsing_user):
+def populate_queue_and_network(followers_list, parsing_user):
     # Loop through every user in the follower list
     for user in followers_list:
         # Get the username @
@@ -379,7 +379,26 @@ def get_all_followers(parsing_user):
 
 
 
-# TODO: DOCSTRING
+"""
+    Processes users in a global queue by fetching their followees and updating the network graph and parsing status.
+
+    This function repeatedly removes users from a global queue, fetches their followees via the `get_all_followers` function, 
+    and then categorizes each user based on the HTTP status code returned from the attempt to fetch their followers. 
+    
+    It updates a global parsing list with the status of each user processed:
+        - 1 if the user's followers were successfully fetched (200),
+        - 2 if the user cannot be accessed (403),
+        - 3 if the user does not exist or was not found (500),
+        - 4 for any other response codes, indicating an unknown issue.
+
+    For each user processed successfully (code 200), their followers are added to the queue for future processing, 
+    and the relationship between the user and each follower is added to the global network graph.
+
+    Notes:
+    - The function modifies the global `queue`, `parsing_list`, and `network_graph` variables.
+    - The loop continues until the `queue` is empty, ensuring that the network is parsed as comprehensively as possible given the initial set of users.
+    - This function relies on `get_all_followers` to fetch follower data and `populate_queue_and_network` to add new users to the queue and update the network graph.
+"""
 def parse_network():
     # Loop until queue is empty
     while queue:   # and len(queue) <= 400
@@ -406,7 +425,7 @@ def parse_network():
 
 
         # Populate the dictionary and the queue with the newly fetched followees
-        populate_queue(followers_list, i)
+        populate_queue_and_network(followers_list, i)
 
 
 
