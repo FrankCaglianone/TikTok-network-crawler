@@ -37,7 +37,7 @@ import datetime
 
 
 
-# --- Helper functions ---
+# ########## Helper functions ##########
 def print_dictionary():
     print("Username to Parsed Status:")
     for username, parsed in parsing_list.items():
@@ -168,7 +168,7 @@ def handle_signal_received():
 
 
 
-# --- CSV DATA RETRIEVAL FUNCTION ---
+########## CSV DATA RETRIEVAL FUNCTION ##########
 """
     This function opens a CSV file located at the given file_path, reads its contents,
     and appends the first item of each row to a list. This list is then returned. The
@@ -214,10 +214,12 @@ def read_from_csv(file_path):
 
 
 
-# --- QUEUE MANAGEMENT FUNCTION ---
+########## QUEUE MANAGEMENT FUNCTION ##########
+
+
+# TODO: ADD NETWORK GRAPH
 # TODO: Fixed the bug checking for duplicates in the parse, but need a better time complexity solution
 def populate_queue(followers_list):
-
     # Loop through every user in the follower list
     for user in followers_list:
         # Get the username @
@@ -328,7 +330,7 @@ def parse_network():
         # Get the first item from the queue
         i = queue.pop(0)
 
-        # Get the followers list of that user and the status code
+        # Get the followees list of that user and the status code
         followers_list, code = get_all_followers(i)
 
         # Add user to dictionary with corresponding bit
@@ -346,7 +348,7 @@ def parse_network():
             parsing_list[i] = 4
 
 
-        # Populate the dictionary and the queue with the newly fetched followers
+        # Populate the dictionary and the queue with the newly fetched followees
         populate_queue(followers_list)
 
 
@@ -365,7 +367,29 @@ time_stamps = {} # Map for time stamps
 
 
 
-# TODO: DOCSTRING
+
+
+
+
+
+"""
+    Initiates parsing based on a username provided through the terminal command line.
+
+    This function configures signal handlers and a cleanup routine to ensure graceful shutdown and data saving. 
+    It starts the parsing process with a single user input as the initial point.
+
+    Parameters:
+    - token (str): Authentication token used for parsing operations.
+    - user_input (str): The username of the starting point for parsing.
+
+    After setting up, it adds the starting username to a global queue and begins the network parsing process.
+    In case of an exception, it ensures that cleanup and save operations are called before termination.
+
+    Note:
+    - This function modifies global variables and relies on external functions like `cleanup_and_save`,
+        `handle_signal_received`, and `parse_network` for its operations.
+    - It catches and handles any exceptions, ensuring that the cleanup function is always called.
+"""
 def parse_with_stdin(token, user_input):
     # Set saving options
     atexit.register(cleanup_and_save)
@@ -399,7 +423,24 @@ def parse_with_stdin(token, user_input):
 
 
 
-# TODO: DOCSTRING
+"""
+    Initiates parsing based on a list of users obtained from a specified file.
+
+    Similar to `parse_with_stdin`, this function sets up signal handlers and a cleanup routine for graceful shutdown and data saving. 
+    Instead of starting with a single user input, it reads a list of users from a provided file path and adds them to the global queue for parsing.
+
+    Parameters:
+    - token (str): Authentication token used for parsing operations.
+    - user_input (str): The file path containing the list of users to start parsing from.
+
+    The function reads the initial list of users to parse from the specified file and proceeds with the network parsing process. 
+    It ensures that cleanup and save operations are executed in case of an exception.
+
+    Note:
+    - This function modifies global variables and relies on external functions like `cleanup_and_save`,
+      `handle_signal_received`, `read_from_csv`, and `parse_network` for its operations.
+    - Exception handling is implemented to ensure cleanup is always performed.
+"""
 def parse_with_list(token, user_input):
      # Set saving options
     atexit.register(cleanup_and_save)
