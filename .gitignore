@@ -11,6 +11,7 @@ parsing_list.csv
 queue.csv
 saved_jsons.csv
 time_stamps.csv
+network.csv
 
 
 ### macOS ###
