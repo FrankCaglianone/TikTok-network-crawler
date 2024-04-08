@@ -4,6 +4,9 @@ import sys
 import atexit
 import signal
 import datetime
+import create_access_token
+import threading
+import time
 
 '''
     Response structure example
@@ -430,10 +433,56 @@ def parse_network():
 
 
 
+
+
+
+
+
+
+########## Token Creation Functions ##########
+condition = threading.Condition()  # Condition variable for synchronizing access to access_token
+
+
+# Use multithreading to instantiate a timer to create an access token every ~ 2 hours
+def create_tokens():
+    # Access Global Variables
+    global access_token, key, secret
+    while True:
+        # Simulate access token creation
+        with condition:
+            access_token = create_access_token.get_token(key, secret)
+            print(f"New Key Created: {access_token} \n")
+            condition.notify_all() # Notify all waiting threads that the token is updated
+        time.sleep(7000) # Sleep for 2 hours, 7200s, use 7000
+
+
+
+
+# Wait for the access token to be available.
+def wait_for_token():
+    global access_token
+    with condition:
+        while access_token is None:
+            condition.wait()  # Wait until the access token is updated
+
+
+
+
+
+
+
+
+
    
 ########## Declaring Global Variables ##########
 access_token = None
+key = None
+secret = None
 start_time = None
+
+
+
+########## Declaring Global Data Structures ##########
 parsing_list = {}  # Maps the username to its parsed bit.
 queue = [] # Queue of all username to still be parsed.
 jsons = {} # Maps each username to a list of all its json responses.
@@ -467,7 +516,7 @@ network_graph = []
         `handle_signal_received`, and `parse_network` for its operations.
     - It catches and handles any exceptions, ensuring that the cleanup function is always called.
 """
-def parse_with_stdin(token, user_input):
+def parse_with_stdin(stdin_key, stdin_secret, user_input):
     # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -476,10 +525,22 @@ def parse_with_stdin(token, user_input):
     # Execute code normally
     try:
         # Get the key and the first user to parse from stdin
-        global access_token, start_time
+        global key, secret, start_time
         start_time = datetime.datetime.now()
-        access_token = token
+        key = stdin_key
+        secret = stdin_secret
         starting_user = user_input
+
+
+        ##### Start the thread to create the access tokens #####
+        # Create a thread that will execute the create_tokens function
+        # Daemon threads are stopped automatically when the main program exits
+        # Start the thread
+        threading.Thread(target=create_tokens, daemon=True).start()
+
+        # Wait for the first access token to be available
+        wait_for_token()
+        
         
         # Add the starting username to dictionary and queue
         queue.append(starting_user)
@@ -517,7 +578,7 @@ def parse_with_stdin(token, user_input):
       `handle_signal_received`, `read_from_csv`, and `parse_network` for its operations.
     - Exception handling is implemented to ensure cleanup is always performed.
 """
-def parse_with_list(token, user_input):
+def parse_with_list(stdin_key, stdin_secret, user_input):
      # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -526,10 +587,22 @@ def parse_with_list(token, user_input):
     # Execute code normally
     try: 
         # Get the key and the path to the list of users to parse
-        global access_token, start_time
+        global key, secret, start_time
         start_time = datetime.datetime.now()
-        access_token = token
+        key = stdin_key
+        secret = stdin_secret
         file_path = user_input
+
+
+        ##### Start the thread to create the access tokens #####
+        # Create a thread that will execute the create_tokens function
+        # Daemon threads are stopped automatically when the main program exits
+        # Start the thread
+        threading.Thread(target=create_tokens, daemon=True).start()
+
+        # Wait for the first access token to be available
+        wait_for_token()
+
 
         # Get all the starting users to parse from the file
         starting_users = read_from_csv(file_path)

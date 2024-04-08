@@ -1,7 +1,4 @@
 import user_following_query
-import create_access_token
-import threading
-import time
 import argparse
 
 
@@ -82,73 +79,6 @@ import argparse
 
 
 
-
-
-
-
-
-
-
-### Global Variables
-access_token = None
-key = None
-secret = None
-condition = threading.Condition()  # Condition variable for synchronizing access to access_token
-
-
-
-
-# Use multithreading to instantiate a timer to create an access token every ~ 2 hours
-def create_tokens():
-    # Access Global Variables
-    global access_token, key, secret
-    while True:
-        # Simulate access token creation
-        with condition:
-            access_token = create_access_token.get_token(key, secret)
-            print(f"New Key Created: {access_token} \n")
-            condition.notify_all() # Notify all waiting threads that the token is updated
-        time.sleep(7000) # Sleep for 2 hours, 7200s
-
-
-
-
-# Wait for the access token to be available.
-def wait_for_token():
-    global access_token
-    with condition:
-        while access_token is None:
-            condition.wait()  # Wait until the access token is updated
-
-
-
-
-    
-
-def main(user_input):
-    # Access all global variables
-    global key, secret, access_token
-
-    ##### Start the thread to create the access tokens #####
-    # Create a thread that will execute the create_tokens function
-    # Daemon threads are stopped automatically when the main program exits
-    # Start the thread
-    threading.Thread(target=create_tokens, daemon=True).start()
-
-    # Wait for the first access token to be available
-    wait_for_token()
-
-    # Determine how to handle user input based on the file extension
-    if user_input.endswith('.csv'):
-        user_following_query.parse_with_list(access_token, user_input)
-    else:
-        user_following_query.parse_with_stdin(access_token, user_input)
-
-
-
-
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Automate user queries with provided credentials.")
 
@@ -161,7 +91,13 @@ if __name__ == "__main__":
     # Set global variables
     key = args.key
     secret = args.secret
+    user_input = args.user_input
 
-    # Call the main function with the appropriate service and input path
-    main(args.user_input)
+
+    # Determine how to handle user input based on the file extension
+    if user_input.endswith('.csv'):
+        user_following_query.parse_with_list(key, secret, user_input)
+    else:
+        user_following_query.parse_with_stdin(key, secret, user_input)
+
 
