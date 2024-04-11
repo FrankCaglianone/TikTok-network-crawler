@@ -37,7 +37,7 @@ This software uses the "requests" package to send the POST requests to the TikTo
   Please note that this package requires Python >= 3.7.  For more information please check [requests](https://pypi.org/project/requests/)
 
 ## Usage 🛠️
-To execute the program, a default job submission script, submit_job.sh, is available. This script is designed to submit jobs through a sbatch workload manager on remote servers. 
+To execute the program, a default job submission script, submit_job.sh, is available. This script is designed to submit jobs to the Slurm workload manager on remote servers using the sbatch command. 
 
 Alternatively, the program can be run locally on your device using the command:
 ```bash
