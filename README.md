@@ -23,14 +23,14 @@ The program saves the fetched data in 5 CSV files for subsequent analysis in 'sr
 - queue.csv: Lists usernames fetched but not yet parsed, allowing for process resumption.
 - saved_jsons.csv: Stores JSON responses from each user query.
 - time_stamps.csv: Records timestamps for each response, noting multiple entries for users with numerous followees.
-- network.csv: Contains tuples of "source" (username) and "destination" (their followee), foundational for network representation.
+- network.csv: Contains tuples of "source" (username) and "destination" (their followee), fundamental for network representation.
 
 
 
 ## Requirements 📋
-- This software uses the TikTok Research API for which an account is needed, once the account is created a key and a secret will be provided which is mandatory to use the program, for more information on how to create an account please check [TikTok for Developers](https://developers.tiktok.com/)
+This software uses the TikTok Research API for which an account is needed, once the account is created a key and a secret will be provided which is mandatory to use the program, for more information on how to create an account please check [TikTok for Developers](https://developers.tiktok.com/)
 
-- This software uses the "requests" package to send the POST requests to the TikTok API, so please make sure to have it installed otherwise it can be installed via pip with the following command:
+This software uses the "requests" package to send the POST requests to the TikTok API, so please make sure to have it installed otherwise it can be installed via pip with the following command:
   ```bash
   pip install requests
   ```
@@ -53,11 +53,12 @@ Please remember in both cases to substitute:
   
 ## Project Structure 🏗️ 
 The project is structured on 3 files:
-1. main: The script is the entry point for the project. It uses argparse for command-line interaction, allowing users to input their API key, secret, and a starting username or a path to a CSV file containing a list of usernames. It automatically differentiates between a single username and a list of usernames based on the file extension, and delegates the parsed input to the appropriate functions in user_following_query.py based on the type of input provided.
-   
-2. create_access_token: Fundamental for handling authentication with the TikTok API. The script uses client credentials (a key and a secret) to obtain an access token from TikTok's OAuth endpoint. This token is essential for making authorized requests to the API. It exits the program if authentication fails due to incorrect credentials or other issues, ensuring that the user is immediately aware of authentication problems. Concurrent programming was used to create multiple access tokens since they expire after 2 hours.
 
-3. user_following_query: This script is the one that parses the network. It executes POST requests to fetch the list of followees for given TikTok usernames, using the access tokens obtained by create_access_token.py, while saving the fetched data in the various CSV files for subsequent analysis. Implements robust error handling and logging mechanisms to manage and diagnose issues during the data fetching and parsing processes.
+main: The script is the entry point for the project. It uses argparse for command-line interaction, allowing users to input their API key, secret, and a starting username or a path to a CSV file containing a list of usernames. It automatically differentiates between a single username and a list of usernames based on the file extension, and delegates the parsed input to the appropriate functions in user_following_query.py based on the type of input provided.
+   
+create_access_token: Fundamental for handling authentication with the TikTok API. The script uses client credentials (a key and a secret) to obtain an access token from TikTok's OAuth endpoint. This token is essential for making authorized requests to the API. It exits the program if authentication fails due to incorrect credentials or other issues, ensuring that the user is immediately aware of authentication problems. Concurrent programming was used to create multiple access tokens since they expire after 2 hours.
+
+user_following_query: This script is the one that parses the network. It executes POST requests to fetch the list of followees for given TikTok usernames, using the access tokens obtained by create_access_token.py, while saving the fetched data in the various CSV files for subsequent analysis. Implements robust error handling and logging mechanisms to manage and diagnose issues during the data fetching and parsing processes.
 
 
 
