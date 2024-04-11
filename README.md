@@ -36,16 +36,6 @@ The program saves the fetched data in 5 CSV files for subsequent analysis in 'sr
   ```
   Please note that this package requires Python >= 3.7.  For more information please check [requests](https://pypi.org/project/requests/)
 
-
-## Project Structure 🏗️ 
-The project is structured on 3 files:
-1. main: The script is the entry point for the project. It uses argparse for command-line interaction, allowing users to input their API key, secret, and a starting username or a path to a CSV file containing a list of usernames. It automatically differentiates between a single username and a list of usernames based on the file extension, and delegates the parsed input to the appropriate functions in user_following_query.py based on the type of input provided.
-   
-2. create_access_token: Fundamental for handling authentication with the TikTok API. The script uses client credentials (a key and a secret) to obtain an access token from TikTok's OAuth endpoint. This token is essential for making authorized requests to the API. It exits the program if authentication fails due to incorrect credentials or other issues, ensuring that the user is immediately aware of authentication problems. Concurrent programming was used to create multiple access tokens since they expire after 2 hours.
-
-3. user_following_query: This script is the one that parses the network. It executes POST requests to fetch the list of followees for given TikTok usernames, using the access tokens obtained by create_access_token.py, while saving the fetched data in the various CSV files for subsequent analysis. Implements robust error handling and logging mechanisms to manage and diagnose issues during the data fetching and parsing processes.
-
-
 ## Usage 🛠️
 To execute the program, a default job submission script, submit_job.sh, is available. This script is designed to submit jobs through a sbatch workload manager on remote servers. 
 
@@ -59,6 +49,17 @@ Please remember in both cases to substitute:
 - key: API key for authentication.
 - secret: API secret for authentication.
 - user_input: Path to the usernames input or a single username. Ends with .csv for list input.
+
+  
+## Project Structure 🏗️ 
+The project is structured on 3 files:
+1. main: The script is the entry point for the project. It uses argparse for command-line interaction, allowing users to input their API key, secret, and a starting username or a path to a CSV file containing a list of usernames. It automatically differentiates between a single username and a list of usernames based on the file extension, and delegates the parsed input to the appropriate functions in user_following_query.py based on the type of input provided.
+   
+2. create_access_token: Fundamental for handling authentication with the TikTok API. The script uses client credentials (a key and a secret) to obtain an access token from TikTok's OAuth endpoint. This token is essential for making authorized requests to the API. It exits the program if authentication fails due to incorrect credentials or other issues, ensuring that the user is immediately aware of authentication problems. Concurrent programming was used to create multiple access tokens since they expire after 2 hours.
+
+3. user_following_query: This script is the one that parses the network. It executes POST requests to fetch the list of followees for given TikTok usernames, using the access tokens obtained by create_access_token.py, while saving the fetched data in the various CSV files for subsequent analysis. Implements robust error handling and logging mechanisms to manage and diagnose issues during the data fetching and parsing processes.
+
+
 
 
 
