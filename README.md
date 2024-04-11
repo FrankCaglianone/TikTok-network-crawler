@@ -11,7 +11,6 @@ This project is structured for those interested in network science, social media
 - REST APIs: Utilizes POST requests to TikTok's API to gather data on user connections.
 - Concurrent Programming: For efficiency and speed.
 - OS Signaling: To ensure that data is saved upon succesfull or unsucesfull completion.
-- Simplified User Experience: By streamlining the input process and automating the parsing and data collection process.
 
 
 ## Outputs 📦
