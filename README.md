@@ -65,7 +65,7 @@ user_following_query: This script is the one that parses the network. It execute
 
 
 ## Contributions 👥 
-
+A special thanks to Prof. Luca Maria Aiello (Associate Professor at ITU Copenhagen) for helping me and supervising me throughout this project. [lajello](https://www.lajello.com/)
 
 
 ## License 📄
