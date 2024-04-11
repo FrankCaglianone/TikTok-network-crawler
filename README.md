@@ -28,7 +28,7 @@ The program saves the fetched data in 5 CSV files for subsequent analysis in 'sr
 
 
 ## Requirements 📋
-This software uses the TikTok Research API for which an account is needed, once the account is created a key and a secret will be provided which is mandatory to use the program, for more information on how to create an account please check [TikTok for Developers](https://developers.tiktok.com/)
+This software uses the TikTok Research API for which an account is needed, once the account is created a key and a secret will be provided, those are mandatory to use the program, for more information on how to create an account please check [TikTok for Developers](https://developers.tiktok.com/)
 
 This software uses the "requests" package to send the POST requests to the TikTok API, so please make sure to have it installed otherwise it can be installed via pip with the following command:
   ```bash
