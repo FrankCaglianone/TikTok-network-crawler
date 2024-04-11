@@ -1,5 +1,6 @@
 # TikTok-network-crawler (Bachelor Research Project) ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-A Social Network Crawler in Python that, given a user or a list of users, fetches the user’s followings from the TikTok API and then recursively fetches the followings of those accounts. This creates a representation of the TikTok network to then compare it with other known social networks like Instagram and Meta.
+This project explores the dynamics of social networks by mapping the connections within TikTok's ecosystem. Starting from a single username or a list of usernames provided in a CSV file, the program employs a series of POST requests to a TikTok API to fetch the user’s followings and then recursively fetches the followings of those accounts. This creates a representation of the TikTok network for comparative network analysis with other social platforms like Instagram and Meta.
+
 
 ## Project Purpose 🎯
 This project is structured for those interested in network science, social media analysis, and data science enthusiasts. The 2 main purposes of this project are:
