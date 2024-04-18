@@ -203,6 +203,8 @@ def populate_queue_and_network(followers_list, parsing_user):
     - In case of 403 Forbidden or 500 Internal Server Error, the loop is exited, but the program does not terminate, allowing for the possibility of subsequent operations with other users.
 """
 def get_all_followers(parsing_user):
+    global post_requests
+
     # Helper
     json_list = []
     tmp = []
@@ -236,6 +238,7 @@ def get_all_followers(parsing_user):
 
         # Make the post request
         response = requests.post(url=url, headers=header, json=body)
+        post_requests += 1
 
         # Append the timestamp of that response to the list
         elapsed_time = datetime.datetime.now() - start_time
@@ -301,32 +304,43 @@ def get_all_followers(parsing_user):
     - This function relies on `get_all_followers` to fetch follower data and `populate_queue_and_network` to add new users to the queue and update the network graph.
 """
 def parse_network():
+    global post_requests
+
     # Loop until queue is empty
     while queue:   # and len(queue) <= 400
+        if(post_requests < 18000):
+            # Get the first item from the queue
+            i = queue.pop(0)
 
-        # Get the first item from the queue
-        i = queue.pop(0)
+            # Get the followees list of that user and the status code
+            followers_list, code = get_all_followers(i)
 
-        # Get the followees list of that user and the status code
-        followers_list, code = get_all_followers(i)
-
-        # Add user to dictionary with corresponding bit
-        if code == 200: 
-            # parsed
-            parsing_list[i] = 1
-        elif code == 403:
-            # User cannot be accessed
-            parsing_list[i] = 2
-        elif code == 500:
-            # User not existent or not found
-            parsing_list[i] = 3
-        else: 
-            # Unkown
-            parsing_list[i] = 4
+            # Add user to dictionary with corresponding bit
+            if code == 200: 
+                # parsed
+                parsing_list[i] = 1
+            elif code == 403:
+                # User cannot be accessed
+                parsing_list[i] = 2
+            elif code == 500:
+                # User not existent or not found
+                parsing_list[i] = 3
+            else: 
+                # Unkown
+                parsing_list[i] = 4
 
 
-        # Populate the dictionary and the queue with the newly fetched followees
-        populate_queue_and_network(followers_list, i)
+            # Populate the dictionary and the queue with the newly fetched followees
+            populate_queue_and_network(followers_list, i)
+        
+        else:
+            print("Rate limit reached. Going to sleep until reset at 12 AM UTC.")
+            current_time = datetime.datetime.utcnow()
+            reset_time = datetime.datetime.combine(current_time.date() + datetime.timedelta(days=1), datetime.time(0))
+            sleep_seconds = (reset_time - current_time).total_seconds()
+            print(f"Current time: {current_time}, Reset time: {reset_time}, Sleep for {sleep_seconds} seconds")
+            time.sleep(sleep_seconds)
+            post_requests = 0  # Reset the request counter after sleep
 
 
 
@@ -377,6 +391,7 @@ access_token = None
 key = None
 secret = None
 start_time = None
+post_requests = 0
 
 
 
