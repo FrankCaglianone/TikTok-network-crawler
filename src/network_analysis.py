@@ -143,22 +143,10 @@ def calculate_pageranks(g):
 
 
 
-
-    # Display the results
-    print("0% - 25% range:", range_0_25)
-    print("26% - 50% range:", range_26_50)
-    print("51% - 75% range:", range_51_75)
-    print("76% - 100% range:", range_76_100)
-
-
-
-
+    # Save the results in .csv format
     save_files.save_pagerankings(range_0_25, range_26_50, range_51_75, range_76_100)
 
-
-
     
-
 
 
     # Search for common words in the 1st quartile
