@@ -3,8 +3,13 @@ import requests
 # import create_access_token
 
 
-def get_top_videos(user_id, access_token):
-    url = 'https://open.tiktokapis.com/v2/research/video/query/?fields=id,video_description,create_time'
+
+# hashtag_names
+
+
+
+def get_top_videos(username, access_token):
+    url = 'https://open.tiktokapis.com/v2/research/video/query/?fields=id,username,view_count'   
     
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -15,28 +20,15 @@ def get_top_videos(user_id, access_token):
         "query": {
             "and": [
                 {
-                    "operation": "IN",
-                    "field_name": "region_code",
-                    "field_values": ["JP", "US"]
-                },
-                {
-                    "operation":"EQ",
-                    "field_name":"hashtag_name",
-                    "field_values":["animal"]
-                }
-            ],
-            "not": [
-                {
                     "operation": "EQ",
-                    "field_name": "video_length",
-                    "field_values": ["SHORT"]
-                }
-            ]
+                    "field_name": "username",
+                    "field_values": [username]
+                },
+            ],
         },
         "max_count": 10,
-        "cursor": 0,
-        "start_date": "20230101",
-        "end_date": "20230115"  
+        "start_date": "20240417",
+        "end_date": "20240419"  
     }
     
     response = requests.post(url=url, headers=headers, json=body)
@@ -51,7 +43,7 @@ def get_top_videos(user_id, access_token):
 
 
 access_token = ""
-user_id = 'francescocaglianone'
+user_id = "alessialanza"
 top_videos = get_top_videos(user_id, access_token)
 
 print(top_videos)
