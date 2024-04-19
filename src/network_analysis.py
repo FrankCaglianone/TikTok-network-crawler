@@ -1,7 +1,10 @@
 import csv
+import sys
 import igraph as ig
 import numpy as np
 import matplotlib.pyplot as plt
+
+import save_files
 
 
 
@@ -29,20 +32,10 @@ def print_nodes_list():
 
 
 
-# Extract the 1st quartile
 
 
 
-# Search for common words in the 1st quartile
 
-
-# Search for common words in the 2nd quartile
-
-
-# Search for common words in the 3rd quartile
-
-
-# Search for common words in the 4th quartile
 
 
 
@@ -75,13 +68,31 @@ def print_nodes_list():
 
 
 
+def read_from_csv(file_path):
+    # Initialize an empty list to store edges
+    edges = []
+
+    try:
+        # Read the CSV file
+        with open(file_path, 'r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                edges.append(tuple(row))
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {file_path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    return edges
 
 
 
 
 
 
-def calculate_pageranks():
+
+def calculate_pageranks(g):
 
     # Calculate the page ranking
     # TODO: pagerank = g.pagerank(damping=0.85)?
@@ -100,6 +111,10 @@ def calculate_pageranks():
 
 
 
+
+
+
+
     scores = [score for name, score in sorted_pageranks_list]
 
     # Calculate percentiles
@@ -107,13 +122,15 @@ def calculate_pageranks():
     p50 = np.percentile(scores, 50)
     p75 = np.percentile(scores, 75)
 
+
     # Initialize lists for each range
     range_0_25 = []
     range_26_50 = []
     range_51_75 = []
     range_76_100 = []
 
-    # Assign data to each range based on scores
+
+    # Assign tuples to each range based on their Page Rank
     for name, score in sorted_pageranks_list:
         if score <= p25:
             range_0_25.append((name, score))
@@ -124,6 +141,9 @@ def calculate_pageranks():
         elif score > p75:
             range_76_100.append((name, score))
 
+
+
+
     # Display the results
     print("0% - 25% range:", range_0_25)
     print("26% - 50% range:", range_26_50)
@@ -133,6 +153,41 @@ def calculate_pageranks():
 
 
 
+    save_files.save_pagerankings(range_0_25, range_26_50, range_51_75, range_76_100)
+
+
+
+    
+
+
+
+    # Search for common words in the 1st quartile
+
+
+    # Search for common words in the 2nd quartile
+
+
+    # Search for common words in the 3rd quartile
+
+
+    # Search for common words in the 4th quartile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########## Declaring Global Variables ##########
+
 
 
 
@@ -140,19 +195,25 @@ def calculate_pageranks():
 
 
 def main():
-    # Initialize an empty list to store edges
-    edges = []
 
-
-    # Read the CSV file
-    with open('', 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            edges.append(tuple(row))
-
+    edges = read_from_csv('')
 
     # Create a graph from the list of edges
-    g = ig.Graph.TupleList(edges, directed=True)
+    graph = ig.Graph.TupleList(edges, directed=True)
+
+    calculate_pageranks(graph)
 
 
 
+
+
+
+
+
+
+
+# if __name__ == "__main__":
+#     main()
+
+
+main()
