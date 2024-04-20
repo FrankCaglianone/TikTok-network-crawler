@@ -11,7 +11,7 @@
 #SBATCH --mail-user=youremail@domain.com     # Email to send the mail events
 
 
-# File path: ./src/pagerankings_outputs/.....
+# File path should be: ./src/pagerankings_outputs/.....
 
 
 python3 ./src/video_query.py key secret file_path
