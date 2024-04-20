@@ -9,16 +9,16 @@ import save_files
 
 
 # Helper function
-def print_page_ranks():
+def print_page_ranks(pagerank):
     print("PageRank Scores:")
     for vertex, score in zip(g.vs, pagerank):
         print(f"{vertex['name']}: {score:.4f}")
 
 
 
-def print_nodes_list():
+def print_nodes_list(graph):
     print("List of nodes:")
-    for v in g.vs:
+    for v in graph.vs:
         print(f"Node ID: {v.index}, Name: {v['name']}")
 
 
@@ -27,19 +27,6 @@ def print_nodes_list():
 
 # for name, score in sorted_pageranks_list:
 #     print(f"{name}: {score}")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -59,6 +46,13 @@ def print_nodes_list():
 #     edge_width=1,
 # )
 # plt.show()
+
+
+
+
+
+
+
 
 
 

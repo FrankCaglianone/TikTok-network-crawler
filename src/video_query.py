@@ -62,6 +62,9 @@ secret = None
 def get_videos(username):
     global access_token
 
+    # Declare the hashtags list
+    all_hashtags =  set()
+
     # Calulate the date and set it to minus 30 days (The end_date must be no more than 30 days after the start_date)
     end_date = date.today()
     start_date = end_date - timedelta(days=30)
@@ -99,7 +102,15 @@ def get_videos(username):
 
     # Check request status code
     if response.status_code == 200:
-        return response.json()
+        videos = response.json().get('data').get('videos')
+
+        for video in videos:
+            if 'hashtag_names' in video:
+                all_hashtags.update(video['hashtag_names'])
+
+        all_hashtags = list(all_hashtags)
+
+        return all_hashtags
     elif response.status_code == 401:
         # If status code 401, means the access token it's incorrect, terminate program and try again
         print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
