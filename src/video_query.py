@@ -1,3 +1,4 @@
+import argparse
 import atexit
 import csv
 import datetime
@@ -280,6 +281,31 @@ def main_query(stdin_key, stdin_secret, file_path):
         # If exception is catched save and close
         cleanup_and_save()
         print(f"Unhandled exception: {e}")
+
+
+
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Automate user queries with provided credentials.")
+
+    parser.add_argument("key", help="API key for authentication.")
+    parser.add_argument("secret", help="API secret for authentication.")
+    parser.add_argument("file_path", help="Path to the usernames input or a single username. Ends with .csv for list input.")
+
+    args = parser.parse_args()
+
+    # Set global variables
+    key = args.key
+    secret = args.secret
+    file_path = args.file_path
+
+
+    main_query(key, secret, file_path)
+
+
+   
 
 
 
