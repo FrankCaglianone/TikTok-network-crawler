@@ -1,3 +1,5 @@
+import atexit
+import signal
 import sys
 import threading
 import time
@@ -5,6 +7,27 @@ import requests
 from datetime import date, timedelta
 
 import create_access_token
+import save_files
+
+
+
+
+
+########## HANDLERS FOR DATA SAVING OPERATIONS ##########
+
+def cleanup_and_save():
+    print("Saving all data to CSV before exiting...")
+
+
+    
+
+
+def handle_signal_received():
+    cleanup_and_save()
+    exit(0)
+
+
+
 
 
 
@@ -48,18 +71,8 @@ def wait_for_token():
 
 
 
-########## Declaring Global Variables ##########
-access_token = None
-key = None
-secret = None
 
-
-
-
-
-
-
-def get_videos(username):
+def get_videos_request(username):
     global access_token
 
     # Declare the hashtags list
@@ -128,23 +141,58 @@ def get_videos(username):
 
 
 
+def fetch_range_hashtags():
+    print("Hello world")
+
+
+
+
+
+
+
+
+########## Declaring Global Variables ##########
+access_token = None
+key = None
+secret = None
+
+
+
+
+
+
+
+
 def main_query(username, stdin_key, stdin_secret):
-    global key, secret
-    key = stdin_key
-    secret = stdin_secret
+    # Set saving options
+    atexit.register(cleanup_and_save)
+    signal.signal(signal.SIGINT, handle_signal_received)
+    signal.signal(signal.SIGTERM, handle_signal_received)
 
 
-    ##### Start the thread to create the access tokens #####
-    # Create a thread that will execute the create_tokens function
-    # Daemon threads are stopped automatically when the main program exits
-    # Start the thread
-    threading.Thread(target=create_tokens, daemon=True).start()
-
-    # Wait for the first access token to be available
-    wait_for_token()
+    try:
+        global key, secret
+        key = stdin_key
+        secret = stdin_secret
 
 
-    print(get_videos(username))
+        ##### Start the thread to create the access tokens #####
+        # Create a thread that will execute the create_tokens function
+        # Daemon threads are stopped automatically when the main program exits
+        # Start the thread
+        threading.Thread(target=create_tokens, daemon=True).start()
+
+        # Wait for the first access token to be available
+        wait_for_token()
+
+
+        print(get_videos_request(username))
+    except Exception as e:
+        # If exception is catched save and close
+        cleanup_and_save()
+        print(f"Unhandled exception: {e}")
+
+
 
 
 
