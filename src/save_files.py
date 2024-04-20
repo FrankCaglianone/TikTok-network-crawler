@@ -1,4 +1,5 @@
 import csv
+import os
 
 
 
@@ -117,7 +118,14 @@ def save_network(network_graph):
 #################### DATA SAVING FUNCTIONS FOR NETWORK ANALYSIS ####################
 
 def save_25_percentile(pageranking_list, start, end):
-    with open('src/network_analysis_outputs/25th_percentile.csv', 'w', newline='') as file:
+    # If the folder does not exist create one, needed only for the first function to be called out of the 4 ranges functions
+    output_dir = 'src/pagerankings_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
+
+
+    with open(f'{output_dir}/25th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["0% - 25% (25th percentile)", f"from {start} to {end}"])
         for username, rank in pageranking_list:
@@ -125,7 +133,7 @@ def save_25_percentile(pageranking_list, start, end):
 
 
 def save_50_percentile(pageranking_list, start, end):
-    with open('src/network_analysis_outputs/50th_percentile.csv', 'w', newline='') as file:
+    with open('src/pagerankings_outputs/50th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["25% - 50% (50th percentile)", f"from {start} to {end}"])
         for username, rank in pageranking_list:
@@ -134,7 +142,7 @@ def save_50_percentile(pageranking_list, start, end):
 
 
 def save_75_percentile(pageranking_list, start, end):
-    with open('src/network_analysis_outputs/75th_percentile.csv', 'w', newline='') as file:
+    with open('src/pagerankings_outputs/75th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["50% - 75% (75th percentile)", f"from {start} to {end}"])
         for username, rank in pageranking_list:
@@ -144,7 +152,7 @@ def save_75_percentile(pageranking_list, start, end):
 
 
 def save_100_percentile(pageranking_list, start, end):
-    with open('src/network_analysis_outputs/100th_percentile.csv', 'w', newline='') as file:
+    with open('src/pagerankings_outputs/100th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["75% - 100% (100th percentile)", f"from {start} to {end}"])
         for username, rank in pageranking_list:

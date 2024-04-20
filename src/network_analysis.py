@@ -25,10 +25,6 @@ def print_nodes_list(graph):
 
 
 
-# for name, score in sorted_pageranks_list:
-#     print(f"{name}: {score}")
-
-
 
 
 
@@ -86,7 +82,7 @@ def read_from_csv(file_path):
 
 
 
-def calculate_pageranks(g):
+def calculate_and_save_pageranks(g):
 
     # Calculate the page ranking
     # TODO: pagerank = g.pagerank(damping=0.85)?
@@ -147,42 +143,6 @@ def calculate_pageranks(g):
 
 
 
-
-
-
-# Search for common words in the 1st quartile
-
-
-# Search for common words in the 2nd quartile
-
-
-# Search for common words in the 3rd quartile
-
-
-# Search for common words in the 4th quartile
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########## Declaring Global Variables ##########
-
-
-
-
-
-
-
 def main():
 
     edges = read_from_csv('./Sample_User_Network.csv')
@@ -190,7 +150,7 @@ def main():
     # Create a graph from the list of edges
     graph = ig.Graph.TupleList(edges, directed=True)
 
-    calculate_pageranks(graph)
+    calculate_and_save_pageranks(graph)
 
 
 
