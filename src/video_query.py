@@ -1,4 +1,5 @@
 import atexit
+import csv
 import signal
 import sys
 import threading
@@ -27,6 +28,32 @@ def handle_signal_received():
     exit(0)
 
 
+
+
+
+
+
+########## CSV DATA RETRIEVAL FUNCTION ##########
+def read_from_csv(file_path):
+    users = []
+
+    try:
+        # Open the file and read the contents
+        with open(file_path, mode='r', encoding='utf-8') as file:
+            csv_reader = csv.reader(file)
+            
+            # Loop through the rows in the file
+            for row in csv_reader:
+                users.append(row[0])
+                # print(row[0])
+        #
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {file_path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    return users
 
 
 
@@ -158,12 +185,20 @@ secret = None
 
 
 
+########## Declaring Global Data Structures ##########
+users_queue = []    # Queue of users to fetch
+hashtags_list = []  # Hashtags retrieved up to that point
+users_hashtags_dict = {}    # Dictionary of hashtags per user
 
 
 
 
 
-def main_query(username, stdin_key, stdin_secret):
+
+
+
+
+def main_query(file_path, stdin_key, stdin_secret):
     # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
@@ -186,7 +221,14 @@ def main_query(username, stdin_key, stdin_secret):
         wait_for_token()
 
 
-        print(get_videos_request(username))
+        # Get all the users to parse from the file
+        starting_users = read_from_csv(file_path)
+
+        # Add all starting users to the data structures
+        for user in starting_users:
+            users_queue.append(user)
+
+
     except Exception as e:
         # If exception is catched save and close
         cleanup_and_save()
@@ -195,5 +237,6 @@ def main_query(username, stdin_key, stdin_secret):
 
 
 
+# print(get_videos_request(username))
 
 
