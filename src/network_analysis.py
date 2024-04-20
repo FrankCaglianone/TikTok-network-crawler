@@ -1,3 +1,4 @@
+import argparse
 import csv
 import sys
 import igraph as ig
@@ -143,9 +144,9 @@ def calculate_and_save_pageranks(g):
 
 
 
-def main():
+def main(file_path):
 
-    edges = read_from_csv('./Sample_User_Network.csv')
+    edges = read_from_csv(file_path)
 
     # Create a graph from the list of edges
     graph = ig.Graph.TupleList(edges, directed=True)
@@ -157,12 +158,17 @@ def main():
 
 
 
+# './Sample_User_Network.csv'
 
 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
 
-# if __name__ == "__main__":
-#     main()
+    parser.add_argument("file_path")
+
+    args = parser.parse_args()
+
+    main(args.file_path)
 
 
-main()
