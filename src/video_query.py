@@ -16,13 +16,10 @@ import save_files
 
 
 ########## HANDLERS FOR DATA SAVING OPERATIONS ##########
-
 def cleanup_and_save():
     print("Saving all data to CSV before exiting...")
     save_files.save_all_data_structures(users_hashtags_dict, users_queue, hashtags_list)
 
-
-    
 
 
 def handle_signal_received():
