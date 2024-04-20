@@ -103,18 +103,16 @@ def calculate_pageranks(g):
     # TODO: ascending or descending? -> # sorted_scores = sorted(pageranks_map.items(), key=lambda item: item[1], reverse=True)
     sorted_pageranks_list = sorted(pagerank_list, key=lambda item: item[1])
 
-
-
-
-
-
-
+    # TODO: Give proper comment
     scores = [score for name, score in sorted_pageranks_list]
 
     # Calculate percentiles
     p25 = np.percentile(scores, 25)
     p50 = np.percentile(scores, 50)
     p75 = np.percentile(scores, 75)
+
+    min_score = np.min(scores)  # 0th percentile
+    max_score = np.max(scores)  # 100th percentile
 
 
     # Initialize lists for each range
@@ -138,21 +136,30 @@ def calculate_pageranks(g):
 
 
     # Save the results in .csv format
-    save_files.save_pagerankings(range_0_25, range_26_50, range_51_75, range_76_100)
+    save_files.save_25_percentile(range_0_25, min_score, p25)
+    save_files.save_50_percentile(range_26_50, p25, p50)
+    save_files.save_75_percentile(range_51_75, p50, p75)
+    save_files.save_100_percentile(range_76_100, p75, max_score)
 
     
 
 
-    # Search for common words in the 1st quartile
 
 
-    # Search for common words in the 2nd quartile
 
 
-    # Search for common words in the 3rd quartile
 
 
-    # Search for common words in the 4th quartile
+# Search for common words in the 1st quartile
+
+
+# Search for common words in the 2nd quartile
+
+
+# Search for common words in the 3rd quartile
+
+
+# Search for common words in the 4th quartile
 
 
 
@@ -178,7 +185,7 @@ def calculate_pageranks(g):
 
 def main():
 
-    edges = read_from_csv('')
+    edges = read_from_csv('./Sample_User_Network.csv')
 
     # Create a graph from the list of edges
     graph = ig.Graph.TupleList(edges, directed=True)

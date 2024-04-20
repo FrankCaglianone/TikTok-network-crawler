@@ -115,32 +115,41 @@ def save_network(network_graph):
 
 
 #################### DATA SAVING FUNCTIONS FOR NETWORK ANALYSIS ####################
-def save_pagerankings(range_0_25, range_26_50, range_51_75, range_76_100):
-    # Open a new CSV file
-    with open('src/network_analysis_outputs/ranges.csv', 'w', newline='') as file:
+
+def save_25_percentile(pageranking_list, start, end):
+    with open('src/network_analysis_outputs/25th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-
-        # Write the headers
-        writer.writerow(['0% - 25%', '26% - 50%', '51% - 75%', '76% - 100%'])
-
-        # Since the lists can have different lengths, find the maximum length of the lists
-        max_length = max(len(range_0_25), len(range_26_50), len(range_51_75), len(range_76_100))
+        writer.writerow(["0% - 25% (25th percentile)", f"from {start} to {end}"])
+        for username, rank in pageranking_list:
+            writer.writerow([username, rank])
 
 
-        for i in range(max_length):
-            # Initialize the row with empty strings for each column
-            row = ['', '', '', '']
-            
-            # For each range, if there is data for the row index, add it to the row
-            if i < len(range_0_25):
-                row[0] = ': '.join(map(str, range_0_25[i]))
-            if i < len(range_26_50):
-                row[1] = ': '.join(map(str, range_26_50[i]))
-            if i < len(range_51_75):
-                row[2] = ': '.join(map(str, range_51_75[i]))
-            if i < len(range_76_100):
-                row[3] = ': '.join(map(str, range_76_100[i]))
-                
-            # Write the row to the CSV file
-            writer.writerow(row)
-     
+def save_50_percentile(pageranking_list, start, end):
+    with open('src/network_analysis_outputs/50th_percentile.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["25% - 50% (50th percentile)", f"from {start} to {end}"])
+        for username, rank in pageranking_list:
+            writer.writerow([username, rank])
+
+
+
+def save_75_percentile(pageranking_list, start, end):
+    with open('src/network_analysis_outputs/75th_percentile.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["50% - 75% (75th percentile)", f"from {start} to {end}"])
+        for username, rank in pageranking_list:
+            writer.writerow([username, rank])
+
+
+
+
+def save_100_percentile(pageranking_list, start, end):
+    with open('src/network_analysis_outputs/100th_percentile.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["75% - 100% (100th percentile)", f"from {start} to {end}"])
+        for username, rank in pageranking_list:
+            writer.writerow([username, rank])
+
+
+
+
