@@ -9,9 +9,9 @@ import save_files
 
 
 # Helper function
-def print_page_ranks(pagerank):
+def print_page_ranks(graph, pagerank):
     print("PageRank Scores:")
-    for vertex, score in zip(g.vs, pagerank):
+    for vertex, score in zip(graph.vs, pagerank):
         print(f"{vertex['name']}: {score:.4f}")
 
 
