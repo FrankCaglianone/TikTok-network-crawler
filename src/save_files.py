@@ -161,3 +161,48 @@ def save_100_percentile(pageranking_list, start, end):
 
 
 
+
+
+
+
+
+
+
+
+
+
+#################### DATA SAVING FUNCTIONS FOR VIDEO QUERY ####################
+def save_all_data_structures(dictionary, queue, list):
+    # If the folder does not exist create one
+    output_dir = 'src/video_query_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
+
+
+    # Save dictionary to CSV
+    with open(f'{output_dir}/user_hashtags.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Username", "Hashtags"])  # Writing headers
+        for username, hashtag in dictionary.items():
+            writer.writerow([username, hashtag])
+
+
+    # Save queue to CSV
+    with open(f'{output_dir}/users_to_parse.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Usernames to parse"]) 
+        if len(queue) == 0:
+            writer.writerow(["All usernames parsed :)"]) 
+        else:
+            for username in queue:
+                writer.writerow([username])
+
+    
+    # Save hashtags list
+    with open(f'{output_dir}/hashtags_list.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Hashtags List"]) 
+        for hashtag in list:
+            writer.writerow([hashtag])
+

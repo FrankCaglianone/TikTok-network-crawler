@@ -19,6 +19,7 @@ import save_files
 
 def cleanup_and_save():
     print("Saving all data to CSV before exiting...")
+    save_files.save_all_data_structures(users_hashtags_dict, users_queue, hashtags_list)
 
 
     
@@ -265,6 +266,9 @@ def main_query(file_path, stdin_key, stdin_secret):
         # Wait for the first access token to be available
         wait_for_token()
 
+        # For debugging purposes
+        print(f"Parsing: {file_path}")
+
 
         # Get all the users to parse from the file
         starting_users = read_from_csv(file_path)
@@ -282,5 +286,3 @@ def main_query(file_path, stdin_key, stdin_secret):
 
 
 
-
-# print(get_videos_request(username))
