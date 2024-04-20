@@ -127,7 +127,7 @@ def save_25_percentile(pageranking_list, start, end):
 
     with open(f'{output_dir}/25th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["0% - 25% (25th percentile)", f"from {start} to {end}"])
+        writer.writerow([f"0% - 25% (25th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
             writer.writerow([username, rank])
 
@@ -135,7 +135,7 @@ def save_25_percentile(pageranking_list, start, end):
 def save_50_percentile(pageranking_list, start, end):
     with open('src/pagerankings_outputs/50th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["25% - 50% (50th percentile)", f"from {start} to {end}"])
+        writer.writerow([f"25% - 50% (50th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
             writer.writerow([username, rank])
 
@@ -144,7 +144,7 @@ def save_50_percentile(pageranking_list, start, end):
 def save_75_percentile(pageranking_list, start, end):
     with open('src/pagerankings_outputs/75th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["50% - 75% (75th percentile)", f"from {start} to {end}"])
+        writer.writerow([f"50% - 75% (75th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
             writer.writerow([username, rank])
 
@@ -154,7 +154,7 @@ def save_75_percentile(pageranking_list, start, end):
 def save_100_percentile(pageranking_list, start, end):
     with open('src/pagerankings_outputs/100th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["75% - 100% (100th percentile)", f"from {start} to {end}"])
+        writer.writerow([f"75% - 100% (100th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
             writer.writerow([username, rank])
 
