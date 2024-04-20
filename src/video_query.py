@@ -1,5 +1,6 @@
 import atexit
 import csv
+import datetime
 import signal
 import sys
 import threading
@@ -100,7 +101,7 @@ def wait_for_token():
 
 
 def get_videos_request(username):
-    global access_token
+    global access_token, post_requests
 
     # Declare the hashtags list
     all_hashtags =  set()
@@ -138,6 +139,7 @@ def get_videos_request(username):
     
     # Get response
     response = requests.post(url=url, headers=headers, json=body)
+    post_requests += 1
 
 
     # Check request status code
@@ -169,7 +171,31 @@ def get_videos_request(username):
 
 
 def fetch_range_hashtags():
-    print("Hello world")
+    global post_requests, users_queue, hashtags_list
+
+    # Loop until queue is empty
+    while users_queue:
+        if(post_requests < 1000): # the daily limit is a 1000 requests per day
+            # Get the first item from the queue
+            i = users_queue.pop(0)
+
+            # Get the hashtags list of that user
+            hashtags_tmp = get_videos_request(i)
+
+            # Add the newly fetched hashtasg to the global hashtags_list
+            hashtags_list.extend(hashtags_tmp)
+
+            # Add the user with it's corresponding hashtags in the global users_hashtags_dict
+            users_hashtags_dict[i] = hashtags_tmp
+        else:
+            print("Rate limit reached. Going to sleep until reset at 12 AM UTC.")
+            current_time = datetime.datetime.utcnow()
+            reset_time = datetime.datetime.combine(current_time.date() + datetime.timedelta(days=1), datetime.time(0))
+            sleep_seconds = (reset_time - current_time).total_seconds()
+            print(f"Current time: {current_time}, Reset time: {reset_time}, Sleep for {sleep_seconds} seconds")
+            time.sleep(sleep_seconds)
+            post_requests = 0  # Reset the request counter after sleep
+
 
 
 
@@ -182,6 +208,7 @@ def fetch_range_hashtags():
 access_token = None
 key = None
 secret = None
+post_requests = 0
 
 
 
@@ -229,6 +256,7 @@ def main_query(file_path, stdin_key, stdin_secret):
             users_queue.append(user)
 
 
+        fetch_range_hashtags()
     except Exception as e:
         # If exception is catched save and close
         cleanup_and_save()
