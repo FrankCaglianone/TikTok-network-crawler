@@ -106,7 +106,7 @@ def get_videos_request(username):
     # Declare the hashtags list
     all_hashtags =  set()
 
-    # Calulate the date and set it to minus 30 days (The end_date must be no more than 30 days after the start_date)
+    # Calulate the date range for the query (The end_date must be no more than 30 days after the start_date)
     end_date = date.today()
     start_date = end_date - timedelta(days=30)
     end_date_string = end_date.strftime('%Y%m%d')    
@@ -120,49 +120,67 @@ def get_videos_request(username):
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/json'
     }
+
+
+    # Intialize cursor, has_more and search_id variables to enter the loop for the first time
+    cursor = None
+    search_id = None
+    has_more = True
+
+    while has_more:
     
-    # Set the body
-    body = {
-        "query": {
-            "and": [
-                {
-                    "operation": "EQ",
-                    "field_name": "username",
-                    "field_values": [username]
-                },
-            ],
-        },
-        "max_count": 20,
-        "start_date": start_date_string,
-        "end_date": end_date_string
-    }
+        # Set the body
+        body = {
+            "query": {
+                "and": [
+                    {
+                        "operation": "EQ",
+                        "field_name": "username",
+                        "field_values": [username]
+                    },
+                ],
+            },
+            "max_count": 100,
+            "start_date": start_date_string,
+            "end_date": end_date_string,
+        }
+
+        # Check if cursor should be included
+        if cursor:
+            body["cursor"] = cursor
+        if search_id:
+            body["search_id"] = search_id
+        
+        # Get response
+        response = requests.post(url=url, headers=headers, json=body)
+        post_requests += 1
+
+
+        # Check request status code
+        if response.status_code == 200:
+            data = response.json().get('data')
+
+            videos = data.get('videos')
+            for video in videos:
+                if 'hashtag_names' in video:
+                    all_hashtags.update(video['hashtag_names'])
+            
+            # Check if there are more videos to fetch
+            has_more = data.get('has_more', False)
+            cursor = data.get('cursor', None)
+            search_id = data.get('search_id', None)
+        elif response.status_code == 401:
+            # If status code 401, means the access token it's incorrect, terminate program and try again
+            print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
+            sys.exit("Terminating the program due to an error. Please check your access credentials")
+        elif response.status_code == 500:
+            # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+            return
+        else:
+            print("Failed to retrieve followers. Status code:", response.status_code, response.text)
+            return
     
-    # Get response
-    response = requests.post(url=url, headers=headers, json=body)
-    post_requests += 1
-
-
-    # Check request status code
-    if response.status_code == 200:
-        videos = response.json().get('data').get('videos')
-
-        for video in videos:
-            if 'hashtag_names' in video:
-                all_hashtags.update(video['hashtag_names'])
-
-        all_hashtags = list(all_hashtags)
-
-        return all_hashtags
-    elif response.status_code == 401:
-        # If status code 401, means the access token it's incorrect, terminate program and try again
-        print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
-        sys.exit("Terminating the program due to an error. Please check your access credentials")
-    elif response.status_code == 500:
-        # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
-        return
-    else:
-        print("Failed to retrieve followers. Status code:", response.status_code)
-        return
+    return list(all_hashtags)
 
 
 
@@ -266,5 +284,3 @@ def main_query(file_path, stdin_key, stdin_secret):
 
 
 # print(get_videos_request(username))
-
-
