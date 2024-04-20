@@ -241,7 +241,7 @@ users_hashtags_dict = {}    # Dictionary of hashtags per user
 
 
 
-def main_query(file_path, stdin_key, stdin_secret):
+def main_query(stdin_key, stdin_secret, file_path):
     # Set saving options
     atexit.register(cleanup_and_save)
     signal.signal(signal.SIGINT, handle_signal_received)
