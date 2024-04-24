@@ -331,6 +331,7 @@ def parse_network():
 
 
             # Populate the dictionary and the queue with the newly fetched followees
+            # Enters the loop only if status code = 200, because follower_list is empty.
             populate_queue_and_network(followers_list, i)
         
         else:
