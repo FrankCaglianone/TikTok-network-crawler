@@ -14,4 +14,4 @@
 # File path should be: ./src/outputs/network.csv
 
 
-python3 ./src/network_analysis.py file_path
+python3 ./src/network_analysis.py parsing_list network_list
