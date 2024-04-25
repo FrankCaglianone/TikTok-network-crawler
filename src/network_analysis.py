@@ -178,7 +178,7 @@ def main(parsing_list, network_list):
 
     cleaned_network = clean_graph(parsing_list, network_list)
 
-    save_files.save_cleaned_graph(cleaned_network)
+    save_files.save_cleaned_network(cleaned_network)
 
     # Create a graph from the list of edges
     graph = ig.Graph.TupleList(cleaned_network, directed=True)
