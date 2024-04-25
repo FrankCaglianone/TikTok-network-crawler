@@ -9,23 +9,6 @@ import save_files
 
 
 
-# Helper function
-def print_page_ranks(graph, pagerank):
-    print("PageRank Scores:")
-    for vertex, score in zip(graph.vs, pagerank):
-        print(f"{vertex['name']}: {score:.4f}")
-
-
-
-def print_nodes_list(graph):
-    print("List of nodes:")
-    for v in graph.vs:
-        print(f"Node ID: {v.index}, Name: {v['name']}")
-
-
-
-
-
 
 
 
@@ -52,30 +35,101 @@ def print_nodes_list(graph):
 
 
 
-
-
-
-
-
-
-
-def read_from_csv(file_path):
-    # Initialize an empty list to store edges
-    edges = []
+def read_parsing_list(path):
+    parsing_list = {}
 
     try:
-        # Read the CSV file
-        with open(file_path, 'r') as file:
-            reader = csv.reader(file)
+        with open(path, newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)  # Skip the header
             for row in reader:
-                edges.append(tuple(row))
+                if row:  # Check if row is not empty
+                    username = row[0].strip()  # Remove any leading/trailing whitespace
+                    status = int(row[1].strip())  # Convert status to integer
+                    parsing_list[username] = status
+
     except FileNotFoundError:
         # If the file is not found, print an error message and exit the program
-        sys.exit(f"Error: The file at {file_path} was not found.") 
+        sys.exit(f"Error: The file at {path} was not found.") 
     except Exception as e: 
         # If any other exception occurs, exit the program
         sys.exit(f"Error: {e}") 
-    return edges
+    return parsing_list
+
+
+
+
+
+
+def read_network(path):
+    network = []
+
+    try:
+        with open(path, 'r') as file:
+            csv_reader = csv.reader(file)
+            next(csv_reader)  # Skip the header
+            for row in csv_reader:
+                network.append((row[0], row[1]))  # Append each row as a tuple to the list
+                
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    return network
+                
+
+
+
+
+
+
+
+
+
+
+def clean_graph(list_path, network_path):
+
+    parsing_list = read_parsing_list(list_path)
+
+    network = read_network(network_path)
+
+
+    final_graph = []
+
+
+    for row in network:
+        source, destination = row
+        if destination in parsing_list:
+            final_graph.append((source, destination))
+
+
+
+    print(final_graph)
+
+
+
+    # Print the data
+    # with open(output_file, 'w', newline='') as output_f:
+    #     writer = csv.writer(output_f)
+    #     writer.writerow(["Connections in network graph"])
+
+    #     for connection in final_graph:
+    #         writer.writerow(connection)
+
+ 
+
+
+    # print(f"Merged data saved to {output_file}")
+
+
+
+
+
+
+
+
 
 
 
@@ -146,31 +200,36 @@ def calculate_and_save_pageranks(g):
 
 
 
-def main(file_path):
+def main(parsing_list, network_list):
 
-    edges = read_from_csv(file_path)
+    # edges = read_from_csv(file_path)
 
-    # Create a graph from the list of edges
-    graph = ig.Graph.TupleList(edges, directed=True)
+    edges = clean_graph(parsing_list, network_list)
 
-    calculate_and_save_pageranks(graph)
+    # print(edges)
 
+    # # Create a graph from the list of edges
+    # graph = ig.Graph.TupleList(edges, directed=True)
 
-
-
-
-
-# './Sample_User_Network.csv'
+    # calculate_and_save_pageranks(graph)
 
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
 
-    parser.add_argument("file_path")
 
-    args = parser.parse_args()
+main("./network2.csv", "./Sample_User_Network.csv")
 
-    main(args.file_path)
+
+
+
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+
+#     parser.add_argument("parsing_list")
+#     parser.add_argument("network_list")
+
+#     args = parser.parse_args()
+
+#     main(args.parsing_list, args.network_list)
 
 
