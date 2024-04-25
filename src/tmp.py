@@ -1,3 +1,4 @@
+import argparse
 import csv
 
 
@@ -53,4 +54,12 @@ def main(path1, path2):
 
 
 
-main("./parsing_list.csv", "./list2.csv")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("list1")
+    parser.add_argument("list2")
+
+    args = parser.parse_args()
+
+    main(args.list1, args.list2)
