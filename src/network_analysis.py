@@ -138,6 +138,8 @@ def calculate_and_save_pageranks(g):
     save_files.save_75_percentile(range_51_75, p50, p75)
     save_files.save_100_percentile(range_76_100, p75, max_score)
 
+    print("Program ended succesfully")
+
     
 
 
