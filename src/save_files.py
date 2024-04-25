@@ -119,7 +119,7 @@ def save_network(network_graph):
 
 def save_25_percentile(pageranking_list, start, end):
     # If the folder does not exist create one, needed only for the first function to be called out of the 4 ranges functions
-    output_dir = 'src/pagerankings_outputs'
+    output_dir = 'src/network_analysis_outputs'
     if not os.path.exists(output_dir):
         # Create the directory if it does not exist
         os.makedirs(output_dir)
@@ -133,7 +133,7 @@ def save_25_percentile(pageranking_list, start, end):
 
 
 def save_50_percentile(pageranking_list, start, end):
-    with open('src/pagerankings_outputs/50th_percentile.csv', 'w', newline='') as file:
+    with open('src/network_analysis_outputs/50th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([f"25% - 50% (50th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
@@ -142,7 +142,7 @@ def save_50_percentile(pageranking_list, start, end):
 
 
 def save_75_percentile(pageranking_list, start, end):
-    with open('src/pagerankings_outputs/75th_percentile.csv', 'w', newline='') as file:
+    with open('src/network_analysis_outputs/75th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([f"50% - 75% (75th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
@@ -152,13 +152,21 @@ def save_75_percentile(pageranking_list, start, end):
 
 
 def save_100_percentile(pageranking_list, start, end):
-    with open('src/pagerankings_outputs/100th_percentile.csv', 'w', newline='') as file:
+    with open('src/network_analysis_outputs/100th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([f"75% - 100% (100th percentile) from {start} to {end}"])
         for username, rank in pageranking_list:
             writer.writerow([username, rank])
 
 
+
+def save_cleaned_network(network):
+    with open('src/network_analysis_outputs/graph.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Source", "Destination"])
+        # Write each tuple in the network list to the file
+        for connection in network:
+            writer.writerow(connection)
 
 
 

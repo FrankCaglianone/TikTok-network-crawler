@@ -86,9 +86,6 @@ def read_network(path):
 
 
 
-
-
-
 def clean_graph(list_path, network_path):
 
     parsing_list = read_parsing_list(list_path)
@@ -105,29 +102,7 @@ def clean_graph(list_path, network_path):
             final_graph.append((source, destination))
 
 
-
-    print(final_graph)
-
-
-
-    # Print the data
-    # with open(output_file, 'w', newline='') as output_f:
-    #     writer = csv.writer(output_f)
-    #     writer.writerow(["Connections in network graph"])
-
-    #     for connection in final_graph:
-    #         writer.writerow(connection)
-
- 
-
-
-    # print(f"Merged data saved to {output_file}")
-
-
-
-
-
-
+    return final_graph
 
 
 
@@ -150,8 +125,7 @@ def calculate_and_save_pageranks(g):
         pagerank_list.append((vertex['name'], score))
 
 
-    # Sort the list
-    # TODO: ascending or descending? -> # sorted_scores = sorted(pageranks_map.items(), key=lambda item: item[1], reverse=True)
+    # Sort the list in ascending order
     sorted_pageranks_list = sorted(pagerank_list, key=lambda item: item[1])
 
     # TODO: Give proper comment
@@ -192,7 +166,7 @@ def calculate_and_save_pageranks(g):
     save_files.save_75_percentile(range_51_75, p50, p75)
     save_files.save_100_percentile(range_76_100, p75, max_score)
 
-    print("Program ended succesfully")
+
 
     
 
@@ -202,34 +176,32 @@ def calculate_and_save_pageranks(g):
 
 def main(parsing_list, network_list):
 
-    # edges = read_from_csv(file_path)
+    cleaned_network = clean_graph(parsing_list, network_list)
 
-    edges = clean_graph(parsing_list, network_list)
+    save_files.save_cleaned_graph(cleaned_network)
 
-    # print(edges)
+    # Create a graph from the list of edges
+    graph = ig.Graph.TupleList(cleaned_network, directed=True)
 
-    # # Create a graph from the list of edges
-    # graph = ig.Graph.TupleList(edges, directed=True)
+    calculate_and_save_pageranks(graph)
 
-    # calculate_and_save_pageranks(graph)
-
-
-
-
-
-main("./network2.csv", "./Sample_User_Network.csv")
+    print("Program ended succesfully")
 
 
 
 
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser()
 
-#     parser.add_argument("parsing_list")
-#     parser.add_argument("network_list")
 
-#     args = parser.parse_args()
 
-#     main(args.parsing_list, args.network_list)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("parsing_list")
+    parser.add_argument("network_list")
+
+    args = parser.parse_args()
+
+    main(args.parsing_list, args.network_list)
 
 
