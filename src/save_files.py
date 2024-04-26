@@ -134,6 +134,14 @@ def save_cleaned_network(network):
 
 
 
+def save_cleaned_nodes(set):
+    with open('src/network_analysis_outputs/cleaned_nodes.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Nodes in graph"]) 
+        for username in set:
+            writer.writerow([username])
+
+
 def save_25_percentile(pageranking_list, start, end):
     with open('src/network_analysis_outputs/25th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)

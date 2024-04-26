@@ -96,20 +96,28 @@ def clean_graph(list_path, network_path):
     final_graph = []
 
 
+    # Clean the network excluding edges with nodes that have not been fetched 
     for row in network:
         source, destination = row
         if destination in parsing_list:
             final_graph.append((source, destination))
 
-
+    
 
     # Use a set to find all unique nodes
     unique_nodes = set()
     for source, destination in final_graph:
         unique_nodes.update([source, destination])
-    # Count the number of unique nodes
-    number_of_nodes = len(unique_nodes)
-    print("Number of unique nodes in the graph:", number_of_nodes)
+
+    
+    for username in parsing_list.keys():
+        if username not in unique_nodes:
+            print(f"User excluded {username}")
+
+
+
+    save_files.save_cleaned_network(final_graph)
+    save_files.save_cleaned_nodes(unique_nodes)
 
 
 
@@ -188,8 +196,6 @@ def calculate_and_save_pageranks(g):
 def main(parsing_list, network_list):
 
     cleaned_network = clean_graph(parsing_list, network_list)
-
-    save_files.save_cleaned_network(cleaned_network)
 
     # Create a graph from the list of edges
     graph = ig.Graph.TupleList(cleaned_network, directed=True)
