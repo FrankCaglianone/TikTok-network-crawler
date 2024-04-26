@@ -41,7 +41,7 @@ def read_from_csv(file_path):
         # Open the file and read the contents
         with open(file_path, mode='r', encoding='utf-8') as file:
             csv_reader = csv.reader(file)
-            
+            next(csv_reader)  # Skip the header
             # Loop through the rows in the file
             for row in csv_reader:
                 users.append(row[0])
@@ -111,9 +111,11 @@ def get_videos_request(username):
     end_date_string = end_date.strftime('%Y%m%d')    
     start_date_string = start_date.strftime('%Y%m%d')
 
+
     # Set the url, with the fields we want to retrieve -> id, username, hashtag_names
     url = 'https://open.tiktokapis.com/v2/research/video/query/?fields=id,username,hashtag_names'   
     
+
     # Set the header
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -121,63 +123,53 @@ def get_videos_request(username):
     }
 
 
-    # Intialize cursor, has_more and search_id variables to enter the loop for the first time
-    cursor = None
-    search_id = None
-    has_more = True
-
-    while has_more:
     
-        # Set the body
-        body = {
-            "query": {
-                "and": [
-                    {
-                        "operation": "EQ",
-                        "field_name": "username",
-                        "field_values": [username]
-                    },
-                ],
-            },
-            "max_count": 100,
-            "start_date": start_date_string,
-            "end_date": end_date_string,
-        }
-
-        # Check if cursor should be included
-        if cursor:
-            body["cursor"] = cursor
-        if search_id:
-            body["search_id"] = search_id
-        
-        # Get response
-        response = requests.post(url=url, headers=headers, json=body)
-        post_requests += 1
+    # Set the body
+    body = {
+        "query": {
+            "and": [
+                {
+                    "operation": "EQ",
+                    "field_name": "username",
+                    "field_values": [username]
+                },
+            ],
+        },
+        "max_count": 100,
+        "start_date": start_date_string,
+        "end_date": end_date_string,
+    }
 
 
-        # Check request status code
-        if response.status_code == 200:
-            data = response.json().get('data')
+    
+    # Get response
+    response = requests.post(url=url, headers=headers, json=body)
+    post_requests += 1
 
-            videos = data.get('videos')
-            for video in videos:
+
+    # Check request status code
+    if response.status_code == 200:
+        data = response.json().get('data')
+
+        videos = data.get('videos')
+        for video in videos:
+            # Extra check: if the exact username is not found it returns users with 'username' inside
+            # example: for username = "user1" it returns also ("user1.dea", "hello.user1")
+            if 'username' == username:
+                # Checker that the hashtag list is not empty
                 if 'hashtag_names' in video:
                     all_hashtags.update(video['hashtag_names'])
-            
-            # Check if there are more videos to fetch
-            has_more = data.get('has_more', False)
-            cursor = data.get('cursor', None)
-            search_id = data.get('search_id', None)
-        elif response.status_code == 401:
-            # If status code 401, means the access token it's incorrect, terminate program and try again
-            print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
-            sys.exit("Terminating the program due to an error. Please check your access credentials")
-        elif response.status_code == 500:
-            # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
-            return
-        else:
-            print("Failed to retrieve followers. Status code:", response.status_code, response.text)
-            return
+        
+    elif response.status_code == 401:
+        # If status code 401, means the access token it's incorrect, terminate program and try again
+        print("Status code 401 Unauthorized: The request has not been applied because it lacks valid authentication credentials for the target resource.")
+        sys.exit("Terminating the program due to an error. Please check your access credentials")
+    elif response.status_code == 500:
+        # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
+        return
+    else:
+        print("Failed to retrieve followers. Status code:", response.status_code, response.text)
+        return
     
     return list(all_hashtags)
 
@@ -192,7 +184,7 @@ def fetch_range_hashtags():
 
     # Loop until queue is empty
     while users_queue:
-        if(post_requests < 1000): # the daily limit is a 1000 requests per day
+        if(post_requests < 900): # the daily limit is a 1000 requests per day
             # Get the first item from the queue
             i = users_queue.pop(0)
 
