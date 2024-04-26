@@ -7,12 +7,12 @@
 
 
 ### Saved .csv files ###
-parsing_list.csv
-queue.csv
-saved_jsons.csv
-time_stamps.csv
-network.csv
-*.csv
+src/outputs
+src/network_analysis_outputs
+src/video_query_outputs
+
+
+
 
 
 ### macOS ###
