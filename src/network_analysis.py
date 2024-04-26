@@ -102,11 +102,15 @@ def clean_graph(list_path, network_path):
             final_graph.append((source, destination))
 
 
-    # Use a set to find unique sources
-    unique_sources = set(source for source, destination in final_graph)
-    # Count the number of unique source nodes
-    number_of_sources = len(unique_sources)
-    print("Number of source nodes:", number_of_sources)
+
+    # Use a set to find all unique nodes
+    unique_nodes = set()
+    for source, destination in final_graph:
+        unique_nodes.update([source, destination])
+    # Count the number of unique nodes
+    number_of_nodes = len(unique_nodes)
+    print("Number of unique nodes in the graph:", number_of_nodes)
+
 
 
     return final_graph
