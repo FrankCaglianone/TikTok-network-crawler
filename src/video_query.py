@@ -157,7 +157,8 @@ def get_videos_request(username):
         for video in videos:
             # Extra check: if the exact username is not found it returns users with 'username' inside
             # example: for username = "user1" it returns also ("user1.dea", "hello.user1")
-            if 'username' == username:
+            tmp = video.get('username')
+            if tmp == username:
                 # Checker that the hashtag list is not empty
                 if 'hashtag_names' in video:
                     all_hashtags.update(video['hashtag_names'])
@@ -268,6 +269,9 @@ def main_query(stdin_key, stdin_secret, file_path):
         # Add all starting users to the data structures
         for user in starting_users:
             users_queue.append(user)
+        
+        
+        print("Queue complete, starting fetching")
 
 
         fetch_range_hashtags()
@@ -301,6 +305,5 @@ if __name__ == "__main__":
 
 
    
-
 
 
