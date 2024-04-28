@@ -269,6 +269,7 @@ def main_query(stdin_key, stdin_secret, file_path):
 
 
         fetch_range_hashtags()
+        cleanup_and_save()
     except Exception as e:
         # If exception is catched save and close
         cleanup_and_save()
