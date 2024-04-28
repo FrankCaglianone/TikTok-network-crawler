@@ -44,8 +44,10 @@ def read_from_csv(file_path):
             next(csv_reader)  # Skip the header
             # Loop through the rows in the file
             for row in csv_reader:
-                users.append(row[0])
-                # print(row[0])
+                if row:  # Check if the row is not empty
+                    users.append(row[0])  # Assume the user's name is in the first column
+                else:
+                    sys.exit("Warning: Found an empty row in the CSV.")
         #
     except FileNotFoundError:
         # If the file is not found, print an error message and exit the program
