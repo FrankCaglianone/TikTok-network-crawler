@@ -56,13 +56,13 @@ def read_network(path):
 
 def save_cleaned_network(network):
     # If the folder does not exist create one, needed only for the first function to be called out of the 4 ranges functions
-    output_dir = 'src/network_analysis_outputs'
+    output_dir = 'src/cleaned'
     if not os.path.exists(output_dir):
         # Create the directory if it does not exist
         os.makedirs(output_dir)
 
 
-    with open('src/network_analysis_outputs/graph.csv', 'w', newline='') as file:
+    with open('src/cleaned/graph.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Source", "Destination"])
         # Write each tuple in the network list to the file
@@ -72,7 +72,7 @@ def save_cleaned_network(network):
 
 
 def save_cleaned_nodes(set):
-    with open('src/network_analysis_outputs/cleaned_nodes.csv', 'w', newline='') as file:
+    with open('src/cleaned/cleaned_nodes.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Nodes in graph"]) 
         for username in set:

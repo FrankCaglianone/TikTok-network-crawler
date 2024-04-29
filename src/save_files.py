@@ -132,7 +132,7 @@ def save_network(network_graph):
 
 #################### DATA SAVING FUNCTIONS FOR NETWORK ANALYSIS ####################
 
-def save_cleaned_network(network):
+def save_25_percentile(pageranking_list, start, end):
     # If the folder does not exist create one, needed only for the first function to be called out of the 4 ranges functions
     output_dir = 'src/network_analysis_outputs'
     if not os.path.exists(output_dir):
@@ -140,24 +140,6 @@ def save_cleaned_network(network):
         os.makedirs(output_dir)
 
 
-    with open('src/network_analysis_outputs/graph.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Source", "Destination"])
-        # Write each tuple in the network list to the file
-        for connection in network:
-            writer.writerow(connection)
-
-
-
-def save_cleaned_nodes(set):
-    with open('src/network_analysis_outputs/cleaned_nodes.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Nodes in graph"]) 
-        for username in set:
-            writer.writerow([username])
-
-
-def save_25_percentile(pageranking_list, start, end):
     with open('src/network_analysis_outputs/25th_percentile.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([f"0% - 25% (25th percentile) from {start} to {end}"])
