@@ -35,27 +35,6 @@ import save_files
 
 
 
-def read_parsing_list(path):
-    parsing_list = {}
-
-    try:
-        with open(path, newline='') as csvfile:
-            reader = csv.reader(csvfile)
-            next(reader)  # Skip the header
-            for row in reader:
-                if row:  # Check if row is not empty
-                    username = row[0].strip()  # Remove any leading/trailing whitespace
-                    status = int(row[1].strip())  # Convert status to integer
-                    parsing_list[username] = status
-
-    except FileNotFoundError:
-        # If the file is not found, print an error message and exit the program
-        sys.exit(f"Error: The file at {path} was not found.") 
-    except Exception as e: 
-        # If any other exception occurs, exit the program
-        sys.exit(f"Error: {e}") 
-    return parsing_list
-
 
 
 
@@ -79,51 +58,6 @@ def read_network(path):
         sys.exit(f"Error: {e}") 
     return network
                 
-
-
-
-
-
-
-
-def clean_graph(list_path, network_path):
-
-    parsing_list = read_parsing_list(list_path)
-
-    network = read_network(network_path)
-
-
-    final_graph = []
-
-
-    # Clean the network excluding edges with nodes that have not been fetched 
-    for row in network:
-        source, destination = row
-        if destination in parsing_list:
-            final_graph.append((source, destination))
-
-    
-
-    # Use a set to find all unique nodes
-    unique_nodes = set()
-    for source, destination in final_graph:
-        unique_nodes.update([source, destination])
-
-    
-    for username in parsing_list.keys():
-        if username not in unique_nodes:
-            print(f"User excluded {username}")
-
-
-
-    save_files.save_cleaned_network(final_graph)
-    save_files.save_cleaned_nodes(unique_nodes)
-
-
-
-    return final_graph
-
-
 
 
 
@@ -193,14 +127,20 @@ def calculate_and_save_pageranks(g):
 
 
 
-def main(parsing_list, network_list):
+def main(network_path):
 
-    cleaned_network = clean_graph(parsing_list, network_list)
+    # Read the .csv
+    network = read_network(network_path)
 
     # Create a graph from the list of edges
-    graph = ig.Graph.TupleList(cleaned_network, directed=True)
+    graph = ig.Graph.TupleList(network, directed=True)
 
+    # Calculate the page rankings and save in quartiles
     calculate_and_save_pageranks(graph)
+
+    # TODO: Backboning
+
+    # TODO: Community
 
     print("Program ended succesfully")
 
@@ -214,11 +154,10 @@ def main(parsing_list, network_list):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("parsing_list")
-    parser.add_argument("network_list")
+    parser.add_argument("network_path")
 
     args = parser.parse_args()
 
-    main(args.parsing_list, args.network_list)
+    main(args.network_path)
 
 
