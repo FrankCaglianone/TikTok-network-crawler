@@ -170,8 +170,14 @@ def get_videos_request(username):
     elif response.status_code == 500:
         # Internal Server Error: This indicates that the server encountered an unexpected condition that prevented it from fulfilling the request.
         return
+    elif response.status_code == 429:
+        # Reached daily limit
+        # Try fetching again the username by re-appending it in the queue
+        print("Daily quota limit exceeded. Status code:", response.status_code, response.text)
+        users_queue.append(username)
+        return
     else:
-        print("Failed to retrieve followers. Status code:", response.status_code, response.text)
+        print("Failed to retrieve videos. Status code:", response.status_code, response.text)
         return
     
     return list(all_hashtags)
