@@ -1,3 +1,4 @@
+import argparse
 import requests
 import csv
 import sys
@@ -538,3 +539,29 @@ def parse_with_list(stdin_key, stdin_secret, user_input):
 
 
 
+
+
+
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Automate user queries with provided credentials.")
+
+    parser.add_argument("key", help="API key for authentication.")
+    parser.add_argument("secret", help="API secret for authentication.")
+    parser.add_argument("user_input", help="Path to the usernames input or a single username. Ends with .csv for list input.")
+
+    args = parser.parse_args()
+
+    # Set global variables
+    key = args.key
+    secret = args.secret
+    user_input = args.user_input
+
+
+    # Determine how to handle user input based on the file extension
+    if user_input.endswith('.csv'):
+        parse_with_list(key, secret, user_input)
+    else:
+        parse_with_stdin(key, secret, user_input)
