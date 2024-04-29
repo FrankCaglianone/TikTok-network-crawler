@@ -14,18 +14,24 @@ import os
     - The `queue.csv` file will contain a single column: "Usernames to parse", 
       listing all usernames to still parse from the `queue` list.
 
-    The file is saved in the `src/outputs` directory with no extra line spaces between rows.
+    The file is saved in the `src/followees_query_outputs` directory with no extra line spaces between rows.
 """
 def save_to_csv(parsing_list, queue):
+    output_dir = 'src/followees_query_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
+
+
     # Save parsing_list to CSV
-    with open('src/outputs/parsing_list.csv', 'w', newline='') as file:
+    with open('src/followees_query_outputs/parsing_list.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Parsed Status"])  # Writing headers
         for username, parsed_status in parsing_list.items():
             writer.writerow([username, parsed_status])
 
     # Save queue to CSV
-    with open('src/outputs/queue.csv', 'w', newline='') as file:
+    with open('src/followees_query_outputs/queue.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Usernames to parse"]) 
         for username in queue:
@@ -42,10 +48,10 @@ def save_to_csv(parsing_list, queue):
     Each row after the header will contain a username and their associated time stamps. 
     If a username has multiple time stamps, all will be included in the same row, following the username.
 
-    The file is saved in the `src/outputs` directory with no extra line spaces between rows.
+    The file is saved in the `src/followees_query_outputs` directory with no extra line spaces between rows.
 """
 def save_time_stamps(time_stamps):
-    with open('src/outputs/time_stamps.csv', 'w', newline='') as file:
+    with open('src/followees_query_outputs/time_stamps.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Time Stamp"])  # Writing headers
         for username, timestamps in time_stamps.items():
@@ -75,7 +81,7 @@ def save_time_stamps(time_stamps):
     The CSV format is chosen for ease of use in spreadsheets and other data analysis tools.
 """
 def save_jsons(jsons):
-    with open('src/outputs/saved_jsons.csv', 'w', newline='') as file:
+    with open('src/followees_query_outputs/saved_jsons.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Username", "Json_response"])  # Writing headers
         for username, data in jsons.items():
@@ -96,15 +102,24 @@ def save_jsons(jsons):
     Each row after the header represents one such relationship in the network.
 
     Notes:
-    - The function writes the CSV file to 'src/outputs/network.csv'. It will overwrite any existing file at this location.
+    - The function writes the CSV file to 'src/followees_query_outputs/network.csv'. It will overwrite any existing file at this location.
 """
 def save_network(network_graph):
-    with open('src/outputs/network.csv', 'w', newline='') as file:
+    with open('src/followees_query_outputs/network.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Source", "Destination"])
         # Write each tuple in the network list to the file
         for connection in network_graph:
             writer.writerow(connection)
+
+
+
+
+
+
+
+
+
 
 
 
