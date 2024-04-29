@@ -38,8 +38,6 @@ import save_files
 
 
 
-
-
 def read_network(path):
     network = []
 
@@ -67,9 +65,8 @@ def read_network(path):
 
 def calculate_and_save_pageranks(g):
 
-    # Calculate the page ranking
-    # TODO: pagerank = g.pagerank(damping=0.85)?
-    pagerank = g.pagerank()
+    # Calculate the page ranking with damping factor of 0.85
+    pagerank = g.pagerank(damping=0.85)
 
 
     # Pair ranks with usernames
@@ -81,13 +78,16 @@ def calculate_and_save_pageranks(g):
     # Sort the list in ascending order
     sorted_pageranks_list = sorted(pagerank_list, key=lambda item: item[1])
 
+
     # TODO: Give proper comment
     scores = [score for name, score in sorted_pageranks_list]
+
 
     # Calculate percentiles
     p25 = np.percentile(scores, 25)
     p50 = np.percentile(scores, 50)
     p75 = np.percentile(scores, 75)
+
 
     min_score = np.min(scores)  # 0th percentile
     max_score = np.max(scores)  # 100th percentile
@@ -112,12 +112,21 @@ def calculate_and_save_pageranks(g):
             range_76_100.append((name, score))
 
 
-
     # Save the results in .csv format
     save_files.save_25_percentile(range_0_25, min_score, p25)
     save_files.save_50_percentile(range_26_50, p25, p50)
     save_files.save_75_percentile(range_51_75, p50, p75)
     save_files.save_100_percentile(range_76_100, p75, max_score)
+
+    # Debugging
+    print("All percentiles .csv saved!")
+
+    
+
+
+
+
+
 
 
 
