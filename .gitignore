@@ -11,6 +11,7 @@ src/outputs
 src/network_analysis_outputs
 src/video_query_outputs
 *.csv
+*.tsv
 
 
 
