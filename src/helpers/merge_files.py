@@ -16,8 +16,8 @@ def read_dict_csv(filename):
         next(reader)  # Skip the header
         for row in reader:
             if row:  # Check if row is not empty
-                username = row[0].strip()  # Remove any leading/trailing whitespace
-                status = int(row[1].strip())  # Convert status to integer
+                username = row[0]
+                status = row[1]
                 user_status_dict[username] = status
 
     
