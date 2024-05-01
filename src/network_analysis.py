@@ -3,7 +3,9 @@ import csv
 import sys
 import igraph as ig
 import numpy as np
-# import matplotlib.pyplot as plt
+import helpers.backboning as backboning
+import matplotlib.pyplot as plt
+import networkx as nx
 
 import save_files
 
@@ -12,22 +14,22 @@ import save_files
 
 
 
-# g.vs["label"] = g.vs["name"]
 
 
-# fig, ax = plt.subplots()
-# ig.plot(
-#     g,
-#     target=ax,
-#     # layout="sugiyama",
-#     vertex_size=15,
-#     vertex_color="blue",
-#     edge_color="#222",
-#     edge_width=1,
-# )
-# plt.show()
 
-
+def plot(g):
+    g.vs["label"] = g.vs["name"]
+    fig, ax = plt.subplots()
+    ig.plot(
+        g,
+        target=ax,
+        # layout="sugiyama",
+        vertex_size=15,
+        vertex_color="blue",
+        edge_color="#222",
+        edge_width=1,
+    )
+    plt.show()
 
 
 
@@ -127,6 +129,12 @@ def calculate_and_save_pageranks(g):
 
 
 
+def backboning_func(input_path, output_path):
+    table, nnodes, nnedges = backboning.read(input_path, "weight")
+    nc_table = backboning.noise_corrected(table)
+    nc_backbone = backboning.thresholding(nc_table, 0.05)
+    backboning.write(nc_backbone, "tiktok_backboning_network", "nc", output_path)
+
 
 
 
@@ -136,37 +144,53 @@ def calculate_and_save_pageranks(g):
 
 
 
-def main(network_path):
+def main(network_path, weighted_network):
 
     # Read the .csv
     network = read_network(network_path)
 
-    # Create a graph from the list of edges
-    graph = ig.Graph.TupleList(network, directed=True)
+    # Create the graphs from the list of edges
+    directed_graph = ig.Graph.TupleList(network, directed=True)
+    undirected_graph = ig.Graph.TupleList(network, directed=False)
+    
 
     # Calculate the page rankings and save in quartiles
-    calculate_and_save_pageranks(graph)
+    # calculate_and_save_pageranks(directed_graph)
+
 
     # TODO: Backboning
-
-    # TODO: Community
-
-    print("Program ended succesfully")
+    # backboning_func(weighted_network, "./")
 
 
+    # TODO: Community Detection
+    g = ig.Graph.Famous('Zachary')
+    louvain_communities = g.community_multilevel()
+
+    print(louvain_communities)
+    print("Modularity:", louvain_communities.modularity)
+    print("Membership:", louvain_communities.membership)
+
+
+
+   
+    # print("Program ended succesfully")
+
+
+
+
+main("./Simple_Network.csv", "ciao")
 
 
 
 
 
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+#     parser.add_argument("network_path")
 
-    parser.add_argument("network_path")
+#     args = parser.parse_args()
 
-    args = parser.parse_args()
-
-    main(args.network_path)
+#     main(args.network_path)
 
 
