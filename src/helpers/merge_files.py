@@ -73,17 +73,17 @@ def write_network_csv(network):
 def main(path1, path2):
 
     # Dictionary execution
-    # dict1 = read_csv(path1)
-    # dict2 = read_csv(path2)
-    # dict1.update(dict2)
-    # write_csv(dict1)
+    dict1 = read_dict_csv(path1)
+    dict2 = read_dict_csv(path2)
+    dict1.update(dict2)
+    write_dict_csv(dict1)
 
 
     # Network execution
-    network1 = read_network_csv(path1)
-    network2  = read_network_csv(path2)
-    network1.extend(network2)
-    write_network_csv(network1)
+    # network1 = read_network_csv(path1)
+    # network2  = read_network_csv(path2)
+    # network1.extend(network2)
+    # write_network_csv(network1)
 
 
     print("Program ended succesfully")
