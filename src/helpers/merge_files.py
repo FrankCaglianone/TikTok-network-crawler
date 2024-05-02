@@ -4,7 +4,7 @@ import csv
 
 
 
-
+######### MERGE DICTIONARIES #########
 def read_dict_csv(filename):
 
     # Dictionary to store the data
@@ -24,10 +24,6 @@ def read_dict_csv(filename):
     return user_status_dict
 
 
-
-
-
-
 def write_dict_csv(list):
     with open('complete_list.csv', 'w', newline='') as file:
             writer = csv.writer(file)
@@ -39,6 +35,7 @@ def write_dict_csv(list):
 
 
 
+######### MERGE NETWORK TUPLES LISTS #########
 
 def read_network_csv(file_path):
     # List to store the tuples
@@ -56,7 +53,6 @@ def read_network_csv(file_path):
 
 
 
-
 def write_network_csv(network):
      with open('complete_network.csv', 'w', newline='') as file:
         writer = csv.writer(file)
@@ -70,13 +66,54 @@ def write_network_csv(network):
 
 
 
+
+
+
+
+######### MERGE VIDEO QUERIES DICTIONARIES #########
+def read_users_hashtags(file_path):
+    data = {}
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header
+        for row in reader:
+            username, hashtag = row
+            data[username] = hashtag
+    return data
+
+
+
+
+
+
+
+
+def write_user_hashtags(dict):
+    # Save dictionary to CSV
+    with open('complete_user_hashtags.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Username", "Hashtags"])  # Writing headers
+        for username, hashtag in dict.items():
+            writer.writerow([username, hashtag])
+
+
+
+
+
+
+
+
+
+
+
+
 def main(path1, path2):
 
     # Dictionary execution
-    dict1 = read_dict_csv(path1)
-    dict2 = read_dict_csv(path2)
-    dict1.update(dict2)
-    write_dict_csv(dict1)
+    # dict1 = read_dict_csv(path1)
+    # dict2 = read_dict_csv(path2)
+    # dict1.update(dict2)
+    # write_dict_csv(dict1)
 
 
     # Network execution
@@ -86,8 +123,29 @@ def main(path1, path2):
     # write_network_csv(network1)
 
 
+
+    # User hashtags execution
+    dict1 = read_users_hashtags(path1)
+    dict2 = read_users_hashtags(path2)
+
+    merged_data = {}
+
+    for username, values in dict1.items():
+        merged_data[username] = values
+
+    for username, values in dict2.items():
+        merged_data[username] = values
+
+    write_user_hashtags(merged_data)
+
+
     print("Program ended succesfully")
 
+
+
+
+
+# main("./complete_user_hashtags.csv", "./user_hashtags_8.csv")
 
 
 
