@@ -1,5 +1,6 @@
 import argparse
 import csv
+import os
 import sys
 import igraph as ig
 import numpy as np
@@ -119,7 +120,6 @@ def calculate_and_save_pageranks(g):
 
 
 
-
 def pageranking_main(path):
     # Read the .csv
     network = read_network(path)
@@ -129,6 +129,8 @@ def pageranking_main(path):
     
     # Calculate the page rankings and save the results in quartiles
     calculate_and_save_pageranks(graph)
+
+    print("Program ended succesfully")
 
 
 
@@ -151,12 +153,11 @@ def pageranking_main(path):
 
 #################### BACKBONING ####################
 
-
 def write_tsv_weighted_network(network):
     modified_list = [(t[0], t[1], 1) for t in network]
 
     # Write the modified list to a .tsv file
-    with open('output_file.tsv', 'w', newline='') as tsvfile:
+    with open('weighted_network.tsv', 'w', newline='') as tsvfile:
         writer = csv.writer(tsvfile, delimiter='\t')
         writer.writerow(["src", "trg", "weight"])
         writer.writerows(modified_list)
@@ -164,9 +165,7 @@ def write_tsv_weighted_network(network):
 
 
 
-
-
-def backboning(input_path, output_path, threshold):
+def backboning_func(input_path, output_path, threshold):
     table, nnodes, nnedges = backboning.read(input_path, "weight")
     nc_table = backboning.noise_corrected(table)
     nc_backbone = backboning.thresholding(nc_table, threshold)
@@ -177,40 +176,28 @@ def backboning(input_path, output_path, threshold):
 
 
 
-
-
-def read_weighted_network(path):
-    network = []
-
-    try:
-        with open(path, 'r') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip the header
-            for row in csv_reader:
-                network.append((row[0], row[1], row[2]))  # Append each row as a tuple to the list
-                
-    except FileNotFoundError:
-        # If the file is not found, print an error message and exit the program
-        sys.exit(f"Error: The file at {path} was not found.") 
-    except Exception as e: 
-        # If any other exception occurs, exit the program
-        sys.exit(f"Error: {e}") 
-    return network
-
-
-
-
+def read_from_tsv(path):
+    edges = []
+    with open(path, 'r') as file:
+        next(file) # Skip the header
+        for line in file:
+            parts = line.strip().split('\t')
+            source = parts[0]
+            destination = parts[1]
+            weight = int(parts[2])
+            edges.append((source, destination, weight))
+    return edges
 
 
 
 
 def get_plots_values(filepath):
-
     # Get the edges
-    edges = []
+    edges = read_from_tsv(filepath)
+
 
     # Create the graph
-    g = ig.Graph(edges)
+    g = ig.Graph.TupleList(edges, directed=False, edge_attrs=['weight'])
 
 
     # Calculate the number of edges
@@ -219,16 +206,18 @@ def get_plots_values(filepath):
 
     # Find the weakly connected components
     components = g.connected_components(mode="weak")
+    print(components)
+    print('\n')
 
     # Get the Giant Weekly connected component
-    gcc = 7
+    gcc = 0
+    for x in components:
+        if len(x) > gcc:
+            gcc = len(x)
 
 
     return edges_sizes, gcc
 
-
-
-    
 
 
 
@@ -239,56 +228,39 @@ def backboning_main(path):
     # Read the .csv
     network = read_network(path)
 
-
-
-
-
-    
-
-
-
-
-
-def main(network_path, weighted_network):
-
-    # Read the .csv
-    network = read_network(network_path)
-
-
-
-    ##### PAGERANK
-    # Create the graph from the list of edges
-    # directed_graph = ig.Graph.TupleList(network, directed=True)
-    # undirected_graph = ig.Graph.TupleList(network, directed=False)
-    
-
-    # Calculate the page rankings and save the results in quartiles
-    # calculate_and_save_pageranks(directed_graph)
-
-
-
     # Create the .tsv file for the backboning function
     write_tsv_weighted_network(network)
+
+
+    # Check if the directory exists, otherwise create one
+    output_dir = './backboning_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
 
 
     # Backboning for various thresholds and saving the results
     for i in range(1, 11):
         threshold = i / 10.0
-        backboning(weighted_network, "./backboning_outputs", threshold)
+        backboning("./weighted_network.tsv", "./backboning_outputs", threshold)
 
 
     # Get values for the plots
-    # edges_sizes = []
-    # gcc_sizes = []
-    # for i in range(10):
-    #     threshold = i / 10.0
-    #     size, gcc = get_plots_values(f'./backboning_outputs/network_backbone_{threshold}_nc')
-    #     edges_sizes.append(size)
-    #     gcc_sizes.append(gcc)
+    edges_sizes = []
+    gcc_sizes = []
+    for i in range(10):
+        threshold = i / 10.0
+        size, gcc = get_plots_values(f'./backboning_outputs/network_backbone_{threshold}_nc.csv')
+        edges_sizes.append(size)
+        gcc_sizes.append(gcc)
 
     
-    # print("Edge Sizes: ", edges_sizes)
-    # print("GCC Sizes: ", gcc_sizes)
+    print('\n')
+    print('\n')
+    print('\n')
+    print('\n')
+    print("Edge Sizes: ", edges_sizes)
+    print("GCC Sizes: ", gcc_sizes)
 
 
     # Create the plots
@@ -296,6 +268,7 @@ def main(network_path, weighted_network):
     # Il secondo plot avrà sull'asse x i valori di A e sull'asse y la size della giant weakly connected component (GCC_size(G(Ai))).
 
 
+    print("Program ended succesfully")
 
 
 
@@ -305,8 +278,19 @@ def main(network_path, weighted_network):
 
 
 
+    
 
 
+
+
+
+#################### COMMUNITY DETECTION ####################
+
+
+
+
+
+def louvain_main():
     # TODO: Community Detection
     # g = ig.Graph.Famous('Zachary')
 
@@ -316,16 +300,12 @@ def main(network_path, weighted_network):
     # print("Modularity:", louvain_communities.modularity)
     # print("Membership:", louvain_communities.membership)
 
-
-
-
    
     print("Program ended succesfully")
 
 
 
 
-main("./Simple_Network.csv", "")
 
 
 
