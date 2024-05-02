@@ -5,7 +5,7 @@ import igraph as ig
 import numpy as np
 import helpers.backboning as backboning
 import matplotlib.pyplot as plt
-import networkx as nx
+
 
 import save_files
 
@@ -37,8 +37,7 @@ def plot(g):
 
 
 
-
-
+#################### PAGERANKING ####################
 
 def read_network(path):
     network = []
@@ -58,50 +57,6 @@ def read_network(path):
         sys.exit(f"Error: {e}") 
     return network
                 
-
-
-
-
-
-
-def write_tsv_weighted_network(network):
-    modified_list = [(t[0], t[1], 1) for t in network]
-
-    # Write the modified list to a .tsv file
-    with open('output_file.tsv', 'w', newline='') as tsvfile:
-        writer = csv.writer(tsvfile, delimiter='\t')
-        writer.writerow(["src", "trg", "weight"])
-        writer.writerows(modified_list)
-
-
-
-
-
-
-
-def read_weighted_network(path):
-    network = []
-
-    try:
-        with open(path, 'r') as file:
-            csv_reader = csv.reader(file)
-            next(csv_reader)  # Skip the header
-            for row in csv_reader:
-                network.append((row[0], row[1], row[2]))  # Append each row as a tuple to the list
-                
-    except FileNotFoundError:
-        # If the file is not found, print an error message and exit the program
-        sys.exit(f"Error: The file at {path} was not found.") 
-    except Exception as e: 
-        # If any other exception occurs, exit the program
-        sys.exit(f"Error: {e}") 
-    return network
-
-
-
-
-
-
 
 
 def calculate_and_save_pageranks(g):
@@ -159,10 +114,53 @@ def calculate_and_save_pageranks(g):
     save_files.save_75_percentile(range_51_75, p50, p75)
     save_files.save_100_percentile(range_76_100, p75, max_score)
 
-    # Debugging
+
     print("All percentiles .csv saved!")
 
+
+
+
+def pageranking_main(path):
+    # Read the .csv
+    network = read_network(path)
+
+    # Create the graph from the list of edges
+    graph = ig.Graph.TupleList(network, directed=True)
     
+    # Calculate the page rankings and save the results in quartiles
+    calculate_and_save_pageranks(graph)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################### BACKBONING ####################
+
+
+def write_tsv_weighted_network(network):
+    modified_list = [(t[0], t[1], 1) for t in network]
+
+    # Write the modified list to a .tsv file
+    with open('output_file.tsv', 'w', newline='') as tsvfile:
+        writer = csv.writer(tsvfile, delimiter='\t')
+        writer.writerow(["src", "trg", "weight"])
+        writer.writerows(modified_list)
+
 
 
 
@@ -174,6 +172,31 @@ def backboning(input_path, output_path, threshold):
     nc_backbone = backboning.thresholding(nc_table, threshold)
     backboning.write(nc_table, f'network_table_{threshold}', "nc", output_path)
     backboning.write(nc_backbone, f'network_backbone_{threshold}', "nc", output_path)
+
+
+
+
+
+
+
+def read_weighted_network(path):
+    network = []
+
+    try:
+        with open(path, 'r') as file:
+            csv_reader = csv.reader(file)
+            next(csv_reader)  # Skip the header
+            for row in csv_reader:
+                network.append((row[0], row[1], row[2]))  # Append each row as a tuple to the list
+                
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    return network
+
 
 
 
@@ -212,6 +235,9 @@ def get_plots_values(filepath):
 
 
 
+def backboning_main(path):
+    # Read the .csv
+    network = read_network(path)
 
 
 
