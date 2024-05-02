@@ -107,16 +107,59 @@ def write_user_hashtags(dict):
 
 
 
+
+
+def check_for_duplicates(file_path):
+    data = []
+    duplicates = []
+
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip the header row
+        for row in reader:
+            username, hashtag = row
+            if username in data:
+                duplicates.append(username)
+            else:
+                data.append(username)
+    return duplicates
+
+
+
+
+
+def check_for_missings(list1, list2):
+
+    # Read from the percentile list
+    for username_one in list1:
+        
+        # Read from video queries
+        if username_one in list2:
+            continue
+        else:
+            print(username_one)
+
+
+
+
+
+
+
+
+
+
+
+
 def main(path1, path2):
 
-    # Dictionary execution
+    ##### Dictionary execution #####
     # dict1 = read_dict_csv(path1)
     # dict2 = read_dict_csv(path2)
     # dict1.update(dict2)
     # write_dict_csv(dict1)
 
 
-    # Network execution
+    ##### Network execution #####
     # network1 = read_network_csv(path1)
     # network2  = read_network_csv(path2)
     # network1.extend(network2)
@@ -124,19 +167,35 @@ def main(path1, path2):
 
 
 
-    # User hashtags execution
-    dict1 = read_users_hashtags(path1)
-    dict2 = read_users_hashtags(path2)
+    ##### User hashtags execution #####
+    # dict1 = read_users_hashtags(path1)
+    # dict2 = read_users_hashtags(path2)
 
-    merged_data = {}
+    # merged_data = {}
 
-    for username, values in dict1.items():
-        merged_data[username] = values
+    # for username, values in dict1.items():
+    #     merged_data[username] = values
 
-    for username, values in dict2.items():
-        merged_data[username] = values
+    # for username, values in dict2.items():
+    #     merged_data[username] = values
 
-    write_user_hashtags(merged_data)
+    # write_user_hashtags(merged_data)
+
+
+
+
+    ##### CHECK FOR DUPLICATES #####
+    # print(check_for_duplicates(path1))
+
+
+
+
+
+    ##### CHECK FOR MISSINGS #####
+    dict1 = read_dict_csv(path2) # percentile file
+    dict2 = read_users_hashtags(path1) # video query
+    check_for_missings(dict1, dict2)
+
 
 
     print("Program ended succesfully")
@@ -145,7 +204,7 @@ def main(path1, path2):
 
 
 
-# main("./complete_user_hashtags.csv", "./user_hashtags_8.csv")
+# main("./complete_user_hashtags_25th.csv", "./25th_percentile.csv")
 
 
 
@@ -154,12 +213,12 @@ def main(path1, path2):
 
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
 
-    parser.add_argument("file1")
-    parser.add_argument("file2")
+#     parser.add_argument("file1")
+#     parser.add_argument("file2")
 
-    args = parser.parse_args()
+#     args = parser.parse_args()
 
-    main(args.file1, args.file2)
+#     main(args.file1, args.file2)
