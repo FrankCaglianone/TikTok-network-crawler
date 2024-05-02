@@ -64,6 +64,45 @@ def read_network(path):
 
 
 
+def write_tsv_weighted_network(network):
+    modified_list = [(t[0], t[1], 1) for t in network]
+
+    # Write the modified list to a .tsv file
+    with open('output_file.tsv', 'w', newline='') as tsvfile:
+        writer = csv.writer(tsvfile, delimiter='\t')
+        writer.writerow(["src", "trg", "weight"])
+        writer.writerows(modified_list)
+
+
+
+
+
+
+
+def read_weighted_network(path):
+    network = []
+
+    try:
+        with open(path, 'r') as file:
+            csv_reader = csv.reader(file)
+            next(csv_reader)  # Skip the header
+            for row in csv_reader:
+                network.append((row[0], row[1], row[2]))  # Append each row as a tuple to the list
+                
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    return network
+
+
+
+
+
+
+
 
 def calculate_and_save_pageranks(g):
 
@@ -129,11 +168,51 @@ def calculate_and_save_pageranks(g):
 
 
 
-def backboning_func(input_path, output_path):
+def backboning(input_path, output_path, threshold):
     table, nnodes, nnedges = backboning.read(input_path, "weight")
     nc_table = backboning.noise_corrected(table)
-    nc_backbone = backboning.thresholding(nc_table, 0.05)
-    backboning.write(nc_backbone, "tiktok_backboning_network", "nc", output_path)
+    nc_backbone = backboning.thresholding(nc_table, threshold)
+    backboning.write(nc_table, f'network_table_{threshold}', "nc", output_path)
+    backboning.write(nc_backbone, f'network_backbone_{threshold}', "nc", output_path)
+
+
+
+
+
+
+
+def get_plots_values(filepath):
+
+    # Get the edges
+    edges = []
+
+    # Create the graph
+    g = ig.Graph(edges)
+
+
+    # Calculate the number of edges
+    edges_sizes = len(edges)
+
+
+    # Find the weakly connected components
+    components = g.connected_components(mode="weak")
+
+    # Get the Giant Weekly connected component
+    gcc = 7
+
+
+    return edges_sizes, gcc
+
+
+
+    
+
+
+
+
+
+
+
 
 
 
@@ -149,36 +228,83 @@ def main(network_path, weighted_network):
     # Read the .csv
     network = read_network(network_path)
 
-    # Create the graphs from the list of edges
-    directed_graph = ig.Graph.TupleList(network, directed=True)
-    undirected_graph = ig.Graph.TupleList(network, directed=False)
+
+
+    ##### PAGERANK
+    # Create the graph from the list of edges
+    # directed_graph = ig.Graph.TupleList(network, directed=True)
+    # undirected_graph = ig.Graph.TupleList(network, directed=False)
     
 
-    # Calculate the page rankings and save in quartiles
+    # Calculate the page rankings and save the results in quartiles
     # calculate_and_save_pageranks(directed_graph)
 
 
-    # TODO: Backboning
-    # backboning_func(weighted_network, "./")
+
+    # Create the .tsv file for the backboning function
+    write_tsv_weighted_network(network)
+
+
+    # Backboning for various thresholds and saving the results
+    for i in range(1, 11):
+        threshold = i / 10.0
+        backboning(weighted_network, "./backboning_outputs", threshold)
+
+
+    # Get values for the plots
+    # edges_sizes = []
+    # gcc_sizes = []
+    # for i in range(10):
+    #     threshold = i / 10.0
+    #     size, gcc = get_plots_values(f'./backboning_outputs/network_backbone_{threshold}_nc')
+    #     edges_sizes.append(size)
+    #     gcc_sizes.append(gcc)
+
+    
+    # print("Edge Sizes: ", edges_sizes)
+    # print("GCC Sizes: ", gcc_sizes)
+
+
+    # Create the plots
+    # Il primo plot avrà sull'asse x i valori di A e sull'asse y il numero di edges (E(G(Ai))).
+    # Il secondo plot avrà sull'asse x i valori di A e sull'asse y la size della giant weakly connected component (GCC_size(G(Ai))).
+
+
+
+
+
+
+
+
+
+
+
 
 
     # TODO: Community Detection
-    g = ig.Graph.Famous('Zachary')
-    louvain_communities = g.community_multilevel()
+    # g = ig.Graph.Famous('Zachary')
 
-    print(louvain_communities)
-    print("Modularity:", louvain_communities.modularity)
-    print("Membership:", louvain_communities.membership)
+    # louvain_communities = g.community_multilevel()
+
+    # print(louvain_communities)
+    # print("Modularity:", louvain_communities.modularity)
+    # print("Membership:", louvain_communities.membership)
+
 
 
 
    
-    # print("Program ended succesfully")
+    print("Program ended succesfully")
 
 
 
 
-main("./Simple_Network.csv", "ciao")
+main("./Simple_Network.csv", "")
+
+
+
+
+
 
 
 
