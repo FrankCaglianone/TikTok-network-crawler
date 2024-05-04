@@ -175,7 +175,6 @@ def backboning_func(input_path, output_path, threshold):
 
 
 
-
 def read_from_tsv(path):
     edges = []
     with open(path, 'r') as file:
@@ -217,8 +216,6 @@ def get_plots_values(filepath):
 
 
     return edges_sizes, gcc
-
-
 
 
 
@@ -285,20 +282,32 @@ def backboning_main(path):
 
 
 #################### COMMUNITY DETECTION ####################
+# TODO: FINISH
+def louvain_main(filepath):  
+    # Get the edges
+    # edges = read_from_tsv(filepath)
+
+    # Create the graph
+    # g = ig.Graph.TupleList(edges, directed=False, edge_attrs=['weight'])
 
 
 
 
+    g = ig.Graph.Famous('Zachary')
 
-def louvain_main():
-    # TODO: Community Detection
-    # g = ig.Graph.Famous('Zachary')
+    louvain_communities = g.community_multilevel()
 
-    # louvain_communities = g.community_multilevel()
-
-    # print(louvain_communities)
+    print(louvain_communities)
     # print("Modularity:", louvain_communities.modularity)
     # print("Membership:", louvain_communities.membership)
+    # Writing the community memberships to a CSV file
+
+
+    with open('community_memberships.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Node', 'Community'])
+        for node, community in enumerate(louvain_communities.membership):
+            writer.writerow([node, community])
 
    
     print("Program ended succesfully")
@@ -315,14 +324,13 @@ def louvain_main():
 
 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
 
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser()
+    parser.add_argument("network_path")
 
-#     parser.add_argument("network_path")
+    args = parser.parse_args()
 
-#     args = parser.parse_args()
-
-#     main(args.network_path)
+    pageranking_main(args.network_path)
 
 
