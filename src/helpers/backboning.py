@@ -2,6 +2,8 @@
 
 
 """
+   Acknowledgments:
+   Coscia & Neffke “Network Backboning with Noisy Data”, ICDE 2017
    This code was developed by Michele Coscia associate prof at IT University of Copenhagen.
    A special thanks to him for providing this code.
    For more informations on him please check his website: https://www.michelecoscia.com/
