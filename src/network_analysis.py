@@ -295,7 +295,7 @@ def louvain_main(filepath):
     # Prints
     print(louvain_communities)
     print("Modularity:", louvain_communities.modularity)
-    print("Membership:", louvain_communities.membership)
+    # print("Membership:", louvain_communities.membership)
     
 
     # Writing the communities to a CSV file
@@ -305,9 +305,17 @@ def louvain_main(filepath):
         # Iterate over each community and get the nodes it contains
         for idx, community in enumerate(louvain_communities):
             # Convert node indices to string and join with commas
-            nodes = ', '.join(map(str, community))
-            writer.writerow([idx, nodes])
+            nodes_names = ', '.join(g.vs[node]['name'] for node in community)
+            writer.writerow([idx, nodes_names])
 
+
+
+    # Add community ID as an attribute to each node
+    g.vs['community'] = louvain_communities.membership
+
+    # Export graph to GraphML
+    g.write_graphml('network_with_communities.graphml')
+    
    
     print("Program ended succesfully")
 
@@ -316,7 +324,7 @@ def louvain_main(filepath):
 
 
 
-
+# louvain_main("./Simple_Network_TSV.tsv")
 
 
 
