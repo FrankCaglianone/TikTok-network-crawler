@@ -245,7 +245,7 @@ def backboning_main(path):
     # Get values for the plots
     edges_sizes = []
     gcc_sizes = []
-    for i in range(10):
+    for i in range(1, 11):
         threshold = i / 10.0
         size, gcc = get_plots_values(f'./backboning_outputs/network_backbone_{threshold}_nc.csv')
         edges_sizes.append(size)
