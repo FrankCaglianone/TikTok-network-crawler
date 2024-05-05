@@ -205,8 +205,8 @@ def get_plots_values(filepath):
 
     # Find the weakly connected components
     components = g.connected_components(mode="weak")
-    print(components)
-    print('\n')
+    # print(components)
+    # print('\n')
 
     # Get the Giant Weekly connected component
     gcc = 0
@@ -331,6 +331,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    pageranking_main(args.network_path)
+    backboning_main(args.network_path)
 
 
