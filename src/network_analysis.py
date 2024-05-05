@@ -4,7 +4,7 @@ import os
 import sys
 import igraph as ig
 import numpy as np
-import helpers.backboning as backboning
+import helpers.backboning as bk
 import matplotlib.pyplot as plt
 
 
@@ -165,12 +165,12 @@ def write_tsv_weighted_network(network):
 
 
 
-def backboning_func(input_path, output_path, threshold):
-    table, nnodes, nnedges = backboning.read(input_path, "weight")
-    nc_table = backboning.noise_corrected(table)
-    nc_backbone = backboning.thresholding(nc_table, threshold)
-    backboning.write(nc_table, f'network_table_{threshold}', "nc", output_path)
-    backboning.write(nc_backbone, f'network_backbone_{threshold}', "nc", output_path)
+def backboning(input_path, output_path, threshold):
+    table, nnodes, nnedges = bk.read(input_path, "weight")
+    nc_table = bk.noise_corrected(table)
+    nc_backbone = bk.thresholding(nc_table, threshold)
+    bk.write(nc_table, f'network_table_{threshold}', "nc", output_path)
+    bk.write(nc_backbone, f'network_backbone_{threshold}', "nc", output_path)
 
 
 
