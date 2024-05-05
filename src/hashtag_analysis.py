@@ -1,42 +1,75 @@
-
-
-
-tmp = []
-tmp.append(("name1", 0.34627))
-tmp.append(("name2", 0.34627))
-tmp.append(("name3", 0.34627))
-tmp.append(("name4", 0.34627))
-tmp.append(("name5", 0.34627))
-
-
-
-def extract_hashtags(quartile, hashtags):
-
-    quartile_hashtags = []
-
-    for qrow in quartile:
-        for hrow in hashtags:
-            if(qrow[0] == hrow[0]):
-                quartile_hashtags.extend(hrow[1])
-
-
-    # Save file
+import ast
+import csv
 
 
 
 
 
 
+def extract_hashtags_from_csv(file_path):
+    # Initialize a dictionary to store the data
+    hashtags_dict = {}
+    
+    with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        next(reader)  # Read the header row
+      
+        # Iterate over each row in the CSV
+        for row in reader:
+            if row[0] and row[1]:  # Ensure the necessary data is present
+                username = row[0]
+                # Evaluate the hashtags string as a list
+                hashtags = ast.literal_eval(row[1].strip())
+                # Add to dictionary
+                hashtags_dict[username] = hashtags
 
-def main():
-    extract_hashtags(range_0_25)
-    print("Extracted hashtags for the first quartile")
+    return hashtags_dict
 
-    extract_hashtags(range_26_50)
-    print("Extracted hashtags for the second quartile")
 
-    extract_hashtags(range_51_75)
-    print("Extracted hashtags for the third quartile")
 
-    extract_hashtags(range_76_100)
-    print("Extracted hashtags for the fourth quartile")
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+def extract_quartile():
+    print("")
+
+
+
+
+
+def calculate_frequency():
+    print()
+
+
+
+
+
+
+
+def main(hashtags_path):
+    # Fetch all the hashtags as dictionary username = list(hashtags)
+    hashtags_dict = extract_hashtags_from_csv(hashtags_path)
+
+    
+
+   
+   
+
+
+
+
+
+main("./user_hashtags_1.csv")
