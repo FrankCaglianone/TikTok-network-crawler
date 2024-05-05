@@ -282,32 +282,31 @@ def backboning_main(path):
 
 
 #################### COMMUNITY DETECTION ####################
-# TODO: FINISH
 def louvain_main(filepath):  
     # Get the edges
-    # edges = read_from_tsv(filepath)
+    edges = read_from_tsv(filepath)
 
     # Create the graph
-    # g = ig.Graph.TupleList(edges, directed=False, edge_attrs=['weight'])
+    g = ig.Graph.TupleList(edges, directed=False, edge_attrs=['weight'])
 
-
-
-
-    g = ig.Graph.Famous('Zachary')
-
+    # Find communities
     louvain_communities = g.community_multilevel()
 
+    # Prints
     print(louvain_communities)
-    # print("Modularity:", louvain_communities.modularity)
-    # print("Membership:", louvain_communities.membership)
-    # Writing the community memberships to a CSV file
+    print("Modularity:", louvain_communities.modularity)
+    print("Membership:", louvain_communities.membership)
+    
 
-
+    # Writing the communities to a CSV file
     with open('community_memberships.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Node', 'Community'])
-        for node, community in enumerate(louvain_communities.membership):
-            writer.writerow([node, community])
+        writer.writerow(['Community ID', 'Nodes'])
+        # Iterate over each community and get the nodes it contains
+        for idx, community in enumerate(louvain_communities):
+            # Convert node indices to string and join with commas
+            nodes = ', '.join(map(str, community))
+            writer.writerow([idx, nodes])
 
    
     print("Program ended succesfully")
@@ -331,6 +330,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    backboning_main(args.network_path)
+    louvain_main(args.network_path)
 
 
