@@ -254,3 +254,22 @@ def save_quartile_hashtags(occurences, output_name):
         writer = csv.writer(file)
         writer.writerow(['Hashtag', 'Frequency'])  # Writing header
         writer.writerows(occurences)
+
+
+
+
+
+
+
+def save_communities_hashtags(occurences, output_name):
+    # If the folder does not exist create one
+    output_dir = 'src/communities_hashtags_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
+
+
+    with open(f"{output_dir}/{output_name}.csv", 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Hashtag', 'Frequency'])  # Writing header
+        writer.writerows(occurences)

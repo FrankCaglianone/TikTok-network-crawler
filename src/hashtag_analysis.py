@@ -108,7 +108,11 @@ def calculate_percentile_frequency(users_list, hash_dict, output_name):
     hashtags = []
 
     for usr in users_list:
-        hashtags.extend(hash_dict[usr])
+        if usr in hash_dict:
+            hashtags.extend(hash_dict[usr])
+        else:
+            print(f"ERROR 404: user '{usr}' not found ")
+
     
 
     occurencies = Counter(hashtags)
@@ -129,6 +133,32 @@ def calculate_percentile_frequency(users_list, hash_dict, output_name):
 
 
 
+
+
+
+def calulate_communities_frequency(users_list, hash_dict, output_name):
+
+    hashtags = []
+
+    for usr in users_list:
+        if usr in hash_dict:
+            hashtags.extend(hash_dict[usr])
+        else:
+            print(f"ERROR 404: user '{usr}' not found ")
+    
+
+    occurencies = Counter(hashtags)
+
+    # Sort the occurrences by frequency in descending order
+    sorted_occurrences = sorted(occurencies.items(), key=lambda item: item[1], reverse=True)
+
+    # Save to .csv format
+    sv.save_communities_hashtags(sorted_occurrences, output_name)
+
+
+    # Print each element and its frequency
+    # for element, count in sorted_occurrences:
+    #     print(element, count)
 
 
 
@@ -169,26 +199,21 @@ def main_quartile_hashtag_analysis(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_
 
 
 
-
-
-
-
-users_list = ["alice", "bob", "charlie"]
-hash_dict = {
-    "alice": ["#apple", "#banana"],
-    "bob": ["#banana", "#orange"],
-    "charlie": ["#apple", "#banana", "#cherry"]
-}
-
-
-
-
 def main(hashtags_path, communities_path):
     # Fetch all the hashtags as dictionary username = list(hashtags)
     hashtags_dict = extract_hashtags_from_csv(hashtags_path)
 
     # Fetch communities
     communities = extract_communities(communities_path)
+
+    for community in communities:
+        calulate_communities_frequency(communities[community], hashtags_dict, f"community_{community}")
+
+
+
+
+
+
 
 
 
