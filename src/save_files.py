@@ -222,3 +222,35 @@ def save_all_data_structures(dictionary, queue, list):
         for hashtag in list:
             writer.writerow([hashtag])
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################### DATA SAVING FUNCTIONS FOR HASHTAGS ANALYSIS ####################
+def save_quartile_hashtags(occurences, output_name):
+    # If the folder does not exist create one
+    output_dir = 'src/quartile_hashtags_outputs'
+    if not os.path.exists(output_dir):
+        # Create the directory if it does not exist
+        os.makedirs(output_dir)
+
+
+    with open(f"{output_dir}/{output_name}.csv", 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Hashtag', 'Frequency'])  # Writing header
+        writer.writerows(occurences)

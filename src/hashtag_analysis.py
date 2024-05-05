@@ -1,6 +1,9 @@
 import ast
 import csv
 import sys
+from collections import Counter
+
+import save_files as sv
 
 
 
@@ -100,12 +103,31 @@ def extract_communities(file_path):
 
 
 
+def calculate_percentile_frequency(users_list, hash_dict, output_name):
+
+    hashtags = []
+
+    for usr in users_list:
+        hashtags.extend(hash_dict[usr])
+    
+
+    occurencies = Counter(hashtags)
+
+    # Sort the occurrences by frequency in descending order
+    sorted_occurrences = sorted(occurencies.items(), key=lambda item: item[1], reverse=True)
+
+    # Save to .csv format
+    sv.save_quartile_hashtags(sorted_occurrences, output_name)
+
+
+    # Print each element and its frequency
+    # for element, count in sorted_occurrences:
+    #     print(element, count)
+    
 
 
 
 
-def calculate_frequency():
-    print()
 
 
 
@@ -113,7 +135,13 @@ def calculate_frequency():
 
 
 
-def main(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_path, communities_path):
+    
+
+
+
+
+
+def main_quartile_hashtag_analysis(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_path,):
     # Fetch all the hashtags as dictionary username = list(hashtags)
     hashtags_dict = extract_hashtags_from_csv(hashtags_path)
 
@@ -123,6 +151,42 @@ def main(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_path, communities_path):
     Q3_users = extract_quartile_users(Q3_path)
     Q4_users = extract_quartile_users(Q4_path)
 
+    # Calculate frequency for quartiles
+    calculate_percentile_frequency(Q1_users, hashtags_dict, "q1")
+    calculate_percentile_frequency(Q2_users, hashtags_dict, "q2")
+    calculate_percentile_frequency(Q3_users, hashtags_dict, "q3")
+    calculate_percentile_frequency(Q4_users, hashtags_dict, "q4")
+
+    print("Program ended succesfully")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+users_list = ["alice", "bob", "charlie"]
+hash_dict = {
+    "alice": ["#apple", "#banana"],
+    "bob": ["#banana", "#orange"],
+    "charlie": ["#apple", "#banana", "#cherry"]
+}
+
+
+
+
+def main(hashtags_path, communities_path):
+    # Fetch all the hashtags as dictionary username = list(hashtags)
+    hashtags_dict = extract_hashtags_from_csv(hashtags_path)
+
     # Fetch communities
     communities = extract_communities(communities_path)
 
@@ -130,12 +194,6 @@ def main(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_path, communities_path):
 
 
 
-
-
-
-extract_communities("./community_memberships.csv")
-   
-   
 
 
 
