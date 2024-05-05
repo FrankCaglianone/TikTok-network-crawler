@@ -1,3 +1,4 @@
+import argparse
 import ast
 import csv
 import sys
@@ -199,7 +200,7 @@ def main_quartile_hashtag_analysis(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_
 
 
 
-def main(hashtags_path, communities_path):
+def main_community_hashtag_analysis(hashtags_path, communities_path):
     # Fetch all the hashtags as dictionary username = list(hashtags)
     hashtags_dict = extract_hashtags_from_csv(hashtags_path)
 
@@ -215,6 +216,42 @@ def main(hashtags_path, communities_path):
 
 
 
+
+
+
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("hashtags_path")
+
+
+    # For quartiles
+    parser.add_argument("Q1_path")
+    parser.add_argument("Q2_path")
+    parser.add_argument("Q3_path")
+    parser.add_argument("Q4_path")
+    
+    
+
+    # For communities
+    # parser.add_argument("communities_path")
+
+
+
+
+    args = parser.parse_args()
+
+
+
+    # For quartiles
+    main_quartile_hashtag_analysis(args.hashtags_path, args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
+
+    # For communities
+    # main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
+   
 
 
 
