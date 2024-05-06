@@ -130,6 +130,8 @@ def check_for_duplicates(file_path):
 
 def check_for_missings(list1, list2):
 
+    i = 0
+
     # Read from the percentile list
     for username_one in list1:
         
@@ -138,6 +140,10 @@ def check_for_missings(list1, list2):
             continue
         else:
             print(username_one)
+            i += 1
+    
+    print('\n')
+    print(i)
 
 
 
@@ -203,8 +209,10 @@ def main(path1, path2):
 
 
 
+# main("./complete_user_hashtags.csv", "./user_hashtags.csv")
 
-# main("./complete_user_hashtags_25th.csv", "./25th_percentile.csv")
+
+main("./complete_user_hashtags.csv", "./complete_list.csv")
 
 
 
