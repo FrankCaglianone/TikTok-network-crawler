@@ -229,15 +229,15 @@ if __name__ == "__main__":
 
 
     # For quartiles
-    parser.add_argument("Q1_path")
-    parser.add_argument("Q2_path")
-    parser.add_argument("Q3_path")
-    parser.add_argument("Q4_path")
+    # parser.add_argument("Q1_path")
+    # parser.add_argument("Q2_path")
+    # parser.add_argument("Q3_path")
+    # parser.add_argument("Q4_path")
     
     
 
     # For communities
-    # parser.add_argument("communities_path")
+    parser.add_argument("communities_path")
 
 
 
@@ -247,10 +247,10 @@ if __name__ == "__main__":
 
 
     # For quartiles
-    main_quartile_hashtag_analysis(args.hashtags_path, args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
+    # main_quartile_hashtag_analysis(args.hashtags_path, args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
 
     # For communities
-    # main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
+    main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
    
 
 
