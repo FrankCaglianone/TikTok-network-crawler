@@ -81,13 +81,27 @@ def calculate_and_save_pageranks(g):
 
 
     # Calculate percentiles
-    p25 = np.percentile(scores, 25)
-    p50 = np.percentile(scores, 50)
-    p75 = np.percentile(scores, 75)
+    old25 = np.percentile(scores, 25)
+    old50 = np.percentile(scores, 50)
+    old75 = np.percentile(scores, 75)
+
+    print(old25)
+    print(old50)
+    print(old75)
 
 
     min_score = np.min(scores)  # 0th percentile
     max_score = np.max(scores)  # 100th percentile
+
+    diff = (max_score - min_score) / 4
+
+    p25 = min_score + diff
+    p50 = p25 + diff
+    p75 = p50 + diff
+
+    print(p25)
+    print(p50)
+    print(p75)
 
 
     # Initialize lists for each range
