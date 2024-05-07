@@ -119,7 +119,12 @@ def calculate_and_save_pageranks(g):
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency')
     plt.grid(True)
-    plt.show()
+   
+    # Save the plot to a file
+    plt.savefig('./pagerank_distribution.png')
+
+    # Optionally, close the plot to free up memory
+    plt.close()
 
 
     # Save the results in .csv format
