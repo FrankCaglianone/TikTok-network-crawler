@@ -1,6 +1,7 @@
 import argparse
 import ast
 import csv
+import os
 import sys
 import pandas as pd
 from collections import Counter
@@ -254,6 +255,10 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
 
 
 def tf_idf_communities():
+    # Directory to save the updated CSV files
+    save_directory = './tfidf_communities_hashtags'
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
 
     dicts = []
     for i in range(40):
@@ -272,7 +277,7 @@ def tf_idf_communities():
         # Create DataFrame
         df = pd.DataFrame(data_list)
         # Save the DataFrame to a CSV file
-        csv_file_path = f'updated_data_{i+1}.csv'
+        csv_file_path = os.path.join(save_directory, f'tfidf_community_{i+1}.csv')
         df.to_csv(csv_file_path, index=False)
         
         print(f'Data saved to {csv_file_path}.')
