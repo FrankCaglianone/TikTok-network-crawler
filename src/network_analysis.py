@@ -130,7 +130,7 @@ def calculate_and_save_pageranks(g):
     plt.grid(True)
 
     # Save the plot to a file
-    plt.savefig('/path/to/your/directory/pagerank_scores_boxplot.png')
+    plt.savefig('pagerank_scores_boxplot.png')
 
     # Close the plot to free up memory
     plt.close()
