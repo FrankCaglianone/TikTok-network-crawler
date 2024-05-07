@@ -254,7 +254,7 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
 
 
 
-def tf_idf_communities(file_path):
+def tf_idf_communities(path):
     # Directory to save the updated CSV files
     save_directory = './tfidf_communities_hashtags'
     if not os.path.exists(save_directory):
@@ -262,7 +262,7 @@ def tf_idf_communities(file_path):
 
     dicts = []
     for i in range(40):
-        file_path = f"{file_path}{i}.csv"
+        file_path = f"{path}{i}.csv"
         dicts.append(extract_hashtag_occurencies(file_path))    
 
         
