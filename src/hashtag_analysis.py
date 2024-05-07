@@ -252,6 +252,17 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     
 
 
+def remove_common_keys(dicts):
+    # Find common keys in all dictionaries
+    common_keys = set.intersection(*[set(d.keys()) for d in dicts])
+    # Remove common keys from all dictionaries
+    for key in common_keys:
+        for d in dicts:
+            d.pop(key, None)
+    return dicts
+
+
+
 
 
 def tf_idf_communities(path):
@@ -260,14 +271,14 @@ def tf_idf_communities(path):
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
 
-    dicts = {}
+    dicts = []
     for i in range(37):
         file_path = f"{path}{i}.csv"
         dicts.append(extract_hashtag_occurencies(file_path))    
 
         
     # Remove common strings
-    updated_dicts = remove_common_strings(dicts)
+    updated_dicts = remove_common_keys(dicts)
     
     # Save each dictionary to a separate CSV file
     for i, d in enumerate(updated_dicts):
