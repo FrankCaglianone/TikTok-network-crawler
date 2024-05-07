@@ -254,7 +254,7 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
 
 
 
-def tf_idf_communities():
+def tf_idf_communities(file_path):
     # Directory to save the updated CSV files
     save_directory = './tfidf_communities_hashtags'
     if not os.path.exists(save_directory):
@@ -262,7 +262,7 @@ def tf_idf_communities():
 
     dicts = []
     for i in range(40):
-        file_path = f"./communities_hashtags_outputs/community_{i}.csv"
+        file_path = f"{file_path}{i}.csv"
         dicts.append(extract_hashtag_occurencies(file_path))    
 
         
@@ -291,12 +291,10 @@ def tf_idf_communities():
 
 
 if __name__ == "__main__":
-
-    tf_idf_communities()
     
-    # parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()
 
-    # parser.add_argument("hashtags_path")
+    parser.add_argument("hashtags_path")
 
 
     # For quartiles
@@ -313,7 +311,8 @@ if __name__ == "__main__":
 
 
 
-    # args = parser.parse_args()
+    args = parser.parse_args()
+    tf_idf_communities(args.hashtags_path)
 
 
 
