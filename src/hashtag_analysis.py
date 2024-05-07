@@ -263,17 +263,11 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     
     # Remove common hashtags from each dictionary
     for hashtag in common_hashtags:
-        q1.pop(hashtag, None)
-        q2.pop(hashtag, None)
-        q3.pop(hashtag, None)
-        q4.pop(hashtag, None)
+        q1.pop(hashtag)
+        q2.pop(hashtag)
+        q3.pop(hashtag)
+        q4.pop(hashtag)
     
-    # Remove common hashtags from each dictionary
-    for hashtag in common_hashtags:
-        q1.pop(hashtag, None)
-        q2.pop(hashtag, None)
-        q3.pop(hashtag, None)
-        q4.pop(hashtag, None)
 
     
     sv.save_quartile_hashtags(q1, "tf_idf_q1")
