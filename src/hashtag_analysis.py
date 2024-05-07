@@ -231,7 +231,7 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     q3 = extract_hashtag_occurencies(Q3_path)
     q4 = extract_hashtag_occurencies(Q4_path)
     
-    updated_dicts = remove_common_strings(q1, q2)
+    updated_dicts = remove_common_strings(q1, q2, q3, q4)
 
 
     # Save each dictionary to a separate CSV file
