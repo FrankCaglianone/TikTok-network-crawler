@@ -115,9 +115,10 @@ def calculate_and_save_pageranks(g):
     plt.axvline(p25, color='red', linestyle='dashed', linewidth=1)
     plt.axvline(p50, color='green', linestyle='dashed', linewidth=1)
     plt.axvline(p75, color='yellow', linestyle='dashed', linewidth=1)
+    plt.yscale('log')
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
-    plt.ylabel('Frequency')
+    plt.ylabel('Frequency (log scale)')
     plt.grid(True)
    
     # Save the plot to a file
