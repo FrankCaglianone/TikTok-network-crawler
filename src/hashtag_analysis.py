@@ -244,10 +244,10 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     q4 = extract_hashtag_occurencies(Q4_path)
     
     # Convert dictionaries to sets of keys for easier comparison
-    q1_set = set(q1.keys())
-    q2_set = set(q2.keys())
-    q3_set = set(q3.keys())
-    q4_set = set(q4.keys())
+    q1_set = set(q1)
+    q2_set = set(q2)
+    q3_set = set(q3)
+    q4_set = set(q4)
     
 
     hashtag_counter = {}
