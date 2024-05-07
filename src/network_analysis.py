@@ -294,12 +294,11 @@ def louvain_main(filepath):
 
     # Prints
     print(louvain_communities)
+    print('\n')
     print("Modularity:", louvain_communities.modularity)
     print("Number of communities:", len(louvain_communities))
-
-
     print('\n\n\n')
-    print("Community sizes:", louvain_communities.community_sizes)
+    print("Community sizes:", louvain_communities.community_sizes())
     # print("Membership:", louvain_communities.membership)
     
 
