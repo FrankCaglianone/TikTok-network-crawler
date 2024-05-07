@@ -74,8 +74,7 @@ def extract_hashtag_occurencies(file_path):
             
             # Iterate over each row in the CSV
             for row in reader:
-                occurencies[row[0]] = row[1] 
-                occurencies.append(row[0])
+                occurencies[row[0]] = int(row[1])
 
     except FileNotFoundError:
         # If the file is not found, print an error message and exit the program
