@@ -252,7 +252,30 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
 
 
 
+
+def tf_idf_communities():
+
+    dicts = []
+    for i in range(40):
+        file_path = f"./communities_hashtags_outputs/community_{i}.csv"
+        dicts.append(extract_hashtag_occurencies(file_path))    
+
+        
+    # Remove common strings
+    updated_dicts = remove_common_strings(dicts)
     
+    # Save each dictionary to a separate CSV file
+    for i, d in enumerate(updated_dicts):
+        # Convert dictionary to a list of dictionaries suitable for DataFrame creation
+        data_list = [{'Hashtag': hashtag, 'Frequency': frequency} for hashtag, frequency in d.items()]
+        
+        # Create DataFrame
+        df = pd.DataFrame(data_list)
+        # Save the DataFrame to a CSV file
+        csv_file_path = f'updated_data_{i+1}.csv'
+        df.to_csv(csv_file_path, index=False)
+        
+        print(f'Data saved to {csv_file_path}.')
 
 
     
@@ -263,16 +286,19 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+
+    tf_idf_communities()
+    
+    # parser = argparse.ArgumentParser()
 
     # parser.add_argument("hashtags_path")
 
 
     # For quartiles
-    parser.add_argument("Q1_path")
-    parser.add_argument("Q2_path")
-    parser.add_argument("Q3_path")
-    parser.add_argument("Q4_path")
+    # parser.add_argument("Q1_path")
+    # parser.add_argument("Q2_path")
+    # parser.add_argument("Q3_path")
+    # parser.add_argument("Q4_path")
     
     
 
@@ -282,7 +308,9 @@ if __name__ == "__main__":
 
 
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
+
+
 
 
 
@@ -292,7 +320,7 @@ if __name__ == "__main__":
     # For communities
     # main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
 
-    tf_idf_pageranking(args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
+    # tf_idf_pageranking(args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
    
 
 
