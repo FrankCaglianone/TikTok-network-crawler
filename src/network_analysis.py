@@ -98,8 +98,8 @@ def calculate_and_save_pageranks(g):
     diff = (max_score - min_score) / 4
 
     myp25 = min_score + diff
-    myp50 = p25 + diff
-    myp75 = p50 + diff
+    myp50 = myp25 + diff
+    myp75 = myp50 + diff
 
     print('\n')
     print(myp25)
