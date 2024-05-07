@@ -2,6 +2,8 @@ import argparse
 import csv
 import os
 import sys
+
+import pandas as pd
 import igraph as ig
 import numpy as np
 import helpers.backboning as bk
@@ -95,14 +97,29 @@ def calculate_and_save_pageranks(g):
 
     diff = (max_score - min_score) / 4
 
-    p25 = min_score + diff
-    p50 = p25 + diff
-    p75 = p50 + diff
+    myp25 = min_score + diff
+    myp50 = p25 + diff
+    myp75 = p50 + diff
+
+    print('\n')
+    print(myp25)
+    print(myp50)
+    print(myp75)
+
+
+
+
+    categories, bins = pd.qcut(scores, q=4, retbins=True, precision=3, duplicates='raise')
+
+    # Extracting quartile values for easy access
+    p25, p50, p75 = bins[1], bins[2], bins[3]
+
 
     print('\n')
     print(p25)
     print(p50)
     print(p75)
+
 
 
     # Initialize lists for each range
