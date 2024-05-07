@@ -64,7 +64,27 @@ def extract_quartile_users(file_path):
 
 
 
+def extract_hashtag_occurencies(file_path):
+    occurencies = {}
 
+    try:
+        with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader)  # Read the header row
+            
+            # Iterate over each row in the CSV
+            for row in reader:
+                occurencies[row[0]] = row[1] 
+                occurencies.append(row[0])
+
+    except FileNotFoundError:
+        # If the file is not found, print an error message and exit the program
+        sys.exit(f"Error: The file at {file_path} was not found.") 
+    except Exception as e: 
+        # If any other exception occurs, exit the program
+        sys.exit(f"Error: {e}") 
+    
+    return occurencies
 
 
 
@@ -216,6 +236,52 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 
 
 
+def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
+    
+   # Extract hashtag occurrences for each query
+    q1 = extract_hashtag_occurencies(Q1_path)
+    q2 = extract_hashtag_occurencies(Q2_path)
+    q3 = extract_hashtag_occurencies(Q3_path)
+    q4 = extract_hashtag_occurencies(Q4_path)
+    
+    # Convert dictionaries to sets of keys for easier comparison
+    q1_set = set(q1.keys())
+    q2_set = set(q2.keys())
+    q3_set = set(q3.keys())
+    q4_set = set(q4.keys())
+    
+    # Find intersection of hashtags across all dictionaries
+    common_hashtags = q1_set.intersection(q2_set).union(
+        q1_set.intersection(q3_set),
+        q1_set.intersection(q4_set),
+        q2_set.intersection(q3_set),
+        q2_set.intersection(q4_set),
+        q3_set.intersection(q4_set)
+    )
+    
+    # Remove common hashtags from each dictionary
+    for hashtag in common_hashtags:
+        q1.pop(hashtag, None)
+        q2.pop(hashtag, None)
+        q3.pop(hashtag, None)
+        q4.pop(hashtag, None)
+
+    
+    sv.save_quartile_hashtags(q1, "tf_idf_q1")
+    sv.save_quartile_hashtags(q2, "tf_idf_q2")
+    sv.save_quartile_hashtags(q3, "tf_idf_q3")
+    sv.save_quartile_hashtags(q4, "tf_idf_q4")
+
+
+
+
+    
+
+    
+
+
+
+    
 
 
 
@@ -225,19 +291,19 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("hashtags_path")
+    # parser.add_argument("hashtags_path")
 
 
     # For quartiles
-    # parser.add_argument("Q1_path")
-    # parser.add_argument("Q2_path")
-    # parser.add_argument("Q3_path")
-    # parser.add_argument("Q4_path")
+    parser.add_argument("Q1_path")
+    parser.add_argument("Q2_path")
+    parser.add_argument("Q3_path")
+    parser.add_argument("Q4_path")
     
     
 
     # For communities
-    parser.add_argument("communities_path")
+    # parser.add_argument("communities_path")
 
 
 
@@ -250,7 +316,9 @@ if __name__ == "__main__":
     # main_quartile_hashtag_analysis(args.hashtags_path, args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
 
     # For communities
-    main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
+    # main_community_hashtag_analysis(args.hashtags_path, args.communities_path)
+
+    tf_idf_pageranking(args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
    
 
 
