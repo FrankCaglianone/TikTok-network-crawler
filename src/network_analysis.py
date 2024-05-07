@@ -307,7 +307,7 @@ def louvain_main(filepath):
     communities_sorted_by_size = sorted(communities_with_sizes, key=lambda x: x[2], reverse=True)
     print("Sorted community sizes with members:")
     for num, community, size in communities_sorted_by_size:
-        print(f"Community {num} ({size} members): {community}")
+        print(f"Community {num} ({size} members)")
         
 
     # Writing the communities to a CSV file
