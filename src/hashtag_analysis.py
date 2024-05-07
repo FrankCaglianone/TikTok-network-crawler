@@ -261,7 +261,7 @@ def tf_idf_communities(path):
         os.makedirs(save_directory)
 
     dicts = []
-    for i in range(40):
+    for i in range(37):
         file_path = f"{path}{i}.csv"
         dicts.append(extract_hashtag_occurencies(file_path))    
 
