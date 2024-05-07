@@ -65,16 +65,16 @@ def extract_quartile_users(file_path):
 
 
 def extract_hashtag_occurencies(file_path):
-    occurencies = {}
+    occurencies = []
 
     try:
-        with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+       with open(file_path, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
             next(reader)  # Read the header row
             
             # Iterate over each row in the CSV
             for row in reader:
-                occurencies[row[0]] = int(row[1])
+                occurencies.append(row[0])
 
     except FileNotFoundError:
         # If the file is not found, print an error message and exit the program
