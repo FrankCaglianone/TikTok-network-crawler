@@ -99,6 +99,7 @@ def calculate_and_save_pageranks(g):
     p50 = p25 + diff
     p75 = p50 + diff
 
+    print('\n')
     print(p25)
     print(p50)
     print(p75)
