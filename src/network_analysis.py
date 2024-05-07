@@ -343,6 +343,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    backboning_main(args.network_path)
+    louvain_main(args.network_path)
 
 
