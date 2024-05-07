@@ -272,7 +272,7 @@ def tf_idf_communities(path):
         os.makedirs(save_directory)
 
     dicts = []
-    for i in range(37):
+    for i in range(38):
         file_path = f"{path}{i}.csv"
         dicts.append(extract_hashtag_occurencies(file_path))    
 
@@ -288,7 +288,7 @@ def tf_idf_communities(path):
         # Create DataFrame
         df = pd.DataFrame(data_list)
         # Save the DataFrame to a CSV file
-        csv_file_path = os.path.join(save_directory, f'tfidf_community_{i+1}.csv')
+        csv_file_path = os.path.join(save_directory, f'tfidf_community_{i}.csv')
         df.to_csv(csv_file_path, index=False)
         
         print(f'Data saved to {csv_file_path}.')
