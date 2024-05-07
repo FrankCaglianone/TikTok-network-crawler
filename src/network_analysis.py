@@ -124,36 +124,23 @@ def calculate_and_save_pageranks(g):
 
 
     # Plot histogram of scores
-    # plt.figure(figsize=(10, 6))
-    # plt.hist(scores, bins=30, color='blue', alpha=0.7)
-    # plt.axvline(p25, color='red', linestyle='dashed', linewidth=1)
-    # plt.axvline(p50, color='green', linestyle='dashed', linewidth=1)
-    # plt.axvline(p75, color='yellow', linestyle='dashed', linewidth=1)
-    # plt.yscale('log')
-    # plt.title('Distribution of PageRank Scores')
-    # plt.xlabel('PageRank Score')
-    # plt.ylabel('Frequency (log scale)')
-    # plt.grid(True)
-
-
-    plt.figure(figsize=(8, 6))
-    plt.boxplot(scores, vert=True, patch_artist=True)  # 'vert=True' makes the boxplot vertical
-    plt.yscale('log')  # Apply logarithmic scale to the y-axis
-    plt.title('Boxplot of PageRank Scores (Log Scale)')
-    plt.ylabel('PageRank Scores (log scale)')
+    plt.figure(figsize=(10, 6))
+    plt.hist(scores, bins=30, color='blue', alpha=0.7)
+    plt.axvline(p25, color='red', linestyle='dashed', linewidth=1)
+    plt.axvline(p50, color='green', linestyle='dashed', linewidth=1)
+    plt.axvline(p75, color='yellow', linestyle='dashed', linewidth=1)
+    plt.yscale('log')
+    plt.title('Distribution of PageRank Scores')
+    plt.xlabel('PageRank Score')
+    plt.ylabel('Frequency (log scale)')
     plt.grid(True)
 
-    # Save the plot to a file
-    plt.savefig('pagerank_scores_boxplot.png')
-
-    # Close the plot to free up memory
-    plt.close()
    
-    # # Save the plot to a file
-    # plt.savefig('./pagerank_distribution.png')
+    # Save the plot to a file
+    plt.savefig('./pagerank_distribution.png')
 
-    # # Optionally, close the plot to free up memory
-    # plt.close()
+    # Optionally, close the plot to free up memory
+    plt.close()
 
 
     # Save the results in .csv format
