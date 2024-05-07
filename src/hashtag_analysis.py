@@ -249,14 +249,24 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     q3_set = set(q3.keys())
     q4_set = set(q4.keys())
     
-    # Find intersection of hashtags across all dictionaries
-    common_hashtags = q1_set.intersection(q2_set).union(
-        q1_set.intersection(q3_set),
-        q1_set.intersection(q4_set),
-        q2_set.intersection(q3_set),
-        q2_set.intersection(q4_set),
-        q3_set.intersection(q4_set)
-    )
+
+    hashtag_counter = {}
+    for hashtag_set in (q1_set, q2_set, q3_set, q4_set):
+        for hashtag in hashtag_set:
+            if hashtag in hashtag_counter:
+                hashtag_counter[hashtag] += 1
+            else:
+                hashtag_counter[hashtag] = 1
+    
+    # Determine which hashtags appear in at least two dictionaries
+    common_hashtags = {hashtag for hashtag, count in hashtag_counter.items() if count >= 2}
+    
+    # Remove common hashtags from each dictionary
+    for hashtag in common_hashtags:
+        q1.pop(hashtag, None)
+        q2.pop(hashtag, None)
+        q3.pop(hashtag, None)
+        q4.pop(hashtag, None)
     
     # Remove common hashtags from each dictionary
     for hashtag in common_hashtags:
