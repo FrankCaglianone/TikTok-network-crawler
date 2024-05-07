@@ -2,6 +2,7 @@ import argparse
 import ast
 import csv
 import sys
+import pandas as pd
 from collections import Counter
 
 import save_files as sv
@@ -39,9 +40,6 @@ def extract_hashtags_from_csv(file_path):
 
 
 
-
-
-
 def extract_quartile_users(file_path):
     users = []
 
@@ -65,27 +63,13 @@ def extract_quartile_users(file_path):
 
 
 def extract_hashtag_occurencies(file_path):
-    occurencies = []
+    # Load the CSV file
+    data = pd.read_csv(file_path)
 
-    try:
-       with open(file_path, mode='r', newline='', encoding='utf-8') as file:
-            reader = csv.reader(file)
-            next(reader)  # Read the header row
-            
-            # Iterate over each row in the CSV
-            for row in reader:
-                occurencies.append(row[0])
+    # Convert the DataFrame to a dictionary
+    hashtag_dict = dict(zip(data['Hashtag'], data['Frequency']))
 
-    except FileNotFoundError:
-        # If the file is not found, print an error message and exit the program
-        sys.exit(f"Error: The file at {file_path} was not found.") 
-    except Exception as e: 
-        # If any other exception occurs, exit the program
-        sys.exit(f"Error: {e}") 
-    
-    return occurencies
-
-
+    return hashtag_dict
 
 
 
@@ -152,10 +136,6 @@ def calculate_percentile_frequency(users_list, hash_dict, output_name):
 
 
 
-
-
-
-
 def calulate_communities_frequency(users_list, hash_dict, output_name):
 
     hashtags = []
@@ -184,13 +164,6 @@ def calulate_communities_frequency(users_list, hash_dict, output_name):
 
 
 
-
-    
-
-
-
-
-
 def main_quartile_hashtag_analysis(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_path,):
     # Fetch all the hashtags as dictionary username = list(hashtags)
     hashtags_dict = extract_hashtags_from_csv(hashtags_path)
@@ -214,11 +187,6 @@ def main_quartile_hashtag_analysis(hashtags_path, Q1_path, Q2_path, Q3_path, Q4_
 
 
 
-
-
-
-
-
 def main_community_hashtag_analysis(hashtags_path, communities_path):
     # Fetch all the hashtags as dictionary username = list(hashtags)
     hashtags_dict = extract_hashtags_from_csv(hashtags_path)
@@ -235,6 +203,26 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 
 
 
+def remove_common_strings(*dicts):
+    # Find common keys in all dictionaries
+    common_keys = set(dicts[0].keys())  # Start with keys from the first dictionary
+    for d in dicts[1:]:  # Iterate over the rest of the dictionaries
+        common_keys.intersection_update(d.keys())
+
+    # Remove common keys from all dictionaries
+    for key in common_keys:
+        for d in dicts:
+            d.pop(key, None)
+
+    return dicts
+
+
+
+
+
+
+
+
 def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     
    # Extract hashtag occurrences for each query
@@ -243,45 +231,28 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     q3 = extract_hashtag_occurencies(Q3_path)
     q4 = extract_hashtag_occurencies(Q4_path)
     
-    # Convert dictionaries to sets of keys for easier comparison
-    q1_set = set(q1)
-    q2_set = set(q2)
-    q3_set = set(q3)
-    q4_set = set(q4)
-    
+    updated_dicts = remove_common_strings(q1, q2)
 
-    hashtag_counter = {}
-    for hashtag_set in (q1_set, q2_set, q3_set, q4_set):
-        for hashtag in hashtag_set:
-            if hashtag in hashtag_counter:
-                hashtag_counter[hashtag] += 1
-            else:
-                hashtag_counter[hashtag] = 1
-    
-    # Determine which hashtags appear in at least two dictionaries
-    common_hashtags = {hashtag for hashtag, count in hashtag_counter.items() if count >= 2}
-    
-    # Remove common hashtags from each dictionary
-    for hashtag in common_hashtags:
-        q1.pop(hashtag)
-        q2.pop(hashtag)
-        q3.pop(hashtag)
-        q4.pop(hashtag)
-    
+
+    # Save each dictionary to a separate CSV file
+    for i, d in enumerate(updated_dicts):
+        # Convert dictionary to a list of dictionaries suitable for DataFrame creation
+        data_list = [{'Hashtag': hashtag, 'Frequency': frequency} for hashtag, frequency in d.items()]
+        
+        # Create DataFrame
+        df = pd.DataFrame(data_list)
+
+        # Save the DataFrame to a CSV file
+        csv_file_path = f'updated_data_{i+1}.csv'
+        df.to_csv(csv_file_path, index=False)
+        
+        print(f'Data saved to {csv_file_path}.')
 
     
-    sv.save_quartile_hashtags(q1, "tf_idf_q1")
-    sv.save_quartile_hashtags(q2, "tf_idf_q2")
-    sv.save_quartile_hashtags(q3, "tf_idf_q3")
-    sv.save_quartile_hashtags(q4, "tf_idf_q4")
-
 
 
 
     
-
-    
-
 
 
     
@@ -323,12 +294,6 @@ if __name__ == "__main__":
 
     tf_idf_pageranking(args.Q1_path, args.Q2_path, args.Q3_path, args.Q4_path)
    
-
-
-
-
-
-
 
 
 
