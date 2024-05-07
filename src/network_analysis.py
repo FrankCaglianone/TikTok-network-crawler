@@ -109,6 +109,19 @@ def calculate_and_save_pageranks(g):
             range_76_100.append((name, score))
 
 
+    # Plot histogram of scores
+    plt.figure(figsize=(10, 6))
+    plt.hist(scores, bins=30, color='blue', alpha=0.7)
+    plt.axvline(p25, color='red', linestyle='dashed', linewidth=1)
+    plt.axvline(p50, color='green', linestyle='dashed', linewidth=1)
+    plt.axvline(p75, color='yellow', linestyle='dashed', linewidth=1)
+    plt.title('Distribution of PageRank Scores')
+    plt.xlabel('PageRank Score')
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.show()
+
+
     # Save the results in .csv format
     save_files.save_25_percentile(range_0_25, min_score, p25)
     save_files.save_50_percentile(range_26_50, p25, p50)
