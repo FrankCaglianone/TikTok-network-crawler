@@ -115,13 +115,14 @@ def calculate_and_save_pageranks(g):
 
 
 
-    x_min = q1 - (q3 - q1) * 0.25  # Less padding on the left
-    x_max = q3 + (q3 - q1) * 0.25  # Less padding on the right
+    x_min = min(scores)  # Use actual data minimum
+    x_max = max(scores)  # Use actual data maximum
+    focused_x_min = q1 - (q3 - q1) * 0.25  # Focused view for display
+    focused_x_max = q3 + (q3 - q1) * 0.25  # Focused view for display
 
     # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    bins = np.linspace(x_min, x_max, 30)  # Adjust bins to match new x-axis limits
-    plt.hist(scores, bins=bins, color='blue', alpha=0.7)
+    plt.hist(scores, bins=30, color='blue', alpha=0.7)  # Let matplotlib decide the best bin range
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
@@ -131,7 +132,8 @@ def calculate_and_save_pageranks(g):
     plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
     plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
 
-    plt.xlim(x_min, x_max)  # Apply new limits
+    plt.xlim(focused_x_min, focused_x_max)  # Apply focused limits for better visibility
+
 
     plt.legend()
     plt.grid(True)
