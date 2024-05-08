@@ -122,18 +122,13 @@ def calculate_and_save_pageranks(g):
     plt.yscale('log')
 
     plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
-    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
+    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Q2')
     plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
 
     plt.legend()
     plt.grid(True)
 
-    # Adjust x-axis limits to focus more closely around the quartiles
-    plt.xlim(min(scores), max(scores)*0.3)  # Adjusting the upper limit to focus on the lower range
 
-    
-
-  
 
    
     # Save the plot to a file
