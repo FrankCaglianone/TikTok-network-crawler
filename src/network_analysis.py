@@ -112,14 +112,14 @@ def calculate_and_save_pageranks(g):
 
     # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    plt.hist(scores, bins=30, color='grey', alpha=0.6)  # Let matplotlib decide the best bin range
+    plt.hist(scores, bins=30, color='grey', alpha=0.7)  # Let matplotlib decide the best bin range
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
     plt.yscale('log')
 
     plt.axvline(p25, color='r', linestyle='dashed', linewidth=2, label=f'Q1: {p25:.6f}')
-    plt.axvline(p50, color='g', linestyle='dashed', linewidth=2, label=f'Median (Q2): {p50:.6f}')
+    plt.axvline(p50, color='g', linestyle='dashed', linewidth=2, label=f'Q2: {p50:.6f}')
     plt.axvline(p75, color='b', linestyle='dashed', linewidth=2, label=f'Q3: {p75:.6f}')
 
     plt.legend()
