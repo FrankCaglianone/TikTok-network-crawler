@@ -114,20 +114,29 @@ def calculate_and_save_pageranks(g):
 
 
     # Plot histogram of scores
+    # Determine suitable x-axis limits
+    min_x = min(scores)
+    max_x = max(scores)
+    padding = (max_x - min_x) * 0.1  # Add 10% padding to each end
+    x_min = min_x - padding
+    x_max = max_x + padding
+
+    # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    plt.hist(scores, bins=30, color='blue', alpha=0.7, range=(np.min(scores), np.max(scores)))
+    plt.hist(scores, bins=30, color='blue', alpha=0.7, range=(min_x, max_x))  # Adjust bin range if needed
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
     plt.yscale('log')
 
     plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
-    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Q2')
+    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
     plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
+
+    plt.xlim(x_min, x_max)  # Set the limits for the x-axis
 
     plt.legend()
     plt.grid(True)
-
    
     # Save the plot to a file
     plt.savefig('./pagerank_distribution.png')
