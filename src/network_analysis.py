@@ -83,43 +83,15 @@ def calculate_and_save_pageranks(g):
 
 
     # Calculate percentiles
-    old25 = np.percentile(scores, 25)
-    old50 = np.percentile(scores, 50)
-    old75 = np.percentile(scores, 75)
-
-    print(old25)
-    print(old50)
-    print(old75)
-
-
+    p25 = np.percentile(scores, 25)
+    p50 = np.percentile(scores, 50)
+    p75 = np.percentile(scores, 75)
     min_score = np.min(scores)  # 0th percentile
     max_score = np.max(scores)  # 100th percentile
 
-    diff = (max_score - min_score) / 4
-
-    myp25 = min_score + diff
-    myp50 = myp25 + diff
-    myp75 = myp50 + diff
-
-    print('\n')
-    print(myp25)
-    print(myp50)
-    print(myp75)
-
-
-
-
-    categories, bins = pd.qcut(scores, q=4, retbins=True, precision=3, duplicates='raise')
-
-    # Extracting quartile values for easy access
-    p25, p50, p75 = bins[1], bins[2], bins[3]
-
-
-    print('\n')
-    print(p25)
-    print(p50)
-    print(p75)
-
+    q1 = p25
+    q2 = p50
+    q3 = p75
 
 
     # Initialize lists for each range
@@ -148,17 +120,24 @@ def calculate_and_save_pageranks(g):
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
 
-    # Setting x-axis limits to zoom in on the main data range
-    plt.xlim(min(scores), max(scores)*0.3)  # Adjusting the upper limit to focus on the lower range
+    # Adjust x-axis limits to focus more closely around the quartiles
+    plt.xlim([q1 - (q3-q1)*0.1, q3 + (q3-q1)*0.1])
 
     # Adding quartile lines
-    q1, q2, q3 = np.percentile(scores, [25, 50, 75])
-    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
-    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
-    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
+    plt.axvline(q1, color='red', linestyle='dashed', linewidth=2, label=f'Q1: {q1:.6f}')
+    plt.axvline(q2, color='green', linestyle='dashed', linewidth=2, label=f'Median (Q2): {q2:.6f}')
+    plt.axvline(q3, color='blue', linestyle='dashed', linewidth=2, label=f'Q3: {q3:.6f}')
+
+    # Adding annotations
+    plt.annotate('Q1', xy=(q1, 10), xytext=(q1, 1000),
+                arrowprops=dict(facecolor='red', shrink=0.05), ha='right')
+    plt.annotate('Median (Q2)', xy=(q2, 10), xytext=(q2, 1000),
+                arrowprops=dict(facecolor='green', shrink=0.05), ha='center')
+    plt.annotate('Q3', xy=(q3, 10), xytext=(q3, 1000),
+                arrowprops=dict(facecolor='blue', shrink=0.05), ha='left')
 
     plt.legend()
-    plt.grid(True, which="both", ls="--", linewidth=0.5)
+    plt.grid(True)
 
    
     # Save the plot to a file
