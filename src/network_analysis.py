@@ -143,15 +143,22 @@ def calculate_and_save_pageranks(g):
 
     # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    plt.hist(scores, bins=30, color='blue', alpha=0.7)
-    plt.axvline(p25, color='red', linestyle='dashed', linewidth=1)
-    plt.axvline(p50, color='green', linestyle='dashed', linewidth=1)
-    plt.axvline(p75, color='yellow', linestyle='dashed', linewidth=1)
-    plt.yscale('log')
-    plt.title('Distribution of PageRank Scores')
+    plt.hist(scores, bins=30, color='blue', log=True)
+    plt.title('Log-Scale Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
-    plt.ylabel('Frequency (log scale)')
-    plt.grid(True)
+    plt.ylabel('Frequency (Log Scale)')
+
+    # Setting x-axis limits to zoom in on the main data range
+    plt.xlim(min(scores), max(scores)*0.3)  # Adjusting the upper limit to focus on the lower range
+
+    # Adding quartile lines
+    q1, q2, q3 = np.percentile(scores, [25, 50, 75])
+    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
+    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
+    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
+
+    plt.legend()
+    plt.grid(True, which="both", ls="--", linewidth=0.5)
 
    
     # Save the plot to a file
