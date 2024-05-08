@@ -116,7 +116,7 @@ def calculate_and_save_pageranks(g):
 
 
    # Plot histogram of scores
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(30, 6))
     # Auto-adjust the bins based on the extended range
     bins = np.linspace(min(scores), max(scores), 30)
     plt.hist(scores, bins=bins, color='blue', alpha=0.7)
