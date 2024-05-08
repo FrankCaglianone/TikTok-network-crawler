@@ -114,13 +114,21 @@ def calculate_and_save_pageranks(g):
 
 
 
-    # Plot histogram of scores
-    plt.figure(figsize=(40, 6))
-    plt.hist(scores, bins=30, color='blue', alpha=0.7)  # Adjust bin range if needed
+
+   # Plot histogram of scores
+    plt.figure(figsize=(10, 6))
+    # Auto-adjust the bins based on the extended range
+    bins = np.linspace(min(scores), max(scores), 30)
+    plt.hist(scores, bins=bins, color='blue', alpha=0.7)
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
     plt.yscale('log')
+
+    # Manually setting wider x-axis limits based on quartiles and adding some padding
+    x_min = q1 - (q3 - q1) * 0.5  # Extend left limit significantly
+    x_max = q3 + (q3 - q1) * 0.5  # Extend right limit significantly
+    plt.xlim(x_min, x_max)
 
     plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
     plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
