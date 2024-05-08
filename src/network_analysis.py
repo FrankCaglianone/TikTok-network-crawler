@@ -89,10 +89,6 @@ def calculate_and_save_pageranks(g):
     min_score = np.min(scores)  # 0th percentile
     max_score = np.max(scores)  # 100th percentile
 
-    q1 = p25
-    q2 = p50
-    q3 = p75
-
 
     # Initialize lists for each range
     range_0_25 = []
@@ -114,26 +110,17 @@ def calculate_and_save_pageranks(g):
 
 
 
-
-    x_min = min(scores)  # Use actual data minimum
-    x_max = max(scores)  # Use actual data maximum
-    focused_x_min = q1 - (q3 - q1) * 0.25  # Focused view for display
-    focused_x_max = q3 + (q3 - q1) * 0.25  # Focused view for display
-
     # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    plt.hist(scores, bins=30, color='blue', alpha=0.7)  # Let matplotlib decide the best bin range
+    plt.hist(scores, bins=30, color='blue', alpha=0.6)  # Let matplotlib decide the best bin range
     plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
     plt.yscale('log')
 
-    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
-    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
-    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
-
-    plt.xlim(focused_x_min, focused_x_max)  # Apply focused limits for better visibility
-
+    plt.axvline(p25, color='r', linestyle='dashed', linewidth=2, label='Q1')
+    plt.axvline(p50, color='g', linestyle='dashed', linewidth=3, label='Median (Q2)')
+    plt.axvline(p75, color='b', linestyle='dashed', linewidth=4, label='Q3')
 
     plt.legend()
     plt.grid(True)
