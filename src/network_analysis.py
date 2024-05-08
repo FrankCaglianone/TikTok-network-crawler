@@ -121,9 +121,9 @@ def calculate_and_save_pageranks(g):
     plt.ylabel('Frequency (Log Scale)')
     plt.yscale('log')
 
-    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1', xytext=(q1, 1000))
-    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Q2', xytext=(q2, 1000))
-    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3', xytext=(q3, 1000))
+    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
+    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Q2')
+    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
 
     plt.legend()
     plt.grid(True)
