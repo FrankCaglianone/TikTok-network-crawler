@@ -115,29 +115,25 @@ def calculate_and_save_pageranks(g):
 
     # Plot histogram of scores
     plt.figure(figsize=(10, 6))
-    plt.hist(scores, bins=30, color='blue', log=True)
-    plt.title('Log-Scale Distribution of PageRank Scores')
+    plt.hist(scores, bins=30, color='blue', alpha=0.7)
+    plt.title('Distribution of PageRank Scores')
     plt.xlabel('PageRank Score')
     plt.ylabel('Frequency (Log Scale)')
+    plt.yscale('log')
 
-    # Adjust x-axis limits to focus more closely around the quartiles
-    plt.xlim([q1 - (q3-q1)*0.1, q3 + (q3-q1)*0.1])
-
-    # Adding quartile lines
-    plt.axvline(q1, color='red', linestyle='dashed', linewidth=2, label=f'Q1: {q1:.6f}')
-    plt.axvline(q2, color='green', linestyle='dashed', linewidth=2, label=f'Median (Q2): {q2:.6f}')
-    plt.axvline(q3, color='blue', linestyle='dashed', linewidth=2, label=f'Q3: {q3:.6f}')
-
-    # Adding annotations
-    plt.annotate('Q1', xy=(q1, 10), xytext=(q1, 1000),
-                arrowprops=dict(facecolor='red', shrink=0.05), ha='right')
-    plt.annotate('Median (Q2)', xy=(q2, 10), xytext=(q2, 1000),
-                arrowprops=dict(facecolor='green', shrink=0.05), ha='center')
-    plt.annotate('Q3', xy=(q3, 10), xytext=(q3, 1000),
-                arrowprops=dict(facecolor='blue', shrink=0.05), ha='left')
+    plt.axvline(q1, color='r', linestyle='dashed', linewidth=1, label='Q1')
+    plt.axvline(q2, color='g', linestyle='dashed', linewidth=1, label='Median (Q2)')
+    plt.axvline(q3, color='b', linestyle='dashed', linewidth=1, label='Q3')
 
     plt.legend()
     plt.grid(True)
+
+    # Adjust x-axis limits to focus more closely around the quartiles
+    plt.xlim(min(scores), max(scores)*0.3)  # Adjusting the upper limit to focus on the lower range
+
+    
+
+  
 
    
     # Save the plot to a file
