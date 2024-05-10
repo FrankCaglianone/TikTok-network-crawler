@@ -221,6 +221,26 @@ def remove_common_strings(*dicts):
 
 
 
+def remove_common_in_two_or_more(*dicts):
+    from collections import Counter
+
+    # Count all occurrences of each key across all dictionaries
+    key_count = Counter(key for d in dicts for key in d.keys())
+
+    # Identify keys that appear in two or more dictionaries
+    keys_to_remove = {key for key, count in key_count.items() if count >= 2}
+
+    # Remove these keys from all dictionaries
+    for key in keys_to_remove:
+        for d in dicts:
+            d.pop(key, None)
+
+    return dicts
+
+
+
+
+
 def remove_common_keys(dicts):
     # Find common keys in all dictionaries
     common_keys = set(dicts[0].keys())  # Start with keys from the first dictionary
@@ -322,7 +342,7 @@ def tf_idf_communities(path):
     # Remove common strings
     # We need to unpack the list of dictionaries as separate arguments
     # updated_dicts = remove_common_strings(*dicts)
-    updated_dicts = remove_common_strings(file0, file1, file2, file3, file4, file5, file6, file7, file8, file9, file10, file11, file12, file13, file14, file15, file16, file17, file18, file19, file20, file21, file22, file23, file24, file25, file26, file27, file28, file29, file30, file31, file32, file33, file34, file35, file36, file37)
+    updated_dicts = remove_common_in_two_or_more(file0, file1, file2, file3, file4, file5, file6, file7, file8, file9, file10, file11, file12, file13, file14, file15, file16, file17, file18, file19, file20, file21, file22, file23, file24, file25, file26, file27, file28, file29, file30, file31, file32, file33, file34, file35, file36, file37)
 
     
     # Save each dictionary to a separate CSV file
