@@ -204,7 +204,7 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 
 
 
-def remove_common_strings(dicts):
+def remove_common_strings(*dicts):
     # Find common keys in all dictionaries
     common_keys = set(dicts[0].keys())  # Start with keys from the first dictionary
     for d in dicts[1:]:  # Iterate over the rest of the dictionaries
@@ -223,7 +223,10 @@ def remove_common_strings(dicts):
 
 def remove_common_keys(dicts):
     # Find common keys in all dictionaries
-    common_keys = set.intersection(*[set(d.keys()) for d in dicts])
+    common_keys = set(dicts[0].keys())  # Start with keys from the first dictionary
+    for d in dicts[1:]:  # Iterate over the rest of the dictionaries
+        common_keys.intersection_update(d.keys())
+
 
     # Remove common keys from all dictionaries
     for key in common_keys:
@@ -276,7 +279,7 @@ def tf_idf_communities(path):
 
         
     # Remove common strings
-    updated_dicts = remove_common_strings(dicts)
+    updated_dicts = remove_common_keys(dicts)
     
     # Save each dictionary to a separate CSV file
     for i, d in enumerate(updated_dicts):
