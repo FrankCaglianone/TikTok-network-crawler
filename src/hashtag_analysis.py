@@ -279,7 +279,8 @@ def tf_idf_communities(path):
 
         
     # Remove common strings
-    updated_dicts = remove_common_keys(dicts)
+    # We need to unpack the list of dictionaries as separate arguments
+    updated_dicts = remove_common_strings(*dicts)
     
     # Save each dictionary to a separate CSV file
     for i, d in enumerate(updated_dicts):
