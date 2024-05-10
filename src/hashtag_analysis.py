@@ -220,6 +220,14 @@ def remove_common_strings(*dicts):
 
 
 
+# def remove_common_keys(dicts):
+#     # Find common keys in all dictionaries
+#     common_keys = set.intersection(*[set(d.keys()) for d in dicts])
+#     # Remove common keys from all dictionaries
+#     for key in common_keys:
+#         for d in dicts:
+#             d.pop(key, None)
+#     return dicts
 
 
 
@@ -252,18 +260,6 @@ def tf_idf_pageranking(Q1_path, Q2_path, Q3_path, Q4_path):
     
 
 
-def remove_common_keys(dicts):
-    # Find common keys in all dictionaries
-    common_keys = set.intersection(*[set(d.keys()) for d in dicts])
-    # Remove common keys from all dictionaries
-    for key in common_keys:
-        for d in dicts:
-            d.pop(key, None)
-    return dicts
-
-
-
-
 
 def tf_idf_communities(path):
     # Directory to save the updated CSV files
@@ -278,7 +274,7 @@ def tf_idf_communities(path):
 
         
     # Remove common strings
-    updated_dicts = remove_common_keys(dicts)
+    updated_dicts = remove_common_strings(dicts)
     
     # Save each dictionary to a separate CSV file
     for i, d in enumerate(updated_dicts):
