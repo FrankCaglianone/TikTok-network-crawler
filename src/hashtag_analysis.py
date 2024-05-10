@@ -272,15 +272,58 @@ def tf_idf_communities(path):
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
 
-    dicts = []
-    for i in range(38):
-        file_path = f"{path}{i}.csv"
-        dicts.append(extract_hashtag_occurencies(file_path))    
+    # dicts = []
+    # for i in range(38):
+    #     file_path = f"{path}{i}.csv"
+    #     dicts.append(extract_hashtag_occurencies(file_path))    
+
+
+    file0 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_0.csv")
+    file1 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_1.csv")
+    file2 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_2.csv")
+    file3 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_3.csv")
+    file4 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_4.csv")
+    file5 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_5.csv")
+    file6 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_6.csv")
+    file7 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_7.csv")
+    file8 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_8.csv")
+    file9 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_9.csv")
+    file10 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_10.csv")
+    file11 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_11.csv")
+    file12 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_12.csv")
+    file13 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_13.csv")
+    file14 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_14.csv")
+    file15 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_15.csv")
+    file16 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_16.csv")
+    file17 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_17.csv")
+    file18 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_18.csv")
+    file19 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_19.csv")
+    file20 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_20.csv")
+    file21 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_21.csv")
+    file22 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_22.csv")
+    file23 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_23.csv")
+    file24 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_24.csv")
+    file25 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_25.csv")
+    file26 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_26.csv")
+    file27 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_27.csv")
+    file28 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_28.csv")
+    file29 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_29.csv")
+    file30 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_30.csv")
+    file31 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_31.csv")
+    file32 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_32.csv")
+    file33 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_33.csv")
+    file34 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_34.csv")
+    file35 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_35.csv")
+    file36 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_36.csv")
+    file37 = extract_hashtag_occurencies("./communities_hashtags_outputs/community_37.csv")
+
 
         
     # Remove common strings
     # We need to unpack the list of dictionaries as separate arguments
-    updated_dicts = remove_common_strings(*dicts)
+    # updated_dicts = remove_common_strings(*dicts)
+    updated_dicts = remove_common_strings(file0, file1, file2, file3, file4, file5, file6, file7, file8, file9, file10, file11, file12, file13, file14, file15, file16, file17, file18, file19, file20, file21, file22, file23, file24, file25, file26, file27, file28, file29, file30, file31, file32, file33, file34, file35, file36, file37)
+
     
     # Save each dictionary to a separate CSV file
     for i, d in enumerate(updated_dicts):
