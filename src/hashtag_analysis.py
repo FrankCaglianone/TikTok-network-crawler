@@ -204,7 +204,7 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 
 
 
-def remove_common_strings(*dicts):
+def remove_common_strings(dicts):
     # Find common keys in all dictionaries
     common_keys = set(dicts[0].keys())  # Start with keys from the first dictionary
     for d in dicts[1:]:  # Iterate over the rest of the dictionaries
@@ -220,14 +220,16 @@ def remove_common_strings(*dicts):
 
 
 
-# def remove_common_keys(dicts):
-#     # Find common keys in all dictionaries
-#     common_keys = set.intersection(*[set(d.keys()) for d in dicts])
-#     # Remove common keys from all dictionaries
-#     for key in common_keys:
-#         for d in dicts:
-#             d.pop(key, None)
-#     return dicts
+
+def remove_common_keys(dicts):
+    # Find common keys in all dictionaries
+    common_keys = set.intersection(*[set(d.keys()) for d in dicts])
+
+    # Remove common keys from all dictionaries
+    for key in common_keys:
+        for d in dicts:
+            d.pop(key, None)
+    return dicts
 
 
 
