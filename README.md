@@ -64,7 +64,9 @@ pip install matplotlib
 │
 ├── .gitignore                  # Specifies intentionally untracked files to ignore
 ├── LICENSE                     # Contains the licensing information for the project
-└── README.md                   # Project overview and setup instructions
+├── README.md                   # Project overview and setup instructions
+├── outputs_data.zip            # Data outputs used in the project
+└── report_fcag.pdf             # Report of the project
 ```
 
 <br>
