@@ -51,15 +51,20 @@ pip install matplotlib
 ## Project Structure 🏗️
 ```bash
 /TikTok-network-crawler
-    ├── data/                  # Contains datasets used in analyses
-    ├── scripts/
-        ├── user_following_query.py  # Implements snowball sampling using BFS
-        ├── network_analysis.py      # Performs network analysis including PageRank
-    ├── results/
-        ├── network.csv         # Edges representing the network structure
-        ├── community_data.csv  # Results from community detection
-    ├── figures/                # Visualization of networks and results
-    ├── README.md
+│
+├── jobs/                       # Contains the SLURM jobs to execute the software on HPC machines
+├── src/                        # Source code directory
+│   ├── helpers/                # Helper files and utilities
+│   ├── create_access_token.py  # Manages access token creation for the TikTok Research API
+│   ├── hashtag_analysis.py     # Performs hashtag analysis for various user influence levels and communities
+│   ├── save_files.py           # Handles saving files locally in CSV format
+│   ├── user_following_query.py # Implements network construction using the TikTok Research API
+│   └── video_query.py          # Fetches the latest hashtags used by users within a 30-day timeframe
+│
+├── .gitignore                  # Specifies intentionally untracked files to ignore
+├── LICENSE                     # Contains the licensing information for the project
+├── figures/                    # Folder for storing visualization of networks and results
+└── README.md                   # Project overview and setup instructions
 ```
 
 <br>
@@ -83,7 +88,11 @@ If you use this code for your research,or portions of this code in your own proj
 }
 ```
 #### Text
+```bash
 Francesco Caglianone (2024). Using Algorithms to Identify Climate Activism Trends on TikTok. GitHub repository, available at: https://github.com/FrankCaglianone/TikTok-network-crawler
+```
+
+
 
 <br>
 <br>
