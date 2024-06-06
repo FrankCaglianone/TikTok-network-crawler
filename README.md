@@ -6,7 +6,7 @@ The research project explores the network dynamics of TikTok users engaged in cl
 
 <br>
 
-## Project Purpose 🎯    [The purpose of the project, what can it be used for]
+## Project Purpose 🎯
 The goal of this project was to answer the following questions:
 1. What topics and trends are commonly associated with climate activism?
 2. Where are most climate activists located?
@@ -30,13 +30,23 @@ The goal of this project was to answer the following questions:
 - Numpy
 - Matplotlib
 - Gephi (Yifan Hu Layout)
-- Network Backboning Algorithm by Michele Coscia and Frank M. H. Neffke.
+- Network Backboning Algorithm by Michele Coscia and Frank M. H. Neffke. [For more info](https://ieeexplore.ieee.org/abstract/document/7929996)
 
 <br>
 
-## Requirements 📋    
+## Requirements 📋
+Please install required Python packages:
+```bash
+pip install numpy
+pip install pandas
+pip install networkx
+pip install scipy
+pip install requests
+pip install python-igraph
+pip install matplotlib
+```
 
-
+<br>
 
 ## Project Structure 🏗️
 ```bash
@@ -52,16 +62,34 @@ The goal of this project was to answer the following questions:
     ├── README.md
 ```
 
+<br>
 
+## Usage 🛠️ 
 
+<br>
+
+## Citation 📣
+If you use this code for your research,or portions of this code in your own projects, please acknowledge it by citing this repository as follows:
+
+#### Bibtex
+```bash
+@misc{TikTokClimateActivism,
+  author = {Caglianone, Francesco},
+  title = {Using Algorithms to Identify Climate Activism Trends on TikTok},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/FrankCaglianone/TikTok-network-crawler}}
+}
+```
+#### Text
+Francesco Caglianone (2024). Using Algorithms to Identify Climate Activism Trends on TikTok. GitHub repository, available at: https://github.com/FrankCaglianone/TikTok-network-crawler
 
 <br>
 <br>
 
 ## Work In Progress 🚧
 
-
-## Usage 🛠️   [Instructions and examples for using your project. This could include code snippets or command line examples.]
 
 ## Contributions 👥    [People that contributed to this project]
 
