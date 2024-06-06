@@ -72,6 +72,11 @@ pip install matplotlib
 <br>
 
 ## Usage 🛠️ 
+### High-Performance Computing (HPC) Systems
+This software is designed to run intensive computations and is optimized for High-Performance Computing (HPC) environments. The `jobs/` directory contains SLURM job scripts, which you can submit to an HPC system equipped with a SLURM job scheduler. To execute these scripts, use the appropriate SLURM commands on your HPC system.
+
+### Local Execution (Not Recommended)
+While it is technically possible to run these programs on a local machine, this is strongly discouraged due to the intensive computational and energy demands of the tasks. Running the software locally may lead to suboptimal performance and could significantly impact system resources.
 
 <br>
 
