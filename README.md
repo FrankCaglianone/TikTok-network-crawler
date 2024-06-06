@@ -96,6 +96,7 @@ Francesco Caglianone (2024). Using Algorithms to Identify Climate Activism Trend
 <br>
 
 ## Contributions 👥
+This research was conducted at the IT University of Copenhagen under the supervision of [Prof. Luca Maria Aiello](https://www.lajello.com/).
 
 <br>
 
