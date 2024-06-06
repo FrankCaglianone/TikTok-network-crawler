@@ -203,6 +203,9 @@ def main_community_hashtag_analysis(hashtags_path, communities_path):
 
 
 
+
+
+
 def remove_common_strings(*dicts):
     from collections import Counter
 
@@ -218,12 +221,6 @@ def remove_common_strings(*dicts):
             d.pop(key, None)
 
     return dicts
-
-
-
-
-
-
 
 
 
