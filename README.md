@@ -52,6 +52,7 @@ pip install matplotlib
 ```bash
 /TikTok-network-crawler
 │
+├── figures/                    # Folder for storing visualization of networks and results
 ├── jobs/                       # Contains the SLURM jobs to execute the software on HPC machines
 ├── src/                        # Source code directory
 │   ├── helpers/                # Helper files and utilities
@@ -63,7 +64,6 @@ pip install matplotlib
 │
 ├── .gitignore                  # Specifies intentionally untracked files to ignore
 ├── LICENSE                     # Contains the licensing information for the project
-├── figures/                    # Folder for storing visualization of networks and results
 └── README.md                   # Project overview and setup instructions
 ```
 
@@ -91,19 +91,15 @@ If you use this code for your research,or portions of this code in your own proj
 ```bash
 Francesco Caglianone (2024). Using Algorithms to Identify Climate Activism Trends on TikTok. GitHub repository, available at: https://github.com/FrankCaglianone/TikTok-network-crawler
 ```
-
-
-
-<br>
 <br>
 
-## Work In Progress 🚧
+## Contributions 👥
 
-
-## Contributions 👥    [People that contributed to this project]
+<br>
 
 ## License 📄
 [MIT License](LICENSE)
+
 
 
 
